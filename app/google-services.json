@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "440779582593",
+    "project_id": "rockit-71ddf",
+    "storage_bucket": "rockit-71ddf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:440779582593:android:4763e2f536a1d900cfb180",
+        "android_client_info": {
+          "package_name": "com.brigade.rockit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "440779582593-onnug7n5ts29o696th3hc9btorm4bs6e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3rZTHkBlVtGdvOqEgStla_f8tfUE9C4k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "440779582593-onnug7n5ts29o696th3hc9btorm4bs6e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

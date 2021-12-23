@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.music.PlayerFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/back_btn"
+            android:layout_width="@dimen/back_btn_width"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/cover_img"
+            android:layout_width="300dp"
+            android:layout_height="306dp"
+            android:layout_marginTop="116dp"
+            android:src="@drawable/pick_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/Header"
+            android:id="@+id/song_name_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cover_img" />
+
+        <TextView
+            android:id="@+id/artist_txt"
+            style="@style/Header2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/song_name_txt" />
+
+        <SeekBar
+            style="@style/SeekBar"
+            android:id="@+id/seekBar"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="84dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.504"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/artist_txt" />
+
+        <ImageView
+            android:id="@+id/play_btn"
+            android:layout_width="@dimen/player_btn_size"
+            android:layout_height="@dimen/player_btn_size"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/pause"
+            app:layout_constraintEnd_toStartOf="@+id/imageView2"
+            app:layout_constraintStart_toEndOf="@+id/imageView3"
+            app:layout_constraintTop_toBottomOf="@+id/artist_txt" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="@dimen/footer_image_size"
+            android:layout_height="@dimen/footer_image_size"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="56dp"
+            android:src="@drawable/next"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/artist_txt" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="@dimen/footer_image_size"
+            android:layout_height="@dimen/footer_image_size"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/ic_previous"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/artist_txt" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

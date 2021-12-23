@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="button_rounding_radius">7dp</dimen>
+    <dimen name="default_text_size">18sp</dimen>
+    <dimen name="min_button_height">50dp</dimen>
+    <dimen name="min_button_width">300dp</dimen>
+    <dimen name="logo_text_size">48sp</dimen>
+    <dimen name="edit_text_padding">7dp</dimen>
+    <dimen name="back_btn_width">100dp</dimen>
+    <dimen name="header_text_size">32sp</dimen>
+    <dimen name="header2_text_size">20sp</dimen>
+    <dimen name="footer_height">50dp</dimen>
+    <dimen name="footer_image_size">30dp</dimen>
+    <dimen name="image_size">200dp</dimen>
+    <dimen name="player_btn_size">50dp</dimen>
+    <dimen name="change_btn_width">190dp</dimen>
+</resources>
