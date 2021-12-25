@@ -1,5 +1,6 @@
 package com.brigade.rockit.fragments.music;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.brigade.rockit.GlideApp;
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
+import com.brigade.rockit.activities.PlayerActivity;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Music;
 import com.brigade.rockit.fragments.main.HomeFragment;
@@ -28,15 +30,16 @@ public class PlayerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_player, container, false);
-        MainActivity mainActivity = (MainActivity)getActivity();
+        PlayerActivity playerActivity = (PlayerActivity) getActivity();
 
         // Получение виджетов
-        Button backBtn = view.findViewById(R.id.back_btn);
         SeekBar seekBar = view.findViewById(R.id.seekBar);
         TextView nameTxt = view.findViewById(R.id.song_name_txt);
         TextView artistTxt = view.findViewById(R.id.artist_txt);
         ImageView coverImg = view.findViewById(R.id.cover_img);
         ImageView playBtn = view.findViewById(R.id.play_btn);
+        ImageView nextBtn = view.findViewById(R.id.next_btn);
+        ImageView prevBtn = view.findViewById(R.id.previous_btn);
 
         // Отображение информации о песне
         Music music = Data.getMusicPlayer().getMusic();
@@ -47,15 +50,24 @@ public class PlayerFragment extends Fragment {
 
         // Содержимое кнопки в зависимости от состояния плеера
         if (!Data.getMusicPlayer().isPlaying())
-            playBtn.setImageDrawable(mainActivity.getDrawable(R.drawable.play));
+            playBtn.setImageDrawable(playerActivity.getDrawable(R.drawable.play));
         playBtn.setOnClickListener(v -> {
             if (!Data.getMusicPlayer().isPlaying()) {
                 Data.getMusicPlayer().continueSong();
-                playBtn.setImageDrawable(mainActivity.getDrawable(R.drawable.pause));
+                playBtn.setImageDrawable(playerActivity.getDrawable(R.drawable.pause));
             } else {
                 Data.getMusicPlayer().stopSong();
-                playBtn.setImageDrawable(mainActivity.getDrawable(R.drawable.play));
+                playBtn.setImageDrawable(playerActivity.getDrawable(R.drawable.play));
             }
+        });
+
+        nextBtn.setOnClickListener(v -> {
+            Data.getMusicPlayer().playNext();
+            playerActivity.setFragment(new PlayerPagerFragment());
+        });
+        prevBtn.setOnClickListener(v -> {
+            Data.getMusicPlayer().playPrevious();
+            playerActivity.setFragment(new PlayerPagerFragment());
         });
 
         // Перематывание песни
@@ -87,14 +99,8 @@ public class PlayerFragment extends Fragment {
                 handler.postDelayed(this, 1000);
             }
         };
-        mainActivity.runOnUiThread(runnable);
+        playerActivity.runOnUiThread(runnable);
 
-        // Переключение на предыдущий фрагмент
-        backBtn.setOnClickListener(v -> {
-            mainActivity.findViewById(R.id.bottom_frgmnt_view).setVisibility(View.VISIBLE);
-            mainActivity.setBottomFragment(new BottomPlayerFragment());
-            mainActivity.setFragment(new HomeFragment());
-        });
 
         return view;
     }

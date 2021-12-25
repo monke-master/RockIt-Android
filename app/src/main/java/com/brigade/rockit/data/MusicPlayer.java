@@ -2,6 +2,7 @@ package com.brigade.rockit.data;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -15,15 +16,18 @@ public class MusicPlayer {
     public MusicPlayer(Context context) {
         this.context = context;
         this.queue = new ArrayList<>();
+        player = new MediaPlayer();
     }
 
     public void playSong(Music music) {
         this.music = music;
+        player.stop();
         player = MediaPlayer.create(context, music.getUri());
         player.start();
         player.setOnCompletionListener(mp -> {
             playNext();
         });
+
     }
 
     public void stopSong() {
@@ -64,12 +68,25 @@ public class MusicPlayer {
 
     public void playNext() {
         curPosition++;
-        if (curPosition > queue.size())
+        if (curPosition == queue.size())
             curPosition = 0;
+        playSong(queue.get(curPosition));
+    }
+
+    public void playPrevious() {
+        curPosition--;
+        if (curPosition == -1)
+            curPosition = queue.size() - 1;
         playSong(queue.get(curPosition));
     }
 
     public boolean isPlaying() {
         return player.isPlaying();
     }
+
+    public ArrayList<Music> getQueue() {
+        return queue;
+    }
+
+
 }

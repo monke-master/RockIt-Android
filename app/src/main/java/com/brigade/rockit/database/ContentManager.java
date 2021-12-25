@@ -2,6 +2,7 @@ package com.brigade.rockit.database;
 
 import android.net.Uri;
 
+import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Music;
 import com.brigade.rockit.data.Post;
 import com.brigade.rockit.data.User;
@@ -27,7 +28,7 @@ public class ContentManager {
 
     public ContentManager() {
         firestore = FirebaseFirestore.getInstance();
-        storage = FirebaseStorage.getInstance("gs://rockit-71ddf.appspot.com");
+        storage = FirebaseStorage.getInstance(Constants.STORAGE_PATH);
         auth = FirebaseAuth.getInstance();
         uid = auth.getUid();
     }

@@ -39,6 +39,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -56,6 +59,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage'
     implementation 'com.firebaseui:firebase-ui-storage:8.0.0'
     implementation 'com.google.android.material:material:1.5.0-alpha02'
+    implementation 'androidx.navigation:navigation-fragment:2.3.5'
+    implementation 'androidx.navigation:navigation-ui:2.3.5'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     implementation files('libs\\activation.jar')
     implementation files('libs\\additionnal.jar')

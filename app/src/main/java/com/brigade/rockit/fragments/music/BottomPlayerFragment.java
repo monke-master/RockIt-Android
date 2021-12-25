@@ -1,5 +1,6 @@
 package com.brigade.rockit.fragments.music;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
+import com.brigade.rockit.activities.PlayerActivity;
 import com.brigade.rockit.data.Data;
 
 public class BottomPlayerFragment extends Fragment {
@@ -31,6 +33,7 @@ public class BottomPlayerFragment extends Fragment {
         TextView artistTxt = view.findViewById(R.id.artist_txt);
         ConstraintLayout layout = view.findViewById(R.id.main_layout);
 
+
         // Вывод информации о песне
         nameTxt.setText(Data.getMusicPlayer().getMusic().getName());
         artistTxt.setText(Data.getMusicPlayer().getMusic().getArtist());
@@ -48,17 +51,18 @@ public class BottomPlayerFragment extends Fragment {
             }
         });
 
+
+
         // Переход на полноэкранный плеер
         layout.setOnClickListener(v -> {
-            mainActivity.findViewById(R.id.bottom_frgmnt_view).setVisibility(View.INVISIBLE);
-            mainActivity.setFragment(new PlayerFragment());
+            Intent intent = new Intent(mainActivity, PlayerActivity.class);
+            startActivity(intent);
         });
 
         // Закрытие плеера
         closeBtn.setOnClickListener(v -> {
-            mainActivity.findViewById(R.id.bottom_frgmnt_view).setVisibility(View.INVISIBLE);
+            mainActivity.findViewById(R.id.player_fragment).setVisibility(View.INVISIBLE);
             Data.getMusicPlayer().stopSong();
-            Data.setMusicPlayer(null);
         });
 
         return view;

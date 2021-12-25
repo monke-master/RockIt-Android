@@ -4,6 +4,7 @@ package com.brigade.rockit.database;
 import android.net.Uri;
 
 
+import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.User;
 
@@ -27,7 +28,7 @@ public class UserManager {
     public UserManager() {
         auth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.
-                getInstance("gs://rockit-71ddf.appspot.com");
+                getInstance(Constants.STORAGE_PATH);
         firestore = FirebaseFirestore.getInstance();
         uid = FirebaseAuth.getInstance().getUid();
     }

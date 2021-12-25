@@ -10,16 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/back_btn"
-            android:layout_width="@dimen/back_btn_width"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <ImageView
             android:id="@+id/cover_img"
             android:layout_width="300dp"
@@ -70,12 +60,12 @@
             android:layout_height="@dimen/player_btn_size"
             android:layout_marginTop="20dp"
             android:src="@drawable/pause"
-            app:layout_constraintEnd_toStartOf="@+id/imageView2"
-            app:layout_constraintStart_toEndOf="@+id/imageView3"
+            app:layout_constraintEnd_toStartOf="@+id/next_btn"
+            app:layout_constraintStart_toEndOf="@+id/previous_btn"
             app:layout_constraintTop_toBottomOf="@+id/artist_txt" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/next_btn"
             android:layout_width="@dimen/footer_image_size"
             android:layout_height="@dimen/footer_image_size"
             android:layout_marginTop="32dp"
@@ -85,7 +75,7 @@
             app:layout_constraintTop_toBottomOf="@+id/artist_txt" />
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/previous_btn"
             android:layout_width="@dimen/footer_image_size"
             android:layout_height="@dimen/footer_image_size"
             android:layout_marginStart="56dp"

@@ -26,7 +26,7 @@ public class AdapterManager {
         auth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.
-                getInstance("gs://rockit-71ddf.appspot.com");
+                getInstance(Constants.STORAGE_PATH);
     }
 
 

@@ -110,4 +110,6 @@
     <string name="at">в</string>
     <string name="working">Извините, мы работаем над этой страницей!</string>
     <string name="post_hint">Что нового?</string>
+    <string name="player">Плеер</string>
+    <string name="queue">Очередь</string>
 </resources>

@@ -17,11 +17,14 @@
         android:supportsRtl="true"
         android:theme="@style/MainTheme">
         <activity
+            android:name=".activities.PlayerActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.OtherActivity"
             android:exported="false" />
         <activity
             android:name=".activities.MainActivity"
-            android:windowSoftInputMode="adjustNothing"></activity>
+            android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".activities.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +40,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
     </application>
 

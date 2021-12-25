@@ -14,9 +14,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Toast;
 
 import com.brigade.rockit.data.Constants;
@@ -29,6 +27,7 @@ import com.brigade.rockit.database.UserManager;
 import com.brigade.rockit.fragments.dialogs.SongDialog;
 import com.brigade.rockit.fragments.main.HomeFragment;
 import com.brigade.rockit.fragments.main.NewContentFragment;
+import com.brigade.rockit.fragments.music.BottomPlayerFragment;
 import com.brigade.rockit.fragments.music.NewMusicFragment;
 import com.brigade.rockit.fragments.profile.ProfileFragment;
 
@@ -43,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private int maxPhotos;
     private MainActivity thisActivity;
     private Fragment currentFragment;
+    private View playerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +51,17 @@ public class MainActivity extends AppCompatActivity {
         thisActivity = this;
 
         // Отображение главной страницы
-        if (savedInstanceState == null) {
-            setFragment(new HomeFragment());
-        }
+        setFragment(new HomeFragment());
+
+        playerFragment = findViewById(R.id.player_fragment);
+        playerFragment.setVisibility(View.INVISIBLE);
+        showBottomPlayer();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        showBottomPlayer();
     }
 
     // Отображение заданного фрагмента
@@ -233,13 +241,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Отображение нижнего фрагмента (для плеера)
-    public void setBottomFragment(Fragment fragment) {
-        FragmentContainerView container = findViewById(R.id.bottom_frgmnt_view);
-        container.setVisibility(View.VISIBLE);
-        getSupportFragmentManager().beginTransaction().replace(R.id.bottom_frgmnt_view,
-                fragment).commit();
-    }
 
     // Отображение настроек песни
     public void showSongSettings(Music music) {
@@ -251,7 +252,16 @@ public class MainActivity extends AppCompatActivity {
         return currentFragment;
     }
 
+    public void showBottomPlayer() {
+        if (Data.getMusicPlayer().isPlaying()) {
+            playerFragment.setVisibility(View.VISIBLE);
+            getSupportFragmentManager().beginTransaction().replace(R.id.player_fragment, new BottomPlayerFragment()).commit();
+        }
+    }
 
+    public void hideBottomPlayer() {
+        playerFragment.setVisibility(View.INVISIBLE);
+    }
 
 
 }

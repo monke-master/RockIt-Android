@@ -114,4 +114,9 @@
     <string name="yesterday">Yesterday</string>
     <string name="at">at</string>
     <string name="working">Sorry, we are working on this page!</string>
+    <!-- Strings used for fragments for navigation -->
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="player">Player</string>
+    <string name="queue">Queue</string>
 </resources>

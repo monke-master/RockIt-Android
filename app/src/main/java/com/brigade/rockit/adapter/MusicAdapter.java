@@ -74,6 +74,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
                     GlideApp.with(itemView.getContext()).load(music.getCover()).into(coverImg);
 
                     musicList.add(music);
+                    Data.getMusicPlayer().getQueue().add(music);
 
 
                     mainLayout.setOnClickListener(v -> {
@@ -132,14 +133,10 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
         }
         // Проигрывание песни
         public void playMusic(Music music) {
-            if (Data.getMusicPlayer() == null)
-                Data.setMusicPlayer(new MusicPlayer(mainActivity));
-            else
-                Data.getMusicPlayer().stopSong();
+            Data.getMusicPlayer().stopSong();
             Data.getMusicPlayer().playSong(music);
-            Data.getMusicPlayer().setQueue(musicList);
             Data.getMusicPlayer().setCurPosition(musicList.indexOf(music));
-            mainActivity.setBottomFragment(new BottomPlayerFragment());
+            mainActivity.showBottomPlayer();
         }
 
     }

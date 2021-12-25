@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.Window;
 
 import com.brigade.rockit.R;
+import com.brigade.rockit.data.Data;
+import com.brigade.rockit.data.MusicPlayer;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.TaskListener;
 import com.brigade.rockit.database.UserManager;
@@ -30,8 +32,8 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         thisActivity = this;
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_start);
+        Data.setMusicPlayer(new MusicPlayer(this));
         if (FirebaseAuth.getInstance().getCurrentUser() != null) { // Если пользователь не вышел, то
             signIn(); // Выполняется вход
         } else { // Иначе отображается стартовый фрагмент

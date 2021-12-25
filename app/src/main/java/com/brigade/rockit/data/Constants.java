@@ -24,5 +24,5 @@ public class Constants {
     public static final int SELECTING_MODE = 1;
     public static final int POST_MODE = 2;
     public static int NEWS_FEED_SIZE = 100000;
-    public static final String API_KEY = "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";
+    public static String STORAGE_PATH = "gs://rockit-e8345.appspot.com";
 }
