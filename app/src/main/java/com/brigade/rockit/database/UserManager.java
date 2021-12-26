@@ -76,6 +76,19 @@ public class UserManager {
         });
     }
 
+    public void verifyEmail(TaskListener listener) {
+        auth.getCurrentUser().sendEmailVerification().addOnCompleteListener(task -> {
+           if (task.isSuccessful())
+               listener.onComplete();
+           else
+               listener.onFailure(task.getException());
+        });
+    }
+
+    public boolean emailVerified() {
+        return auth.getCurrentUser().isEmailVerified();
+    }
+
     // Вход по емэйлу
     public void signInWithEmail(String email, String password, TaskListener listener) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {

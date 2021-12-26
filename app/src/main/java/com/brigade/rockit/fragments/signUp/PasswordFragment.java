@@ -49,7 +49,7 @@ public class PasswordFragment extends Fragment {
                 manager.createUser(Data.getNewUser(), password1, new TaskListener() {
                     @Override
                     public void onComplete() { // Вход
-                        startActivity.signIn();
+                        startActivity.nextRegFrag();
                     }
 
                     @Override

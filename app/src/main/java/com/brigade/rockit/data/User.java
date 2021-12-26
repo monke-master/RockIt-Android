@@ -9,6 +9,7 @@ public class User {
     private String email;
     private String name;
     private String surname;
+    private String phone;
     private String login;
     private String bio;
     private Uri pictureUri;
@@ -106,5 +107,13 @@ public class User {
 
     public void setFollowersList(ArrayList<String> followersList) {
         this.followersList = followersList;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

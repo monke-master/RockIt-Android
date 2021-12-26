@@ -29,7 +29,7 @@ public class SignInFragment extends Fragment {
         manager = new UserManager();
 
         // Получение виджетов
-        EditText emailEdit = view.findViewById(R.id.email_edit);
+        EditText emailEdit = view.findViewById(R.id.phone_edit);
         EditText passwordEdit = view.findViewById(R.id.pswrd_edit);
         Button signInBtn = view.findViewById(R.id.sign_in_btn);
         Button backBtn = view.findViewById(R.id.back_btn);

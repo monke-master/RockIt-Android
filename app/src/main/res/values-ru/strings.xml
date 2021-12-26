@@ -112,4 +112,6 @@
     <string name="post_hint">Что нового?</string>
     <string name="player">Плеер</string>
     <string name="queue">Очередь</string>
+    <string name="verify_email">Пожалуйста, подтвердите ваш адрес эл. почты, пройдя по ссылке в нашем письме.</string>
+    <string name="can_sign_in">После этого вы можете зайти в ваш аккаунт.</string>
 </resources>

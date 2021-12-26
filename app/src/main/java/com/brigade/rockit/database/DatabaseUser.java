@@ -15,6 +15,7 @@ public class DatabaseUser {
     private ArrayList<String> music;
     private ArrayList<User> followingList;
     private ArrayList<User> followersList;
+    private String phone;
 
     public DatabaseUser() {
         bio = "";
@@ -74,7 +75,6 @@ public class DatabaseUser {
         return posts;
     }
 
-
     public ArrayList<User> getFollowingList() {
         return followingList;
     }
@@ -85,5 +85,13 @@ public class DatabaseUser {
 
     public ArrayList<String> getMusic() {
         return music;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

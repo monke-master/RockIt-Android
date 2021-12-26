@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Window;
 
 import com.brigade.rockit.R;
 import com.brigade.rockit.data.Data;
@@ -13,12 +12,12 @@ import com.brigade.rockit.data.MusicPlayer;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.TaskListener;
 import com.brigade.rockit.database.UserManager;
-import com.brigade.rockit.fragments.signUp.CodeFragment;
 import com.brigade.rockit.fragments.signUp.EmailFragment;
 import com.brigade.rockit.fragments.signUp.LoginFragment;
 import com.brigade.rockit.fragments.signUp.PasswordFragment;
 import com.brigade.rockit.fragments.signIn.SignInFragment;
 import com.brigade.rockit.fragments.main.StartFragment;
+import com.brigade.rockit.fragments.signUp.VerifyEmailFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -48,13 +47,18 @@ public class StartActivity extends AppCompatActivity {
                 new StartFragment()).commit();
     }
 
+    public void setFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.frgmnt_view_music,
+               fragment).commit();
+    }
+
     // Инициализация фрагментов регистрации
     private void regFragInit() {
         ArrayList<Fragment> signUpFragments = new ArrayList<>();
         signUpFragments.add(new EmailFragment());
-        signUpFragments.add(new CodeFragment());
         signUpFragments.add(new LoginFragment());
         signUpFragments.add(new PasswordFragment());
+        signUpFragments.add(new VerifyEmailFragment());
         signUpIter = signUpFragments.iterator();
     }
 
@@ -77,9 +81,12 @@ public class StartActivity extends AppCompatActivity {
         manager.getUserData(new TaskListener() {
             @Override
             public void onComplete() {
-                // Запуск главной активности
-                Intent intent = new Intent(thisActivity, MainActivity.class);
-                startActivity(intent);
+                if (manager.emailVerified()) {
+                    // Запуск главной активности
+                    Intent intent = new Intent(thisActivity, MainActivity.class);
+                    startActivity(intent);
+                } else
+                    setFragment(new VerifyEmailFragment());
             }
 
             @Override

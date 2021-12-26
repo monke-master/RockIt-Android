@@ -10,6 +10,12 @@ android {
             keyAlias 'key0'
             keyPassword 'GkL8mnVALD9107B'
         }
+        testing {
+            storeFile file('D:\\Прожекты\\RockIt\\key\\rockit_key.jks')
+            storePassword 'GkL8mnVALD9107B'
+            keyAlias 'keytest'
+            keyPassword 'GkL8mnVALD9107Btest'
+        }
     }
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -18,8 +24,8 @@ android {
         applicationId "com.brigade.rockit"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "alpha 0.0.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.debug

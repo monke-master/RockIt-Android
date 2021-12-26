@@ -119,4 +119,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="player">Player</string>
     <string name="queue">Queue</string>
+    <string name="verify_email">Please, verify your email adress by following the link we sent.</string>
+    <string name="can_sign_in">Then you can sign in to your account.</string>
+    <!-- TODO: Remove or change this placeholder text -->
 </resources>
