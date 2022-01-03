@@ -26,7 +26,11 @@ import java.util.ArrayList;
 public class SelectMusicFragment extends Fragment {
 
     private MusicAdapter adapter;
+    private int request;
 
+    public SelectMusicFragment(int request) {
+        this.request = request;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,8 +64,17 @@ public class SelectMusicFragment extends Fragment {
 
         backBtn.setOnClickListener(v -> mainActivity.setFragment(new NewContentFragment()));
         nextBtn.setOnClickListener(v -> {
-            Data.getCurPost().setMusicIds(adapter.getSelectedList());
-            mainActivity.setFragment(new NewContentFragment());
+            switch (request){
+                case Constants.CREATING_POST:
+                    Data.getNewPost().setMusicIds(adapter.getSelectedList());
+                    mainActivity.setFragment(new NewContentFragment());
+                    break;
+                case Constants.CREATING_PLAYLIST:
+                    Data.getNewPlaylist().setSongIds(adapter.getSelectedList());
+                    mainActivity.setFragment(new NewPlaylistFragment());
+                    break;
+            }
+
         });
 
         return view;

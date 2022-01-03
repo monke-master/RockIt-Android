@@ -17,11 +17,9 @@ import com.brigade.rockit.activities.MainActivity;
 import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Music;
-import com.brigade.rockit.data.MusicPlayer;
 import com.brigade.rockit.database.ContentManager;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
-import com.brigade.rockit.fragments.music.BottomPlayerFragment;
 
 import java.util.ArrayList;
 
@@ -98,7 +96,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
                             optionButton.setImageDrawable(mainActivity.getDrawable(R.drawable.delete));
                             optionButton.setOnClickListener(v -> {
                                 adapter.deleteItem(musicId);
-                                Data.getCurPost().getMusicIds().remove(musicId);
+
                             });
                             break;
                         case Constants.SELECTING_MODE:
@@ -195,5 +193,9 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
 
     public ArrayList<Music> getMusicList() {
         return musicList;
+    }
+
+    public ArrayList<String> getMusicIds() {
+        return musicIds;
     }
 }

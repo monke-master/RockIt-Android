@@ -11,12 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
+import com.brigade.rockit.adapter.PlaylistAdapter;
 import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.adapter.MusicAdapter;
+import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.database.UserManager;
 
@@ -25,7 +28,7 @@ import java.util.ArrayList;
 
 public class MyMusicFragment extends Fragment {
 
-    private MusicAdapter adapter;
+    private MusicAdapter musicAdapter;
     private MainActivity mainActivity;
 
     @Override
@@ -35,32 +38,56 @@ public class MyMusicFragment extends Fragment {
         mainActivity = (MainActivity)getActivity();
 
         // Получение виджетов
-        Button newMusic = view.findViewById(R.id.new_music_btn);
-        RecyclerView recyclerView = view.findViewById(R.id.songs_list);
+        ImageView addMusic = view.findViewById(R.id.add_music_btn);
+        RecyclerView songsList = view.findViewById(R.id.songs_list);
+        RecyclerView playlists = view.findViewById(R.id.playlists);
+        ImageView addPlaylist = view.findViewById(R.id.add_playlist_btn);
 
         // Отображение песен
-        recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
-        adapter = new MusicAdapter(mainActivity);
-        adapter.setMode(Constants.PLAYLIST_MODE);
-        recyclerView.setAdapter(adapter);
+        songsList.setLayoutManager(new LinearLayoutManager(mainActivity));
+        musicAdapter = new MusicAdapter(mainActivity);
+        musicAdapter.setMode(Constants.PLAYLIST_MODE);
+        songsList.setAdapter(musicAdapter);
         UserManager manager = new UserManager();
         manager.getUserMusic(Data.getCurUser().getId(), new GetObjectListener() {
             @Override
             public void onComplete(Object object) {
                 ArrayList<String> musicIds = (ArrayList<String>) object;
                 for (String id: musicIds)
-                    adapter.addItem(id);
+                    musicAdapter.addItem(id);
             }
 
             @Override
             public void onFailure(Exception e) {
+                ExceptionManager.showError(e, getContext());
+            }
+        });
 
+        playlists.setLayoutManager(new LinearLayoutManager(mainActivity,
+                LinearLayoutManager.HORIZONTAL, false));
+        PlaylistAdapter playlistAdapter = new PlaylistAdapter(mainActivity);
+        playlists.setAdapter(playlistAdapter);
+        manager.getUserPlaylists(Data.getCurUser().getId(), new GetObjectListener() {
+            @Override
+            public void onComplete(Object object) {
+                ArrayList<String> playlistIds = (ArrayList<String>) object;
+                for (int i = playlistIds.size() - 1; i >= 0; i--)
+                    playlistAdapter.addItem(playlistIds.get(i));
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                ExceptionManager.showError(e, getContext());
             }
         });
 
         // Добавление музыки
-        newMusic.setOnClickListener(v -> {
+        addMusic.setOnClickListener(v -> {
             mainActivity.setFragment(new NewMusicFragment());
+        });
+
+        addPlaylist.setOnClickListener(v -> {
+            mainActivity.setFragment(new NewPlaylistFragment());
         });
 
         return view;

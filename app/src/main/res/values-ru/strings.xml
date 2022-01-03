@@ -114,4 +114,17 @@
     <string name="queue">Очередь</string>
     <string name="verify_email">Пожалуйста, подтвердите ваш адрес эл. почты, пройдя по ссылке в нашем письме.</string>
     <string name="can_sign_in">После этого вы можете зайти в ваш аккаунт.</string>
+    <string name="playlists">Плейлисты</string>
+    <string name="title">Название</string>
+    <string name="description">Описание</string>
+    <string name="playlist_example_title">Например: Chill Vibes</string>
+    <string name="songs">Песни</string>
+    <string name="delete">Удалить</string>
+    <string name="new_playlist">Новый плейлист</string>
+    <string name="playlist_uploaded">Ваш плейлист успешно добавлен.</string>
+    <string name="delete_my_playlists">Удалить из моих плейлистов</string>
+    <string name="deleted_my_playlists">Удалено из ваших плейлистов</string>
+    <string name="add_playlist">Добавить в Мои плейлисты</string>
+    <string name="playlist_added">Плейлист добавлен.</string>
+    <string name="playlist_deleted">Плейлист удален.</string>
 </resources>

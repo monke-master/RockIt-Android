@@ -62,8 +62,8 @@ public class NewContentFragment extends Fragment {
         songsList.setAdapter(musicAdapter);
 
         // Если какие то данные уже есть, отображаем их
-        if (Data.getCurPost() != null) {
-            Post post = Data.getCurPost();
+        if (Data.getNewPost() != null) {
+            Post post = Data.getNewPost();
             textEdit.setText(post.getText());
             ArrayList<Uri> images = post.getImagesList();
             for (Uri uri: images)
@@ -71,17 +71,17 @@ public class NewContentFragment extends Fragment {
             for (String musicId: post.getMusicIds())
                 musicAdapter.addItem(musicId);
         } else {
-            Data.setCurPost(new Post());
+            Data.setNewPost(new Post());
         }
 
         // Добавление фото
         addPhotoBtn.setOnClickListener(v -> {
-            if (Data.getCurPost().getImagesList().size() < Constants.MAX_POST_IMAGES) {
+            if (Data.getNewPost().getImagesList().size() < Constants.MAX_POST_IMAGES) {
                 String text = textEdit.getText().toString();
                 if (!text.equals(""))
-                    Data.getCurPost().setText(text);
+                    Data.getNewPost().setText(text);
                 PhotoDialog dialog = new PhotoDialog(Constants.MAX_POST_IMAGES,
-                        Constants.PICK_POST_IMAGES);
+                        Constants.CREATING_POST);
                 dialog.show(getParentFragmentManager(), "Photo");
             } else
                 Toast.makeText(mainActivity, getString(R.string.pick_photo_error) +
@@ -90,11 +90,11 @@ public class NewContentFragment extends Fragment {
 
         // Добавление музыки
         addMusicBtn.setOnClickListener(v -> {
-            if (Data.getCurPost().getMusicIds().size() < Constants.MAX_POST_SONGS) {
+            if (Data.getNewPost().getMusicIds().size() < Constants.MAX_POST_SONGS) {
                 String text = textEdit.getText().toString();
                 if (!text.equals(""))
-                    Data.getCurPost().setText(text);
-                mainActivity.setFragment(new SelectMusicFragment());
+                    Data.getNewPost().setText(text);
+                mainActivity.setFragment(new SelectMusicFragment(Constants.CREATING_POST));
             } else
                 Toast.makeText(mainActivity, getString(R.string.select_music_error) +
                         Constants.MAX_POST_SONGS, Toast.LENGTH_LONG).show();
@@ -104,15 +104,16 @@ public class NewContentFragment extends Fragment {
         // Публикация поста
         postBtn.setOnClickListener(v -> {
             String text = textEdit.getText().toString();
-            Data.getCurPost().setText(text);
-            Post post = Data.getCurPost();
+            Data.getNewPost().setText(text);
+            Data.getNewPost().setMusicIds(musicAdapter.getMusicIds());
+            Post post = Data.getNewPost();
             if (!post.getText().equals("") || (post.getImagesList().size() > 0) ||
                     (post.getMusicIds().size() > 0)) {
                 ContentManager contentManager = new ContentManager();
-                contentManager.uploadPost(Data.getCurPost(), new TaskListener() {
+                contentManager.uploadPost(Data.getNewPost(), new TaskListener() {
                     @Override
                     public void onComplete() {
-                        Data.setCurPost(null);
+                        Data.setNewPost(null);
                     }
 
                     @Override
@@ -130,7 +131,7 @@ public class NewContentFragment extends Fragment {
 
         // Возвращение на предыдущий фрагмент
         backBtn.setOnClickListener(v -> {
-            Data.setCurPost(null);
+            Data.setNewPost(null);
             mainActivity.setFragment(new HomeFragment());
         });
         return view;

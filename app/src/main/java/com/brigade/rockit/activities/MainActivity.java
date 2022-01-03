@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
 
 import android.Manifest;
 import android.content.ClipData;
@@ -29,6 +28,7 @@ import com.brigade.rockit.fragments.main.HomeFragment;
 import com.brigade.rockit.fragments.main.NewContentFragment;
 import com.brigade.rockit.fragments.music.BottomPlayerFragment;
 import com.brigade.rockit.fragments.music.NewMusicFragment;
+import com.brigade.rockit.fragments.music.NewPlaylistFragment;
 import com.brigade.rockit.fragments.profile.ProfileFragment;
 
 import java.io.File;
@@ -68,7 +68,11 @@ public class MainActivity extends AppCompatActivity {
     public void setFragment(Fragment fragment) {
         currentFragment = fragment;
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frgmnt_view,
-                fragment).commit();
+                fragment).addToBackStack(null).commit();
+    }
+
+    public void getPreviousFragment() {
+        getSupportFragmentManager().popBackStack();
     }
 
     // Установка цели
@@ -221,18 +225,22 @@ public class MainActivity extends AppCompatActivity {
                         });
                         setFragment(new ProfileFragment(Data.getCurUser())); // Отображаем фрагмент профиля
                         break;
-                    case Constants.PICK_POST_IMAGES: // Выбор фото для поста
+                    case Constants.CREATING_POST: // Выбор фото для поста
                         for (Uri uri1: imagesUri)
-                            Data.getCurPost().getImagesList().add(uri1); // Добавляем выбранные фото к списку фото
+                            Data.getNewPost().getImagesList().add(uri1); // Добавляем выбранные фото к списку фото
                         setFragment(new NewContentFragment()); // Отображаем фрагмент редактирования поста
                         break;
                     case Constants.PICK_AUDIO: // Выбор аудио
-                        Data.getCurMusic().setUri(uri);
+                        Data.getNewMusic().setUri(uri);
                         setFragment(new NewMusicFragment());
                         break;
                     case Constants.PICK_COVER_IMAGE: // Выбор обложки для песни
-                        Data.getCurMusic().setCover(uri);
+                        Data.getNewMusic().setCover(uri);
                         setFragment(new NewMusicFragment());
+                        break;
+                    case Constants.CREATING_PLAYLIST:
+                        Data.getNewPlaylist().setCoverUri(uri);
+                        setFragment(new NewPlaylistFragment());
                         break;
                 }
             }

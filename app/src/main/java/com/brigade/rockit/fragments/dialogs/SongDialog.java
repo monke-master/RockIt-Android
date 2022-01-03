@@ -17,7 +17,6 @@ import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.database.TaskListener;
 import com.brigade.rockit.database.UserManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -30,7 +29,7 @@ public class SongDialog extends BottomSheetDialog {
         ContentManager contentManager = new ContentManager();
 
         // Если песня загружена пользователем, добавление возможности удалить песню из бд
-        if (music.getAuthorId().equals(FirebaseAuth.getInstance().getUid())) {
+        if (music.getAuthorId().equals(Data.getCurUser().getId())) {
             Button deleteBtn = findViewById(R.id.delete_btn);
             deleteBtn.setVisibility(View.VISIBLE);
             deleteBtn.setOnClickListener(v -> {

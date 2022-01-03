@@ -1,9 +1,11 @@
 package com.brigade.rockit.database;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Music;
+import com.brigade.rockit.data.Playlist;
 import com.brigade.rockit.data.Post;
 import com.brigade.rockit.data.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -15,8 +17,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.UUID;
 
 public class ContentManager {
@@ -376,34 +376,19 @@ public class ContentManager {
                 Post post = new Post();
                 post.setText(dbPost.getText());
                 post.setDate(dbPost.getDate());
-                firestore.collection("users").
-                        document(dbPost.getAuthorId()).get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        User user = new User();
-                        DocumentSnapshot userDoc = task.getResult();
-                        user.setLogin(userDoc.get("login").toString());
-                        user.setName(userDoc.get("name").toString());
-                        user.setSurname(userDoc.get("surname").toString());
-                        user.setBio(userDoc.get("bio").toString());
-                        user.setId(userDoc.getId());
-                        user.setFollowingList((ArrayList<String>) userDoc.get("followingList"));
-                        user.setFollowersList((ArrayList<String>) userDoc.get("followersList"));
-                        getUri(userDoc.get("profilePicture").toString(), new GetObjectListener() {
-                            @Override
-                            public void onComplete(Object object) {
-                                user.setPictureUri((Uri)object);
-                                post.setAuthor(user);
-                                listener.onComplete(post);
-                            }
+                UserManager userManager = new UserManager();
+                userManager.getUser(dbPost.getAuthorId(), new GetObjectListener() {
+                    @Override
+                    public void onComplete(Object object) {
+                        post.setAuthor((User) object);
+                        listener.onComplete(post);
+                    }
 
-                            @Override
-                            public void onFailure(Exception e) {
-                                listener.onFailure(e);
-                            }
-                        });
+                    @Override
+                    public void onFailure(Exception e) {
+                        listener.onFailure(e);
                     }
                 });
-
             }
         });
     }
@@ -490,8 +475,116 @@ public class ContentManager {
         });
     }
 
+    public void uploadPlaylist(Playlist playlist, TaskListener listener) {
+        DatabasePlaylist dbPlaylist = new DatabasePlaylist(playlist);
+        firestore.collection("playlists").add(dbPlaylist).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                String coverPath = "";
+                if (playlist.getCoverUri() == null) {
+                    if (playlist.getSongs().size() > 0)
+                        playlist.setCoverUri(playlist.getSongs().get(0).getCover());
+                    else
+                        coverPath = "song_covers/default.png";
+                } else
+                    coverPath = "playlist_covers/" + task.getResult().getId();
+                String finalCoverPath = coverPath;
+                if (playlist.getCoverUri() != null) {
+                    uploadUriFile(playlist.getCoverUri(), coverPath, new TaskListener() {
+                        @Override
+                        public void onComplete() {
+                            task.getResult().update("cover", finalCoverPath).addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    addPlaylist(task.getResult().getId(), listener);
+                                } else
+                                    listener.onFailure(task1.getException());
+                            });
+                        }
 
 
+                        @Override
+                        public void onFailure(Exception e) {
+                            listener.onFailure(e);
+                        }
+                    });
+                } else {
+                    task.getResult().update("cover", finalCoverPath).addOnCompleteListener(task1 -> {
+                        if (task1.isSuccessful()) {
+                            addPlaylist(task.getResult().getId(), listener);
+                        } else
+                            listener.onFailure(task1.getException());
+                    });
+                }
+            } else
+                listener.onFailure(task.getException());
+        });
+    }
 
+    public void addPlaylist(String playlistId, TaskListener listener) {
+        firestore.collection("users").document(uid).update(
+                "playlists", FieldValue.arrayUnion(playlistId)).
+                addOnCompleteListener(task2 -> {
+                    if (task2.isSuccessful())
+                        listener.onComplete();
+                    else
+                        listener.onFailure(task2.getException());
+                });
+    }
+
+    public void getPlaylist(String id, GetObjectListener listener) {
+        firestore.collection("playlists").document(id).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot result = task.getResult();
+                DatabasePlaylist playlist = new DatabasePlaylist();
+                playlist.setName(result.get("name").toString());
+                playlist.setAuthor(result.get("author").toString());
+                playlist.setCover(result.get("cover").toString());
+                playlist.setDate(result.get("date").toString());
+                playlist.setSongs((ArrayList<String>) result.get("songs"));
+                listener.onComplete(playlist);
+            } else
+                listener.onFailure(task.getException());
+        });
+    }
+
+    public void deleteFromMyPlaylists(String playlistId, TaskListener listener) {
+        firestore.collection("users").document(uid).update("playlists",
+                FieldValue.arrayRemove(playlistId)).addOnCompleteListener(task -> {
+            if (task.isSuccessful())
+                listener.onComplete();
+            else
+                listener.onFailure(task.getException());
+        });
+    }
+
+    public void deletePlaylist(String playlistId, TaskListener listener) {
+        deleteFromMyPlaylists(playlistId, new TaskListener() {
+            @Override
+            public void onComplete() {
+                DocumentReference playlistRef = firestore.collection("playlists").document(playlistId);
+                playlistRef.get().
+                        addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        String coverPath = task.getResult().get("cover").toString();
+                        playlistRef.delete().addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()) {
+                                if (coverPath.contains("playlist_covers/"))
+                                    deleteFile(coverPath, listener);
+                                else
+                                    listener.onComplete();
+                            }
+                            else
+                                listener.onFailure(task1.getException());
+                        });
+                    } else
+                        listener.onFailure(task.getException());
+                });
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                listener.onFailure(e);
+            }
+        });
+    }
 
 }

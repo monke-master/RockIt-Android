@@ -22,6 +22,10 @@
     </style>
     <style name="Header2" parent="Widget.AppCompat.TextView">
         <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="android:textColor">@color/light_grey</item>
+    </style>
+    <style name="Header3" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/header3_text_size</item>
         <item name="android:textColor">@color/light_grey_2</item>
     </style>
     <style name="Text" parent="Widget.AppCompat.TextView">
@@ -41,4 +45,10 @@
     <style name="BottomSheetDialog" parent="Widget.MaterialComponents.BottomSheet">
         <item name="buttonStyle">@style/TextButton</item>
     </style>
+    <style name="Toolbar">
+        <item name="android:background">@color/dark_red</item>
+        <item name="height">@dimen/footer_height</item>
+        <item name="buttonGravity">center_vertical</item>
+    </style>
+
 </resources>

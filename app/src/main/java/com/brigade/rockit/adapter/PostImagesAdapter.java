@@ -39,7 +39,7 @@ public class PostImagesAdapter extends RecyclerView.Adapter<PostImagesAdapter.Po
             GlideApp.with(context).load(uri).into(imageView);
             // Удаление фото
             deleteBtn.setOnClickListener(v -> {
-                Data.getCurPost().getImagesList().remove(uri);
+                Data.getNewPost().getImagesList().remove(uri);
                 adapter.deleteItem(uri);
             });
         }

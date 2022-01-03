@@ -5,9 +5,10 @@ import com.brigade.rockit.database.DatabaseUser;
 public class Data {
     private static DatabaseUser newUser;
     private static User curUser;
-    private static Post curPost;
-    private static Music curMusic;
+    private static Post newPost;
+    private static Music newMusic;
     private static MusicPlayer musicPlayer;
+    private static Playlist newPlaylist;
 
     public static DatabaseUser getNewUser() {
         return newUser;
@@ -25,18 +26,18 @@ public class Data {
         Data.curUser = curUser;
     }
 
-    public static Post getCurPost() {
-        return curPost;
+    public static Post getNewPost() {
+        return newPost;
     }
 
-    public static void setCurPost(Post post) { Data.curPost = post;}
+    public static void setNewPost(Post post) { Data.newPost = post;}
 
-    public static Music getCurMusic() {
-        return curMusic;
+    public static Music getNewMusic() {
+        return newMusic;
     }
 
-    public static void setCurMusic(Music curMusic) {
-        Data.curMusic = curMusic;
+    public static void setNewMusic(Music newMusic) {
+        Data.newMusic = newMusic;
     }
 
     public static MusicPlayer getMusicPlayer() {
@@ -45,5 +46,13 @@ public class Data {
 
     public static void setMusicPlayer(MusicPlayer musicPlayer) {
         Data.musicPlayer = musicPlayer;
+    }
+
+    public static Playlist getNewPlaylist() {
+        return newPlaylist;
+    }
+
+    public static void setNewPlaylist(Playlist newPlaylist) {
+        Data.newPlaylist = newPlaylist;
     }
 }

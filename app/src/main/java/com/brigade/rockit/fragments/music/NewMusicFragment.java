@@ -43,12 +43,12 @@ public class NewMusicFragment extends Fragment {
         ImageView coverImage = view.findViewById(R.id.cover_img);
 
         // Отображение введенной информации, если она есть
-        if (Data.getCurMusic() == null) {
-            Data.setCurMusic(new Music());
+        if (Data.getNewMusic() == null) {
+            Data.setNewMusic(new Music());
             mainActivity.setRequest(Constants.PICK_AUDIO);
             mainActivity.pickAudio();
         } else {
-            Music music = Data.getCurMusic();
+            Music music = Data.getNewMusic();
             if (music.getName() != null)
                 nameEdit.setText(music.getName());
             if (music.getArtist() != null)
@@ -63,9 +63,9 @@ public class NewMusicFragment extends Fragment {
             String name = nameEdit.getText().toString();
             String artist = artistEdit.getText().toString();
             if (!name.equals(""))
-                Data.getCurMusic().setName(name);
+                Data.getNewMusic().setName(name);
             if (!artist.equals(""))
-                Data.getCurMusic().setArtist(artist);
+                Data.getNewMusic().setArtist(artist);
             mainActivity.setRequest(Constants.PICK_COVER_IMAGE);
             mainActivity.pickPhotos(1);
         });
@@ -76,22 +76,22 @@ public class NewMusicFragment extends Fragment {
             String artist = artistEdit.getText().toString();
             // Проверка на пустые поля
             if (!(artist.equals("") && name.equals(""))) {
-                Data.getCurMusic().setArtist(artist);
-                Data.getCurMusic().setName(name);
-                Data.getCurMusic().setAuthorId(FirebaseAuth.getInstance().getUid());
+                Data.getNewMusic().setArtist(artist);
+                Data.getNewMusic().setName(name);
+                Data.getNewMusic().setAuthorId(FirebaseAuth.getInstance().getUid());
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-                retriever.setDataSource(mainActivity.getApplicationContext(), Data.getCurMusic().
+                retriever.setDataSource(mainActivity.getApplicationContext(), Data.getNewMusic().
                         getUri());
                 int millis =  Integer.parseInt(retriever.
                         extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
                 int seconds = millis / 1000;
                 String duration = seconds / 60 + ":" + seconds % 60;
-                Data.getCurMusic().setDuration(duration);
+                Data.getNewMusic().setDuration(duration);
                 ContentManager contentManager = new ContentManager();
-                contentManager.uploadMusic(Data.getCurMusic(), new TaskListener() {
+                contentManager.uploadMusic(Data.getNewMusic(), new TaskListener() {
                     @Override
                     public void onComplete() {
-                        Data.setCurMusic(null);
+                        Data.setNewMusic(null);
 
                     }
 
@@ -116,7 +116,7 @@ public class NewMusicFragment extends Fragment {
         // Возвращение на предыдущий фрагмент
         backBtn.setOnClickListener(v -> {
             mainActivity.setFragment(new MusicFragment());
-            Data.setCurMusic(null);
+            Data.setNewMusic(null);
         });
 
 
