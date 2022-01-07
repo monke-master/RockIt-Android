@@ -1,15 +1,7 @@
 package com.brigade.rockit.fragments.music;
 
-
 import android.net.Uri;
 import android.os.Bundle;
-
-
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,6 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.brigade.rockit.GlideApp;
 import com.brigade.rockit.R;
@@ -36,10 +33,14 @@ import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 
+public class EditPlaylistFragment extends Fragment {
 
-public class NewPlaylistFragment extends Fragment {
+    private Playlist playlist;
+    private boolean coverChanged;
 
-
+    public EditPlaylistFragment(Playlist playlist) {
+        this.playlist = playlist;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,15 +59,14 @@ public class NewPlaylistFragment extends Fragment {
         songsList.setAdapter(musicAdapter);
         songsList.setLayoutManager(new LinearLayoutManager(mainActivity));
 
+        if (!titleEdit.equals(""))
+            toolbar.getMenu().getItem(0).setVisible(true);
 
-        if (Data.getNewPlaylist() == null)
-            Data.setNewPlaylist(new Playlist());
-        Playlist playlist = Data.getNewPlaylist();
-
-        if (playlist.getCoverUri() != null)
-            coverImg.setImageURI(playlist.getCoverUri());
-        for (String songId: playlist.getSongIds())
-            musicAdapter.addItem(songId);
+        titleEdit.setText(playlist.getName());
+        descrEdit.setText(playlist.getDescription());
+        for (String id: playlist.getSongIds())
+            musicAdapter.addItem(id);
+        GlideApp.with(mainActivity).load(playlist.getCoverUri()).into(coverImg);
 
 
         coverImg.setOnClickListener(v -> {
@@ -76,6 +76,7 @@ public class NewPlaylistFragment extends Fragment {
                     ArrayList<Uri> uris = (ArrayList)object;
                     playlist.setCoverUri(uris.get(0));
                     GlideApp.with(mainActivity).load(playlist.getCoverUri()).into(coverImg);
+                    coverChanged = true;
                 }
 
                 @Override
@@ -128,17 +129,15 @@ public class NewPlaylistFragment extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.done_btn) {
-                    Playlist newPlaylist = Data.getNewPlaylist();
-                    newPlaylist.setName(titleEdit.getText().toString());
-                    newPlaylist.setDescription(descrEdit.getText().toString());
-                    newPlaylist.setAuthor(Data.getCurUser());
+                    playlist.setName(titleEdit.getText().toString());
+                    playlist.setDescription(descrEdit.getText().toString());
                     DateManager dateManager = new DateManager();
-                    newPlaylist.setDate(dateManager.getDate());
+                    playlist.setDate(dateManager.getDate());
                     ContentManager contentManager = new ContentManager();
-                    contentManager.uploadPlaylist(newPlaylist, new TaskListener() {
+                    contentManager.updatePlaylist(playlist, coverChanged, new TaskListener() {
                         @Override
                         public void onComplete() {
-                            Data.setNewPlaylist(null);
+
                         }
 
                         @Override
@@ -154,5 +153,4 @@ public class NewPlaylistFragment extends Fragment {
 
         return view;
     }
-
 }

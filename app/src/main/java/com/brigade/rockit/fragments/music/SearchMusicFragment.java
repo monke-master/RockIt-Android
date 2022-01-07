@@ -61,6 +61,6 @@ public class SearchMusicFragment extends Fragment {
 
     // Очистка выводимого списка
     public void clear() {
-        adapter.clear();
+        //adapter.clear();
     }
 }

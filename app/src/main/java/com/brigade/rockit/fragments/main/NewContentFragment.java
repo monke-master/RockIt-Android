@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +25,13 @@ import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Post;
 import com.brigade.rockit.database.ContentManager;
 import com.brigade.rockit.database.ExceptionManager;
+import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.database.TaskListener;
 import com.brigade.rockit.fragments.dialogs.PhotoDialog;
 import com.brigade.rockit.fragments.music.SelectMusicFragment;
 import com.brigade.rockit.fragments.profile.ProfileFragment;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class NewContentFragment extends Fragment {
@@ -61,27 +64,36 @@ public class NewContentFragment extends Fragment {
         musicAdapter.setMode(Constants.POST_MODE);
         songsList.setAdapter(musicAdapter);
 
-        // Если какие то данные уже есть, отображаем их
-        if (Data.getNewPost() != null) {
-            Post post = Data.getNewPost();
-            textEdit.setText(post.getText());
-            ArrayList<Uri> images = post.getImagesList();
-            for (Uri uri: images)
-                imageAdapter.addItem(uri);
-            for (String musicId: post.getMusicIds())
-                musicAdapter.addItem(musicId);
-        } else {
+        if (Data.getNewPost() == null)
             Data.setNewPost(new Post());
+        Post post = Data.getNewPost();
+        for (Uri uri: post.getImagesList()) {
+            imageAdapter.addItem(uri);
         }
+
+        for (String musicId: post.getMusicIds())
+            musicAdapter.addItem(musicId);
+
 
         // Добавление фото
         addPhotoBtn.setOnClickListener(v -> {
             if (Data.getNewPost().getImagesList().size() < Constants.MAX_POST_IMAGES) {
-                String text = textEdit.getText().toString();
-                if (!text.equals(""))
-                    Data.getNewPost().setText(text);
                 PhotoDialog dialog = new PhotoDialog(Constants.MAX_POST_IMAGES,
-                        Constants.CREATING_POST);
+                        new GetObjectListener() {
+                            @Override
+                            public void onComplete(Object object) {
+                                ArrayList<Uri> uris = (ArrayList<Uri>)object;
+                                post.setImagesList((ArrayList<Uri>) object);
+                                for (Uri uri: post.getImagesList()) {
+                                    imageAdapter.addItem(uri);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+                                ExceptionManager.showError(e, getContext());
+                            }
+                        });
                 dialog.show(getParentFragmentManager(), "Photo");
             } else
                 Toast.makeText(mainActivity, getString(R.string.pick_photo_error) +
@@ -91,10 +103,19 @@ public class NewContentFragment extends Fragment {
         // Добавление музыки
         addMusicBtn.setOnClickListener(v -> {
             if (Data.getNewPost().getMusicIds().size() < Constants.MAX_POST_SONGS) {
-                String text = textEdit.getText().toString();
-                if (!text.equals(""))
-                    Data.getNewPost().setText(text);
-                mainActivity.setFragment(new SelectMusicFragment(Constants.CREATING_POST));
+                mainActivity.setFragment(new SelectMusicFragment(new GetObjectListener() {
+                    @Override
+                    public void onComplete(Object object) {
+                        ArrayList<String> songIds = (ArrayList<String>) object;
+                        for (String id: songIds)
+                            post.getMusicIds().add(id);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                }));
             } else
                 Toast.makeText(mainActivity, getString(R.string.select_music_error) +
                         Constants.MAX_POST_SONGS, Toast.LENGTH_LONG).show();
@@ -104,13 +125,12 @@ public class NewContentFragment extends Fragment {
         // Публикация поста
         postBtn.setOnClickListener(v -> {
             String text = textEdit.getText().toString();
-            Data.getNewPost().setText(text);
-            Data.getNewPost().setMusicIds(musicAdapter.getMusicIds());
-            Post post = Data.getNewPost();
+            post.setText(text);
+            post.setMusicIds(musicAdapter.getMusicIds());
             if (!post.getText().equals("") || (post.getImagesList().size() > 0) ||
                     (post.getMusicIds().size() > 0)) {
                 ContentManager contentManager = new ContentManager();
-                contentManager.uploadPost(Data.getNewPost(), new TaskListener() {
+                contentManager.uploadPost(post, new TaskListener() {
                     @Override
                     public void onComplete() {
                         Data.setNewPost(null);

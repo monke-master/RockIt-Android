@@ -8,6 +8,7 @@ import com.brigade.rockit.data.Music;
 import com.brigade.rockit.data.Playlist;
 import com.brigade.rockit.data.Post;
 import com.brigade.rockit.data.User;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -587,4 +588,19 @@ public class ContentManager {
         });
     }
 
+    public void updatePlaylist(Playlist playlist, boolean coverChanged, TaskListener listener) {
+
+        DatabasePlaylist dbPlaylist = new DatabasePlaylist(playlist);
+        dbPlaylist.setCover("playlist_covers/" + playlist.getId());
+
+        firestore.collection("playlists").document(playlist.getId()).set(dbPlaylist).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                if (coverChanged)
+                    uploadUriFile(playlist.getCoverUri(), dbPlaylist.getCover(), listener);
+                else
+                    listener.onComplete();
+            } else
+                listener.onFailure(task.getException());
+        });
+    }
 }

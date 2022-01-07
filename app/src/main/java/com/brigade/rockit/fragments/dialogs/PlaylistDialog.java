@@ -17,6 +17,7 @@ import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.database.TaskListener;
 import com.brigade.rockit.database.UserManager;
+import com.brigade.rockit.fragments.music.EditPlaylistFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
@@ -31,7 +32,6 @@ public class PlaylistDialog extends BottomSheetDialog {
         Button addBtn = findViewById(R.id.add_btn);
         Button editBtn = findViewById(R.id.edit_btn);
         Button deleteBtn = findViewById(R.id.delete_btn);
-
 
         ContentManager contentManager = new ContentManager();
         UserManager userManager = new UserManager();
@@ -98,9 +98,17 @@ public class PlaylistDialog extends BottomSheetDialog {
                         ExceptionManager.showError(e, getContext());
                     }
                 });
+                hide();
             });
         } else
             deleteBtn.setVisibility(View.GONE);
 
+        if (Data.getCurUser().getId().equals(playlist.getAuthor().getId())) {
+            editBtn.setOnClickListener(v -> {
+                mainActivity.setFragment(new EditPlaylistFragment(playlist));
+                hide();
+            });
+        } else
+            editBtn.setVisibility(View.GONE);
     }
 }

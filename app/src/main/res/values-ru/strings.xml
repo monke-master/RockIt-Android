@@ -75,7 +75,6 @@
     <string name="for_you">Рекомендации</string>
     <string name="song_name">Название песни</string>
     <string name="artist">Исполнитель</string>
-    <string name="add_cover">Добавить обложку</string>
     <string name="song_name_error">Введите название песни!</string>
     <string name="song_artist_error">Введите автора песни!</string>
     <string name="done">Готово</string>
@@ -127,4 +126,5 @@
     <string name="add_playlist">Добавить в Мои плейлисты</string>
     <string name="playlist_added">Плейлист добавлен.</string>
     <string name="playlist_deleted">Плейлист удален.</string>
+    <string name="set_cover">Загрузить обложку</string>
 </resources>

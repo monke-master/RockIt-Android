@@ -1,6 +1,7 @@
 package com.brigade.rockit.fragments.music;
 
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -21,8 +22,12 @@ import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Music;
 import com.brigade.rockit.database.ContentManager;
 import com.brigade.rockit.database.ExceptionManager;
+import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.database.TaskListener;
+import com.brigade.rockit.fragments.dialogs.PhotoDialog;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
 
 public class NewMusicFragment extends Fragment {
 
@@ -42,32 +47,43 @@ public class NewMusicFragment extends Fragment {
         EditText artistEdit = view.findViewById(R.id.artist_edit);
         ImageView coverImage = view.findViewById(R.id.cover_img);
 
+
         // Отображение введенной информации, если она есть
         if (Data.getNewMusic() == null) {
             Data.setNewMusic(new Music());
-            mainActivity.setRequest(Constants.PICK_AUDIO);
-            mainActivity.pickAudio();
-        } else {
-            Music music = Data.getNewMusic();
-            if (music.getName() != null)
-                nameEdit.setText(music.getName());
-            if (music.getArtist() != null)
-                artistEdit.setText(music.getArtist());
-            if (music.getCover() != null)
-                GlideApp.with(getActivity()).load(music.getCover()).into(coverImage);
+            mainActivity.pickAudio(new GetObjectListener() {
+                @Override
+                public void onComplete(Object object) {
+                    Data.getNewMusic().setUri((Uri) object);
+                }
 
+                @Override
+                public void onFailure(Exception e) {
+
+                }
+            });
         }
+        Music music = Data.getNewMusic();
+        if (music.getUri() != null )
+            GlideApp.with(mainActivity).load(music.getCover()).into(coverImage);
+
 
         // Добавление обложки
         addCoverBtn.setOnClickListener(v -> {
-            String name = nameEdit.getText().toString();
-            String artist = artistEdit.getText().toString();
-            if (!name.equals(""))
-                Data.getNewMusic().setName(name);
-            if (!artist.equals(""))
-                Data.getNewMusic().setArtist(artist);
-            mainActivity.setRequest(Constants.PICK_COVER_IMAGE);
-            mainActivity.pickPhotos(1);
+            PhotoDialog dialog = new PhotoDialog(1, new GetObjectListener() {
+                @Override
+                public void onComplete(Object object) {
+                    ArrayList<Uri> uris = (ArrayList<Uri>) object;
+                    music.setCover(uris.get(0));
+                    GlideApp.with(mainActivity).load(music.getCover()).into(coverImage);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    ExceptionManager.showError(e, getContext());
+                }
+            });
+            dialog.show(getParentFragmentManager(), "photo");
         });
 
         // Загрузка песни
