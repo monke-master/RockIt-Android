@@ -16,8 +16,10 @@ import com.brigade.rockit.activities.OtherActivity;
 import com.brigade.rockit.activities.StartActivity;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.fragments.main.HomeFragment;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 
+// Другое
 public class OtherFragment extends Fragment {
 
     @Override
@@ -30,7 +32,7 @@ public class OtherFragment extends Fragment {
         Button acntStngsBtn = view.findViewById(R.id.acnt_stngs_btn);
         Button stngsBtn = view.findViewById(R.id.stngs_btn);
         Button signOutBtn = view.findViewById(R.id.sign_out_btn);
-        Button backBtn = view.findViewById(R.id.back_btn_other);
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
 
         // Настройки аккаунта
         acntStngsBtn.setOnClickListener(v -> {
@@ -44,11 +46,12 @@ public class OtherFragment extends Fragment {
             Intent intent = new Intent(otherActivity, StartActivity.class);
             startActivity(intent);
         });
-        // Предыдущий фрагмент
-        backBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(otherActivity, MainActivity.class);
-            startActivity(intent);
+
+        toolbar.setNavigationOnClickListener(v -> {
+            otherActivity.finish();
         });
+
         return view;
     }
+
 }

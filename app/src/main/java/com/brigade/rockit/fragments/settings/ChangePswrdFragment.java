@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +21,12 @@ import com.brigade.rockit.data.Patterns;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.TaskListener;
 import com.brigade.rockit.database.UserManager;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// Смена пароля
 public class ChangePswrdFragment extends Fragment {
 
 
@@ -35,10 +39,45 @@ public class ChangePswrdFragment extends Fragment {
         // Получение виджетов
         EditText curPswrdEdit = view.findViewById(R.id.cur_pswrd_edit);
         EditText newPswrdEdit = view.findViewById(R.id.new_pswrd_edit);
-        Button backBtn = view.findViewById(R.id.back_btn_cp);
-        Button changeBtn = view.findViewById(R.id.change_btn_p);
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
 
-        changeBtn.setOnClickListener(v -> {
+        curPswrdEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                toolbar.getMenu().getItem(0).setVisible(!(s.toString().equals("") ||
+                        newPswrdEdit.getText().toString().equals("")));
+            }
+        });
+
+        newPswrdEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                toolbar.getMenu().getItem(0).setVisible(!(s.toString().equals("") ||
+                        curPswrdEdit.getText().toString().equals("")));
+            }
+        });
+
+        toolbar.setOnMenuItemClickListener(item -> {
             String curPswrd = curPswrdEdit.getText().toString();
             String newPswrd = newPswrdEdit.getText().toString();
             // Если форма текущего пароля правильная
@@ -62,11 +101,11 @@ public class ChangePswrdFragment extends Fragment {
             } else // Неверная форма нового пароля
                 Toast.makeText(getContext(), getString(R.string.pswrd_form_error),
                         Toast.LENGTH_LONG).show();
+            return true;
         });
 
-        backBtn.setOnClickListener(v -> {
-            otherActivity.setFragment(new AccountFragment());
-        });
+        toolbar.setNavigationOnClickListener(v -> otherActivity.previousFragment());
+
         return view;
     }
 

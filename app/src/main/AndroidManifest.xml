@@ -18,17 +18,19 @@
         android:theme="@style/MainTheme">
         <activity
             android:name=".activities.PlayerActivity"
-            android:exported="false" />
+            android:exported="false"
+            />
         <activity
             android:name=".activities.OtherActivity"
             android:exported="false" />
         <activity
             android:name=".activities.MainActivity"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".activities.StartActivity">
+        <activity
+            android:name=".activities.StartActivity"
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -1,7 +1,6 @@
 package com.brigade.rockit.fragments.dialogs;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -49,7 +48,6 @@ public class SongDialog extends BottomSheetDialog {
             });
         }
 
-        Log.d("com227", "plete");
 
         // Добавление и удаление из "Моей музыки"
         Button myMusicBtn = findViewById(R.id.my_music_btn);

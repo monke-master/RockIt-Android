@@ -30,7 +30,6 @@
     <string name="sign_up">Регистрация</string>
     <string name="next">Далее</string>
     <string name="email_or_login">Адрес эл.почты или логин</string>
-    <string name="sign_in">Войти</string>
     <string name="sign_in_error">Ошибка входа</string>
     <string name="account_not_found">Учётная запись не найдена</string>
     <string name="invalid_password">Неверный пароль!</string>
@@ -70,7 +69,7 @@
     <string name="add_photo">Добавить фото</string>
     <string name="add_music">Добавить музыку</string>
     <string name="music">Музыка</string>
-    <string name="search_music">Найти музыку</string>
+    <string name="search_music">Исполнители, песни и плейлисты</string>
     <string name="my_music">Моя музыка</string>
     <string name="for_you">Рекомендации</string>
     <string name="song_name">Название песни</string>
@@ -88,7 +87,6 @@
     <string name="deleted_my_music">Песня успешно удалена из вашей музыки</string>
     <string name="deleted_music">Песня удалена</string>
     <string name="added_to_my_music">Песня добавлена в вашу музыку</string>
-    <string name="search_my_music">Найти музыку</string>
     <string name="nothing_found">Ничего не найдено</string>
     <string name="select_music_error">"Количество песен не должно превышать "</string>
     <string name="empty_post">Пост пустой!</string>
@@ -127,4 +125,11 @@
     <string name="playlist_added">Плейлист добавлен.</string>
     <string name="playlist_deleted">Плейлист удален.</string>
     <string name="set_cover">Загрузить обложку</string>
+    <string name="agreement">Нажимая Далее, вы соглашаетесь с</string>
+    <string name="privacy_policy">Политикой Конфиденциальности</string>
+    <string name="sign_in">Вход</string>
+    <string name="new_post">Новый пост</string>
+    <string name="profile_pic">Фото профиля</string>
+    <string name="search">Поиск</string>
+    <string name="new_song">Новая песня</string>
 </resources>

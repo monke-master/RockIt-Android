@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,6 @@ import android.widget.Toast;
 import com.brigade.rockit.GlideApp;
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
-import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Music;
 import com.brigade.rockit.database.ContentManager;
@@ -25,10 +26,12 @@ import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.database.TaskListener;
 import com.brigade.rockit.fragments.dialogs.PhotoDialog;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
+// Добавление новой музыки
 public class NewMusicFragment extends Fragment {
 
 
@@ -40,13 +43,11 @@ public class NewMusicFragment extends Fragment {
         MainActivity mainActivity = (MainActivity)getActivity();
 
         // Получение виджетов
-        Button backBtn = view.findViewById(R.id.back_btn_nm);
-        Button doneBtn = view.findViewById(R.id.done_btn_nm);
         Button addCoverBtn = view.findViewById(R.id.add_cover_btn);
         EditText nameEdit = view.findViewById(R.id.song_name_edit);
         EditText artistEdit = view.findViewById(R.id.artist_edit);
         ImageView coverImage = view.findViewById(R.id.cover_img);
-
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
 
         // Отображение введенной информации, если она есть
         if (Data.getNewMusic() == null) {
@@ -63,6 +64,7 @@ public class NewMusicFragment extends Fragment {
                 }
             });
         }
+
         Music music = Data.getNewMusic();
         if (music.getUri() != null )
             GlideApp.with(mainActivity).load(music.getCover()).into(coverImage);
@@ -86,8 +88,45 @@ public class NewMusicFragment extends Fragment {
             dialog.show(getParentFragmentManager(), "photo");
         });
 
-        // Загрузка песни
-        doneBtn.setOnClickListener(v -> {
+        // Отображение кнопки подтверждения в зависимоти от введенных полей
+        nameEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                toolbar.getMenu().getItem(0).setVisible(!(s.toString().equals("")
+                        || artistEdit.getText().toString().equals("")));
+            }
+        });
+
+        artistEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                toolbar.getMenu().getItem(0).setVisible(!(s.toString().equals("")
+                        || nameEdit.getText().toString().equals("")));
+            }
+        });
+
+        // Загрузка музыки
+        toolbar.setOnMenuItemClickListener(item -> {
             String name = nameEdit.getText().toString();
             String artist = artistEdit.getText().toString();
             // Проверка на пустые поля
@@ -126,14 +165,14 @@ public class NewMusicFragment extends Fragment {
             if (artist.equals(""))
                 Toast.makeText(mainActivity, getString(R.string.song_artist_error),
                         Toast.LENGTH_LONG).show();
-
+            return true;
         });
 
-        // Возвращение на предыдущий фрагмент
-        backBtn.setOnClickListener(v -> {
+
+        toolbar.setNavigationOnClickListener(v -> {
             mainActivity.setFragment(new MusicFragment());
-            Data.setNewMusic(null);
         });
+
 
 
         return view;

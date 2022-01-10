@@ -17,6 +17,7 @@ import com.brigade.rockit.activities.MainActivity;
 import com.brigade.rockit.activities.PlayerActivity;
 import com.brigade.rockit.data.Data;
 
+// Нижний музыкальный плеер
 public class BottomPlayerFragment extends Fragment {
 
 

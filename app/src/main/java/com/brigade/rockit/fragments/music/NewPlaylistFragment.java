@@ -36,7 +36,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 
-
+// Добавление нового плейлиста
 public class NewPlaylistFragment extends Fragment {
 
 
@@ -46,7 +46,7 @@ public class NewPlaylistFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_playlist, container, false);
         MainActivity mainActivity = (MainActivity)getActivity();
-
+        // Получение виджетов
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
         EditText titleEdit = view.findViewById(R.id.title_edit);
         EditText descrEdit = view.findViewById(R.id.descr_edit);
@@ -68,7 +68,7 @@ public class NewPlaylistFragment extends Fragment {
         for (String songId: playlist.getSongIds())
             musicAdapter.addItem(songId);
 
-
+        // Добавление обложки
         coverImg.setOnClickListener(v -> {
             PhotoDialog dialog = new PhotoDialog(1, new GetObjectListener() {
                 @Override
@@ -86,6 +86,7 @@ public class NewPlaylistFragment extends Fragment {
             dialog.show(getParentFragmentManager(), "photo");
         });
 
+        // Добавление песен
         addMusicBtn.setOnClickListener(v -> {
             mainActivity.setFragment(new SelectMusicFragment(new GetObjectListener() {
                 @Override
@@ -101,11 +102,7 @@ public class NewPlaylistFragment extends Fragment {
                 }
             }));
         });
-
-        toolbar.setNavigationOnClickListener(v -> {
-            mainActivity.setFragment(new MusicFragment());
-        });
-
+        // Отображение кнопки загрузки в зависимости от введенных полей
         titleEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -150,6 +147,11 @@ public class NewPlaylistFragment extends Fragment {
                 }
                 return true;
             }
+        });
+
+        // Возвращение на предыдущий фрагмент
+        toolbar.setNavigationOnClickListener(v -> {
+            mainActivity.setFragment(new MusicFragment());
         });
 
         return view;

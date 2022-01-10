@@ -24,6 +24,7 @@ import com.brigade.rockit.fragments.profile.ProfileFragment;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// Редактирование профиля
 public class EditProfileFragment extends Fragment {
 
     @Override

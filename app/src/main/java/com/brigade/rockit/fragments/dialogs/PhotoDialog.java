@@ -11,7 +11,7 @@ import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
 import com.brigade.rockit.database.GetObjectListener;
 
-
+// Диалог выбора пути загрузки фото
 public class PhotoDialog extends DialogFragment {
 
     public GetObjectListener listener;

@@ -6,9 +6,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
@@ -30,10 +34,35 @@ public class SearchUserFragment extends Fragment {
         MainActivity mainActivity = (MainActivity)getActivity();
         // Получение виджетов
         RecyclerView usersList = view.findViewById(R.id.users_list);
+        ImageView backBtn = view.findViewById(R.id.back_btn);
+        EditText searchEdit = view.findViewById(R.id.search_user);
+
         usersList.setLayoutManager(new LinearLayoutManager(mainActivity));
         adapter = new UserAdapter(mainActivity);
         usersList.setAdapter(adapter);
 
+        searchEdit.requestFocus();
+        searchEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            // При изменении вводимого текста фрагмент отображает результаты поиска
+            @Override
+            public void afterTextChanged(Editable s) {
+                clear();
+                if (!s.toString().equals(""))
+                    search(s.toString());
+            }
+        });
+
+        backBtn.setOnClickListener(v -> mainActivity.previousFragment());
         return view;
     }
     // Поиск пользователей

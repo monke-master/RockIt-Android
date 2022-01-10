@@ -6,9 +6,9 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 
 import com.brigade.rockit.R;
-import com.brigade.rockit.fragments.main.HomeFragment;
 import com.brigade.rockit.fragments.settings.OtherFragment;
 
+// Активность настроек
 public class OtherActivity extends AppCompatActivity {
 
     @Override
@@ -21,8 +21,15 @@ public class OtherActivity extends AppCompatActivity {
         }
     }
 
+    // Установка фрагмента
     public void setFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frgmnt_view,
+        getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.frgmnt_view,
                 fragment).commit();
     }
+
+    // Предыдущий фрагмент
+    public void previousFragment() {
+        getSupportFragmentManager().popBackStack();
+    }
+
 }

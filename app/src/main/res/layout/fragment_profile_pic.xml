@@ -10,15 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/back_btn_pp"
-            android:layout_width="@dimen/back_btn_width"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/footer_height"
+            android:layout_gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/back"
+            app:title="@string/profile"
+            app:menu="@menu/top_bar_confirm"
+            tools:layout_editor_absoluteX="0dp" />
 
         <ImageView
             android:id="@+id/profile_pic_img_big"

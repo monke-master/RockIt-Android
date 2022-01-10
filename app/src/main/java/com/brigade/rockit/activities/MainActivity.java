@@ -7,13 +7,11 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
-import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,21 +20,15 @@ import com.brigade.rockit.R;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Music;
 import com.brigade.rockit.data.TooManyPhotoException;
-import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
-import com.brigade.rockit.database.TaskListener;
-import com.brigade.rockit.database.UserManager;
 import com.brigade.rockit.fragments.dialogs.SongDialog;
 import com.brigade.rockit.fragments.main.HomeFragment;
-import com.brigade.rockit.fragments.main.NewContentFragment;
 import com.brigade.rockit.fragments.music.BottomPlayerFragment;
-import com.brigade.rockit.fragments.music.NewMusicFragment;
-import com.brigade.rockit.fragments.music.NewPlaylistFragment;
-import com.brigade.rockit.fragments.profile.ProfileFragment;
 
 import java.io.File;
 import java.util.ArrayList;
 
+// Главная активность
 public class MainActivity extends AppCompatActivity {
 
     private Uri takenPhotoUri;
@@ -51,8 +43,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Отображение главной страницы
-        setFragment(new HomeFragment());
+        if (savedInstanceState == null)
+            setFragment(new HomeFragment());
+        else
+            setFragment(getSupportFragmentManager().getFragment(savedInstanceState,
+                    "last_fragment"));
 
+        // Начальные установки для музыкального плеера
         playerFragment = findViewById(R.id.player_fragment);
         playerFragment.setVisibility(View.INVISIBLE);
         showBottomPlayer();
@@ -71,14 +68,11 @@ public class MainActivity extends AppCompatActivity {
                 fragment).addToBackStack(null).commit();
     }
 
-    public void getPreviousFragment() {
+    // Предыдущий фрагмент
+    public void previousFragment() {
         getSupportFragmentManager().popBackStack();
     }
 
-
-    public void setListener(GetObjectListener listener) {
-        this.listener = listener;
-    }
 
     // Выбор фото из галереи
     public void pickPhotos(int maxPhotos, GetObjectListener listener) {
@@ -174,9 +168,9 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             ArrayList<Uri> uris = new ArrayList<>();
             switch (requestCode) {
+                // Выбор фото из галереи
                 case Constants.PICK_PHOTOS:
                     boolean successful = true;
-
                     if (data.getClipData() != null) {
                         if (data.getClipData().getItemCount() <= maxPhotos) {
                             for (int i = 0; i < data.getClipData().getItemCount(); i++) {
@@ -192,10 +186,12 @@ public class MainActivity extends AppCompatActivity {
                     if (successful)
                         listener.onComplete(uris);
                     break;
+                // Съемка фото
                 case Constants.IMAGE_CAPTURE:
                     uris.add(takenPhotoUri);
                     listener.onComplete(uris);
                     break;
+                // Выбор аудио файла
                 case Constants.PICK_AUDIO:
                     listener.onComplete(data.getData());
                     break;
@@ -212,10 +208,12 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    // Получение текущего фрагмента
     public Fragment getCurrentFragment() {
         return currentFragment;
     }
 
+    // Отображение плеера
     public void showBottomPlayer() {
         if (Data.getMusicPlayer().isPlaying()) {
             playerFragment.setVisibility(View.VISIBLE);
@@ -223,9 +221,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void hideBottomPlayer() {
-        playerFragment.setVisibility(View.INVISIBLE);
+    // Сохранение данных
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Сохранение текущего фрагмента
+        getSupportFragmentManager().putFragment(outState, "last_fragment", currentFragment);
     }
+
 
 
 }

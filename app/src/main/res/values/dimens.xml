@@ -21,4 +21,6 @@
     <dimen name="big_edit_height">120dp</dimen>
     <dimen name="dscr_btn_width">350dp</dimen>
     <dimen name="playlist_cover_size">100dp</dimen>
+    <dimen name="title_size">22sp</dimen>
+    <dimen name="playlists_height">280dp</dimen>
 </resources>

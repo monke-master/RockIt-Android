@@ -30,10 +30,12 @@ import com.brigade.rockit.database.TaskListener;
 import com.brigade.rockit.fragments.dialogs.PhotoDialog;
 import com.brigade.rockit.fragments.music.SelectMusicFragment;
 import com.brigade.rockit.fragments.profile.ProfileFragment;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+// Фрагмент с новым постом
 public class NewContentFragment extends Fragment {
 
     @Override
@@ -43,8 +45,7 @@ public class NewContentFragment extends Fragment {
         MainActivity mainActivity = (MainActivity)getActivity();
 
         // Получение виджетов
-        Button backBtn = view.findViewById(R.id.back_btn_nc);
-        Button postBtn = view.findViewById(R.id.post_btn);
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
         EditText textEdit = view.findViewById(R.id.post_text_edit);
         RecyclerView imagesList = view.findViewById(R.id.images_list);
         RecyclerView songsList = view.findViewById(R.id.songs_list);
@@ -73,7 +74,6 @@ public class NewContentFragment extends Fragment {
 
         for (String musicId: post.getMusicIds())
             musicAdapter.addItem(musicId);
-
 
         // Добавление фото
         addPhotoBtn.setOnClickListener(v -> {
@@ -123,7 +123,8 @@ public class NewContentFragment extends Fragment {
         });
 
         // Публикация поста
-        postBtn.setOnClickListener(v -> {
+        toolbar.getMenu().getItem(0).setVisible(true);
+        toolbar.setOnMenuItemClickListener(item -> {
             String text = textEdit.getText().toString();
             post.setText(text);
             post.setMusicIds(musicAdapter.getMusicIds());
@@ -145,15 +146,11 @@ public class NewContentFragment extends Fragment {
 
             } else
                 Toast.makeText(mainActivity, getString(R.string.empty_post), Toast.LENGTH_LONG).show();
-
-
+            return true;
         });
 
         // Возвращение на предыдущий фрагмент
-        backBtn.setOnClickListener(v -> {
-            Data.setNewPost(null);
-            mainActivity.setFragment(new HomeFragment());
-        });
+        toolbar.setNavigationOnClickListener(v -> mainActivity.previousFragment());
         return view;
     }
 }

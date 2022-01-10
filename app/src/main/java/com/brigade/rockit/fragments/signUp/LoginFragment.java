@@ -18,11 +18,12 @@ import com.brigade.rockit.activities.StartActivity;
 import com.brigade.rockit.database.AvailableListener;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.UserManager;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+// Ввод данных о пользователе
 public class LoginFragment extends Fragment {
 
 
@@ -37,7 +38,7 @@ public class LoginFragment extends Fragment {
         EditText surnameEdit = view.findViewById(R.id.surname_edit);
         EditText loginEdit = view.findViewById(R.id.login_edit);
         Button nextBtn = view.findViewById(R.id.next_btn);
-        Button backBtn = view.findViewById(R.id.back_btn);
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
 
         // Ввод данных
         nextBtn.setOnClickListener(v -> {
@@ -55,7 +56,7 @@ public class LoginFragment extends Fragment {
                             Data.getNewUser().setName(name);
                             Data.getNewUser().setSurname(surname);
                             Data.getNewUser().setLogin(login);
-                            startActivity.nextRegFrag();
+                            startActivity.setFragment(new PasswordFragment());
                         } else // Логин занят
                             Toast.makeText(getContext(), getString(R.string.login_taken_error),
                                     Toast.LENGTH_LONG).show();
@@ -81,10 +82,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        // Возвращение на стартовый фрагмент
-        backBtn.setOnClickListener(v -> {
-            startActivity.goToStart();
-        });
+        toolbar.setNavigationOnClickListener(v -> startActivity.previousFragment());
 
         return view;
     }

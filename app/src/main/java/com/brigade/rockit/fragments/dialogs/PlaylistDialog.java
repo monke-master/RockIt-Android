@@ -6,7 +6,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
 
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
@@ -22,6 +21,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 
+// Диалог параметров плейлиста
 public class PlaylistDialog extends BottomSheetDialog {
 
 
@@ -29,10 +29,12 @@ public class PlaylistDialog extends BottomSheetDialog {
         super(context);
         setContentView(R.layout.dialog_playlist);
 
+        // Получение виджетов
         Button addBtn = findViewById(R.id.add_btn);
         Button editBtn = findViewById(R.id.edit_btn);
         Button deleteBtn = findViewById(R.id.delete_btn);
 
+        // Кнопка добавления/удаления
         ContentManager contentManager = new ContentManager();
         UserManager userManager = new UserManager();
         userManager.getUserPlaylists(Data.getCurUser().getId(), new GetObjectListener() {
@@ -47,7 +49,7 @@ public class PlaylistDialog extends BottomSheetDialog {
                             public void onComplete() {
                                 Toast.makeText(context, context.getString(R.string.delete_my_playlists),
                                         Toast.LENGTH_LONG).show();
-                                mainActivity.getPreviousFragment();
+                                mainActivity.previousFragment();
                             }
 
                             @Override
@@ -72,8 +74,9 @@ public class PlaylistDialog extends BottomSheetDialog {
                                 ExceptionManager.showError(e, context);
                             }
                         });
+                        hide();
                     });
-                    hide();
+
                 }
             }
 
@@ -83,6 +86,7 @@ public class PlaylistDialog extends BottomSheetDialog {
             }
         });
 
+        // Кнопка удаления
         if (Data.getCurUser().getId().equals(playlist.getAuthor().getId())) {
             deleteBtn.setOnClickListener(v -> {
                 contentManager.deletePlaylist(playlist.getId(), new TaskListener() {
@@ -90,7 +94,7 @@ public class PlaylistDialog extends BottomSheetDialog {
                     public void onComplete() {
                         Toast.makeText(context, context.getString(R.string.playlist_deleted),
                                 Toast.LENGTH_LONG).show();
-                        mainActivity.getPreviousFragment();
+                        mainActivity.previousFragment();
                     }
 
                     @Override
@@ -102,7 +106,7 @@ public class PlaylistDialog extends BottomSheetDialog {
             });
         } else
             deleteBtn.setVisibility(View.GONE);
-
+        // Кнопка редактирования
         if (Data.getCurUser().getId().equals(playlist.getAuthor().getId())) {
             editBtn.setOnClickListener(v -> {
                 mainActivity.setFragment(new EditPlaylistFragment(playlist));

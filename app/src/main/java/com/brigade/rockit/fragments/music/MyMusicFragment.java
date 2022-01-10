@@ -25,7 +25,7 @@ import com.brigade.rockit.database.UserManager;
 
 import java.util.ArrayList;
 
-
+// Фрагмент с плейлистами и музыкой пользователя
 public class MyMusicFragment extends Fragment {
 
     private MusicAdapter musicAdapter;
@@ -63,8 +63,7 @@ public class MyMusicFragment extends Fragment {
             }
         });
 
-        playlists.setLayoutManager(new LinearLayoutManager(mainActivity,
-                LinearLayoutManager.HORIZONTAL, false));
+        playlists.setLayoutManager(new LinearLayoutManager(mainActivity, RecyclerView.HORIZONTAL, false));
         PlaylistAdapter playlistAdapter = new PlaylistAdapter(mainActivity);
         playlists.setAdapter(playlistAdapter);
         manager.getUserPlaylists(Data.getCurUser().getId(), new GetObjectListener() {

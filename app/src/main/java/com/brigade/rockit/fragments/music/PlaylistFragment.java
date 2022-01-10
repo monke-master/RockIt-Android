@@ -23,7 +23,7 @@ import com.brigade.rockit.data.Playlist;
 import com.brigade.rockit.fragments.dialogs.PlaylistDialog;
 import com.google.android.material.appbar.MaterialToolbar;
 
-
+// Фрагмент с плейлистом
 public class PlaylistFragment extends Fragment {
     private Playlist playlist;
 
@@ -36,14 +36,14 @@ public class PlaylistFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_playlist, container, false);
         MainActivity mainActivity = (MainActivity) getActivity();
-
+        // Получение виджетов
         ImageView coverImg = view.findViewById(R.id.cover_img);
         TextView nameTxt = view.findViewById(R.id.name_txt);
         TextView authorTxt = view.findViewById(R.id.author_txt);
         TextView dateTxt = view.findViewById(R.id.date_txt);
         RecyclerView songsList = view.findViewById(R.id.songs_list);
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
-
+        // Отображение данных плейлиста
         GlideApp.with(mainActivity).load(playlist.getCoverUri()).into(coverImg);
         nameTxt.setText(playlist.getName());
         authorTxt.setText(playlist.getAuthor().getLogin());
@@ -56,7 +56,7 @@ public class PlaylistFragment extends Fragment {
         for (String id: playlist.getSongIds())
             musicAdapter.addItem(id);
 
-        toolbar.setNavigationOnClickListener(v -> mainActivity.setFragment(new MusicFragment()));
+        // Параметры плейлиста
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.other_btn) {
                 PlaylistDialog playlistDialog = new PlaylistDialog(getContext(), mainActivity, playlist);
@@ -64,6 +64,10 @@ public class PlaylistFragment extends Fragment {
             }
             return true;
         });
+
+        // Возвращение на предыдущий фрагмент
+        toolbar.setNavigationOnClickListener(v -> mainActivity.setFragment(new MusicFragment()));
+
         return view;
     }
 }

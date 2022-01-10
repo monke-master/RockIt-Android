@@ -21,7 +21,6 @@ import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
 import com.brigade.rockit.adapter.MusicAdapter;
 import com.brigade.rockit.data.Constants;
-import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Playlist;
 import com.brigade.rockit.database.ContentManager;
 import com.brigade.rockit.database.DateManager;
@@ -33,6 +32,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 
+// Редактирование плейлиста
 public class EditPlaylistFragment extends Fragment {
 
     private Playlist playlist;
@@ -48,6 +48,7 @@ public class EditPlaylistFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new_playlist, container, false);
         MainActivity mainActivity = (MainActivity)getActivity();
 
+        // Получение виджетов
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
         EditText titleEdit = view.findViewById(R.id.title_edit);
         EditText descrEdit = view.findViewById(R.id.descr_edit);
@@ -62,13 +63,14 @@ public class EditPlaylistFragment extends Fragment {
         if (!titleEdit.equals(""))
             toolbar.getMenu().getItem(0).setVisible(true);
 
+        // Отображение данных плейлиста
         titleEdit.setText(playlist.getName());
         descrEdit.setText(playlist.getDescription());
         for (String id: playlist.getSongIds())
             musicAdapter.addItem(id);
         GlideApp.with(mainActivity).load(playlist.getCoverUri()).into(coverImg);
 
-
+        // Замена обложки
         coverImg.setOnClickListener(v -> {
             PhotoDialog dialog = new PhotoDialog(1, new GetObjectListener() {
                 @Override
@@ -87,6 +89,7 @@ public class EditPlaylistFragment extends Fragment {
             dialog.show(getParentFragmentManager(), "photo");
         });
 
+        // Добавление песен
         addMusicBtn.setOnClickListener(v -> {
             mainActivity.setFragment(new SelectMusicFragment(new GetObjectListener() {
                 @Override
@@ -103,10 +106,12 @@ public class EditPlaylistFragment extends Fragment {
             }));
         });
 
+        // Возвращение на предыдущий фрагмент
         toolbar.setNavigationOnClickListener(v -> {
             mainActivity.setFragment(new MusicFragment());
         });
 
+        // Отображение кнопки подтверждения в зависимости от введенного названия
         titleEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -125,30 +130,28 @@ public class EditPlaylistFragment extends Fragment {
             }
         });
 
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.done_btn) {
-                    playlist.setName(titleEdit.getText().toString());
-                    playlist.setDescription(descrEdit.getText().toString());
-                    DateManager dateManager = new DateManager();
-                    playlist.setDate(dateManager.getDate());
-                    ContentManager contentManager = new ContentManager();
-                    contentManager.updatePlaylist(playlist, coverChanged, new TaskListener() {
-                        @Override
-                        public void onComplete() {
+        // Сохранение изменений
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.done_btn) {
+                playlist.setName(titleEdit.getText().toString());
+                playlist.setDescription(descrEdit.getText().toString());
+                DateManager dateManager = new DateManager();
+                playlist.setDate(dateManager.getDate());
+                ContentManager contentManager = new ContentManager();
+                contentManager.updatePlaylist(playlist, coverChanged, new TaskListener() {
+                    @Override
+                    public void onComplete() {
 
-                        }
+                    }
 
-                        @Override
-                        public void onFailure(Exception e) {
-                            ExceptionManager.showError(e, getContext());
-                        }
-                    });
-                    mainActivity.setFragment(new MusicFragment());
-                }
-                return true;
+                    @Override
+                    public void onFailure(Exception e) {
+                        ExceptionManager.showError(e, getContext());
+                    }
+                });
+                mainActivity.setFragment(new MusicFragment());
             }
+            return true;
         });
 
         return view;

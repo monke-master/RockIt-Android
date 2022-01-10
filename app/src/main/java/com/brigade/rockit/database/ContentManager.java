@@ -476,8 +476,10 @@ public class ContentManager {
         });
     }
 
+    // Загрузка плейлиста
     public void uploadPlaylist(Playlist playlist, TaskListener listener) {
         DatabasePlaylist dbPlaylist = new DatabasePlaylist(playlist);
+        // Создание документа с данными
         firestore.collection("playlists").add(dbPlaylist).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 String coverPath = "";
@@ -490,6 +492,7 @@ public class ContentManager {
                     coverPath = "playlist_covers/" + task.getResult().getId();
                 String finalCoverPath = coverPath;
                 if (playlist.getCoverUri() != null) {
+                    // Загрузка обложки
                     uploadUriFile(playlist.getCoverUri(), coverPath, new TaskListener() {
                         @Override
                         public void onComplete() {
@@ -520,6 +523,7 @@ public class ContentManager {
         });
     }
 
+    // Добавление плейлиста в список плейлистов пользователя
     public void addPlaylist(String playlistId, TaskListener listener) {
         firestore.collection("users").document(uid).update(
                 "playlists", FieldValue.arrayUnion(playlistId)).
@@ -531,6 +535,7 @@ public class ContentManager {
                 });
     }
 
+    // Получение плейлиста
     public void getPlaylist(String id, GetObjectListener listener) {
         firestore.collection("playlists").document(id).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -547,6 +552,7 @@ public class ContentManager {
         });
     }
 
+    // Удаление плейлиста из списка пользователя
     public void deleteFromMyPlaylists(String playlistId, TaskListener listener) {
         firestore.collection("users").document(uid).update("playlists",
                 FieldValue.arrayRemove(playlistId)).addOnCompleteListener(task -> {
@@ -557,7 +563,9 @@ public class ContentManager {
         });
     }
 
+    // Удаление плейлиста из бд
     public void deletePlaylist(String playlistId, TaskListener listener) {
+        // Удаление плейлиста из списка пользователя
         deleteFromMyPlaylists(playlistId, new TaskListener() {
             @Override
             public void onComplete() {
@@ -586,13 +594,13 @@ public class ContentManager {
                 listener.onFailure(e);
             }
         });
+
     }
 
+    // Обновление плейлиста
     public void updatePlaylist(Playlist playlist, boolean coverChanged, TaskListener listener) {
-
         DatabasePlaylist dbPlaylist = new DatabasePlaylist(playlist);
         dbPlaylist.setCover("playlist_covers/" + playlist.getId());
-
         firestore.collection("playlists").document(playlist.getId()).set(dbPlaylist).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 if (coverChanged)

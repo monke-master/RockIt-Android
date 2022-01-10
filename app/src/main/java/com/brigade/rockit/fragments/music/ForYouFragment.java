@@ -10,12 +10,11 @@ import android.view.ViewGroup;
 
 import com.brigade.rockit.R;
 
-
+// Фрагмент с рекомендациями(в разработке)
 public class ForYouFragment extends Fragment {
 
 
 
-    // Да нихуя тут нет пока
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

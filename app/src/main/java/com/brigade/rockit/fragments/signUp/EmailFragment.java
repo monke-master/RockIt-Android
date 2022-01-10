@@ -1,5 +1,7 @@
 package com.brigade.rockit.fragments.signUp;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,7 +11,9 @@ import androidx.fragment.app.Fragment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Patterns;
@@ -19,11 +23,12 @@ import com.brigade.rockit.database.AvailableListener;
 import com.brigade.rockit.database.DatabaseUser;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.UserManager;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+// Привязка почты к аккаунту
 public class EmailFragment extends Fragment {
     public EmailFragment() {
         super(R.layout.fragment_email);
@@ -37,7 +42,8 @@ public class EmailFragment extends Fragment {
         // Получение виджетов
         EditText emailEdit = view.findViewById(R.id.email_edit);
         Button signUpBtn = view.findViewById(R.id.next_btn);
-        Button backBtn = view.findViewById(R.id.back_btn);
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
+        TextView ppTxt = view.findViewById(R.id.pp_txt);
 
         // Ввод почты
         signUpBtn.setOnClickListener(v -> {
@@ -53,7 +59,7 @@ public class EmailFragment extends Fragment {
                             DatabaseUser user = new DatabaseUser();
                             user.setEmail(email);
                             Data.setNewUser(user);
-                            startActivity.nextRegFrag();
+                            startActivity.setFragment(new LoginFragment());
                         } else
                             Toast.makeText(getContext(), getString(R.string.email_taken),
                                     Toast.LENGTH_LONG).show();
@@ -68,10 +74,13 @@ public class EmailFragment extends Fragment {
                         Toast.LENGTH_LONG).show();
         });
 
-        // Возвращение на стартовый фрагмент
-        backBtn.setOnClickListener(v -> {
-            startActivity.goToStart();
+        ppTxt.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://docs.google.com/document/d/1uDRoVfGDkVE4VP_DGjmkApNOiTTpUgJn8Hnuem7k5_Q/edit"));
+            startActivity(intent);
         });
+
+        toolbar.setNavigationOnClickListener(v -> startActivity.previousFragment());
     }
 
     // Проверка правильности формы почты

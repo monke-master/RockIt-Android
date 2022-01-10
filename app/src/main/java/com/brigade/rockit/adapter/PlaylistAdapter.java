@@ -25,6 +25,7 @@ import com.brigade.rockit.fragments.music.PlaylistFragment;
 
 import java.util.ArrayList;
 
+// Адаптер для плейлиста
 public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder> {
 
     private ArrayList<String> playlistIds;
@@ -40,6 +41,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
         public PlaylistViewHolder(@NonNull View itemView) {
             super(itemView);
+            // Получение виджетов
             coverImg = itemView.findViewById(R.id.cover_img);
             nameTxt = itemView.findViewById(R.id.name_txt);
             authorTxt = itemView.findViewById(R.id.author_txt);
@@ -50,6 +52,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         public void bind(String id) {
             ContentManager contentManager = new ContentManager();
             UserManager userManager = new UserManager();
+            // Получение и отображение данных о плейлисте
             contentManager.getPlaylist(id, new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
@@ -123,5 +126,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         notifyDataSetChanged();
     }
 
+    public ArrayList<String> getPlaylistIds() {
+        return playlistIds;
+    }
 
+    public void clear() {
+        playlistIds.clear();
+        notifyDataSetChanged();
+    }
 }

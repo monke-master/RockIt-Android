@@ -3,6 +3,7 @@ package com.brigade.rockit.database;
 
 
 import com.brigade.rockit.adapter.MusicAdapter;
+import com.brigade.rockit.adapter.PlaylistAdapter;
 import com.brigade.rockit.adapter.PostAdapter;
 import com.brigade.rockit.adapter.UserAdapter;
 import com.brigade.rockit.data.Constants;
@@ -30,8 +31,6 @@ public class AdapterManager {
     }
 
 
-
-
     // Поиск музыки
     public void showSearchedMusic(MusicAdapter adapter, String searching, TaskListener listener){
         // Получение песен по введенному имени
@@ -40,7 +39,7 @@ public class AdapterManager {
                 for (DocumentSnapshot document: task.getResult()) {
                     String name = document.get("name").toString().toLowerCase(Locale.ROOT);
                     String artist = document.get("artist").toString().toLowerCase(Locale.ROOT);
-                    if ((name.startsWith(searching) || artist.startsWith(searching)) &&
+                    if ((name.contains(searching) || artist.contains(searching)) &&
                             !adapter.getMusicList().contains(document.getId())) {
                                 adapter.addItem(document.getId());
                     }
@@ -74,7 +73,7 @@ public class AdapterManager {
                     String name = document.get("name").toString().toLowerCase(Locale.ROOT);
                     String surname = document.get("surname").toString().toLowerCase(Locale.ROOT);
                     String login = document.get("login").toString().toLowerCase(Locale.ROOT);
-                    if ((name.startsWith(searching) || surname.startsWith(searching) ||
+                    if ((name.contains(searching) || surname.contains(searching) ||
                             login.startsWith(searching)) &&
                             !ids.contains(document.getId())) {
                         ids.add(document.getId());
@@ -164,7 +163,23 @@ public class AdapterManager {
                 }
             });
         }
+    }
 
+    // Поиск плейлистов
+    public void showSearchedPlaylists(PlaylistAdapter adapter, String searching, TaskListener listener) {
+        firestore.collection("playlists").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (DocumentSnapshot document: task.getResult()) {
+                    String name = document.get("name").toString().toLowerCase(Locale.ROOT);
+                    // Отображение подходящего плейлиста
+                    if ((name.contains(searching)) &&
+                            !adapter.getPlaylistIds().contains(document.getId())) {
+                        adapter.addItem(document.getId());
+                    }
+                }
+            } else
+                listener.onFailure(task.getException());
+        });
     }
 
 }

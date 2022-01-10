@@ -356,7 +356,6 @@ public class UserManager {
     // Получение списка песен пользователя
     public void getUserMusic(String userId, GetObjectListener listener) {
         DocumentReference userRef = firestore.collection("users").document(userId);
-        // Получение списка песен
         userRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful() ) {
                 ArrayList<String> musicIds = (ArrayList<String>) task.getResult().get("music");
@@ -372,9 +371,9 @@ public class UserManager {
 
     }
 
+    // Получение списка плейлистов пользователя
     public void getUserPlaylists(String userId, GetObjectListener listener) {
         DocumentReference userRef = firestore.collection("users").document(userId);
-        // Получение списка песен
         userRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful() ) {
                 ArrayList<String> playlists = (ArrayList<String>) task.getResult().get("playlists");
@@ -388,6 +387,7 @@ public class UserManager {
         });
     }
 
+    // Получение данных о пользователе
     public void getUser(String id, GetObjectListener listener) {
         ContentManager contentManager = new ContentManager();
         firestore.collection("users").document(id).get().addOnCompleteListener(task -> {

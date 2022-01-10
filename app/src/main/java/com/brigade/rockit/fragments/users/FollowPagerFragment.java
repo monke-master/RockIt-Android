@@ -16,6 +16,7 @@ import com.brigade.rockit.adapter.FollowPagerAdapter;
 import com.brigade.rockit.adapter.MusicPagerAdapter;
 import com.brigade.rockit.data.User;
 import com.brigade.rockit.fragments.profile.ProfileFragment;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -37,7 +38,7 @@ public class FollowPagerFragment extends Fragment {
         MainActivity mainActivity = (MainActivity)getActivity();
 
         ViewPager2 viewPager = view.findViewById(R.id.pager);
-        Button backBtn = view.findViewById(R.id.back_btn);
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
 
         FollowPagerAdapter adapter = new FollowPagerAdapter(this, user);
         viewPager.setAdapter(adapter);
@@ -55,9 +56,8 @@ public class FollowPagerFragment extends Fragment {
         });
         mediator.attach();
 
-        backBtn.setOnClickListener(v -> {
-            mainActivity.setFragment(new ProfileFragment(user));
-        });
+        toolbar.setTitle("@" + user.getLogin());
+        toolbar.setNavigationOnClickListener(v -> mainActivity.previousFragment());
 
         return view;
     }
