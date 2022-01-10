@@ -13,32 +13,23 @@
         android:weightSum="100">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/header"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="7">
-
-            <Button
-                android:id="@+id/back_btn"
-                android:layout_width="@dimen/back_btn_width"
-                android:layout_height="wrap_content"
-                android:text="@string/back"
-                android:visibility="visible"
-                app:layout_constraintEnd_toStartOf="@+id/search_user"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="@dimen/footer_height"
+            android:background="@color/dark_red">
 
             <EditText
                 android:id="@+id/search_user"
-                android:layout_width="250dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="1dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
                 android:ems="10"
                 android:hint="@string/search_user"
                 android:inputType="textPersonName"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                tools:layout_editor_absoluteX="55dp" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.fragment.app.FragmentContainerView

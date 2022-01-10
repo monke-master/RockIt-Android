@@ -74,13 +74,11 @@
     <string name="add_photo">Add photo</string>
     <string name="add_music">Add music</string>
     <string name="music">Music</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="search_music">Search music</string>
+    <string name="search_music">Artists, songs or playlists</string>
     <string name="my_music">My music</string>
     <string name="for_you">For you</string>
     <string name="song_name">Song name</string>
     <string name="artist">Artist</string>
-    <string name="add_cover">Add cover</string>
     <string name="song_name_error">Enter the name of the song!</string>
     <string name="song_artist_error">Enter the author of the song!</string>
     <string name="done">Done</string>
@@ -94,7 +92,6 @@
     <string name="deleted_my_music">Successfully deleted from your music</string>
     <string name="deleted_music">Song successfuly deleted</string>
     <string name="added_to_my_music">Successfuly added to your music</string>
-    <string name="search_my_music">Search my music</string>
     <string name="nothing_found">Nothing found</string>
     <string name="select_music_error">The maximum number of songs is</string>
     <string name="empty_post">The post is empty!</string>
@@ -114,12 +111,28 @@
     <string name="yesterday">Yesterday</string>
     <string name="at">at</string>
     <string name="working">Sorry, we are working on this page!</string>
-    <!-- Strings used for fragments for navigation -->
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="player">Player</string>
     <string name="queue">Queue</string>
     <string name="verify_email">Please, verify your email adress by following the link we sent.</string>
     <string name="can_sign_in">Then you can sign in to your account.</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="playlists">Playlists</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="playlist_example_title">Example: Chill Vibes</string>
+    <string name="songs">Songs</string>
+    <string name="delete">Delete</string>
+    <string name="new_playlist">New playlist</string>
+    <string name="playlist_uploaded">Your playlist added successfully.</string>
+    <string name="delete_my_playlists">Delete from my playlists</string>
+    <string name="deleted_my_playlists">Deleted from your playlists</string>
+    <string name="add_playlist">Add to My playlists</string>
+    <string name="playlist_added">Added to your playlists.</string>
+    <string name="playlist_deleted">Playlist deleted.</string>
+    <string name="set_cover">Set cover</string>
+    <string name="agreement">By pressing Next, you agree to the</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="new_post">New post</string>
+    <string name="profile_pic">Profile picture</string>
+    <string name="search">Search</string>
+    <string name="new_song">New song</string>
 </resources>

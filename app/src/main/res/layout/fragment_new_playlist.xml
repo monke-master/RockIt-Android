@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.music.NewPlaylistFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/songs_txt"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/songs"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/descr_edit"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.499" />
+
+        <ImageView
+            android:id="@+id/add_music_btn"
+            android:layout_width="@dimen/footer_image_size"
+            android:layout_height="@dimen/footer_image_size"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/plus"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/descr_edit"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.499" />
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/footer_height"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                app:title="@string/new_playlist"
+                app:navigationIcon="@drawable/delete"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/footer_height"
+                app:menu="@menu/top_bar_confirm" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <ImageView
+            android:id="@+id/cover_img"
+            android:layout_width="@dimen/playlist_pic_size"
+            android:layout_height="@dimen/playlist_pic_size"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/photo"
+            app:layout_constraintStart_toStartOf="@+id/descr_edit"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_layout" />
+
+        <EditText
+            android:id="@+id/title_edit"
+            android:layout_width="241dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="56dp"
+            android:ems="10"
+            android:hint="@string/playlist_example_title"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="@+id/descr_edit"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_layout" />
+
+        <EditText
+            android:id="@+id/descr_edit"
+            android:layout_width="@dimen/dscr_btn_width"
+            android:layout_height="@dimen/big_edit_height"
+            android:layout_marginTop="40dp"
+            android:ems="10"
+            android:gravity="top"
+            android:hint="@string/description"
+            android:inputType="textMultiLine|textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title_edit" />
+
+        <TextView
+            android:id="@+id/title_txt"
+            style="@style/Header2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/title"
+            app:layout_constraintBottom_toTopOf="@+id/title_edit"
+            app:layout_constraintStart_toStartOf="@+id/title_edit" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/songs_list"
+            android:layout_width="match_parent"
+            android:layout_height="348dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:layout_editor_absoluteX="1dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

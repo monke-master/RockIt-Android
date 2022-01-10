@@ -11,6 +11,8 @@ import android.widget.Button;
 
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.StartActivity;
+import com.brigade.rockit.fragments.signIn.SignInFragment;
+import com.brigade.rockit.fragments.signUp.EmailFragment;
 
 
 public class StartFragment extends Fragment {
@@ -29,11 +31,11 @@ public class StartFragment extends Fragment {
         StartActivity startActivity = (StartActivity)getActivity();
         // Вход
         signInBtn.setOnClickListener(v -> {
-            startActivity.signInFrag();
+            startActivity.setFragment(new SignInFragment());
         });
         // Регистрация
         signUpBtn.setOnClickListener(v -> {
-            startActivity.nextRegFrag();
+            startActivity.setFragment(new EmailFragment());
         });
 
 

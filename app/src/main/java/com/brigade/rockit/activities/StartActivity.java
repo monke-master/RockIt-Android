@@ -12,19 +12,13 @@ import com.brigade.rockit.data.MusicPlayer;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.TaskListener;
 import com.brigade.rockit.database.UserManager;
-import com.brigade.rockit.fragments.signUp.EmailFragment;
-import com.brigade.rockit.fragments.signUp.LoginFragment;
-import com.brigade.rockit.fragments.signUp.PasswordFragment;
-import com.brigade.rockit.fragments.signIn.SignInFragment;
 import com.brigade.rockit.fragments.main.StartFragment;
 import com.brigade.rockit.fragments.signUp.VerifyEmailFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
+// начальная активность
 public class StartActivity extends AppCompatActivity {
-    private Iterator<Fragment> signUpIter;
+
     private StartActivity thisActivity;
 
     @Override
@@ -42,38 +36,20 @@ public class StartActivity extends AppCompatActivity {
 
     // Отображение стартового фрагмента
     public void goToStart() {
-        regFragInit();
-        getSupportFragmentManager().beginTransaction().replace(R.id.frgmnt_view_music,
-                new StartFragment()).commit();
+        setFragment(new StartFragment());
     }
 
+    // Отображение заданного фрагмента
     public void setFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frgmnt_view_music,
-               fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frgmnt_view,
+               fragment).addToBackStack(null).commit();
     }
 
-    // Инициализация фрагментов регистрации
-    private void regFragInit() {
-        ArrayList<Fragment> signUpFragments = new ArrayList<>();
-        signUpFragments.add(new EmailFragment());
-        signUpFragments.add(new LoginFragment());
-        signUpFragments.add(new PasswordFragment());
-        signUpFragments.add(new VerifyEmailFragment());
-        signUpIter = signUpFragments.iterator();
+    // Предыдущий фрагмент
+    public void previousFragment() {
+        getSupportFragmentManager().popBackStack();
     }
 
-
-    // Следующий фрагмент регистрации
-    public void nextRegFrag() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frgmnt_view_music,
-                signUpIter.next()).commit();
-    }
-
-    // Вывод фрагмента входа
-    public void signInFrag() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frgmnt_view_music,
-                new SignInFragment()).commit();
-    }
 
     // Вход пользователя
     public void signIn() {

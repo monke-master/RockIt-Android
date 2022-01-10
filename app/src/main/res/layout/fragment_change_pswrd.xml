@@ -23,16 +23,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cur_pswrd_edit" />
 
-        <Button
-            android:id="@+id/back_btn_cp"
-            android:layout_width="@dimen/back_btn_width"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <EditText
             android:id="@+id/cur_pswrd_edit"
             android:layout_width="300dp"
@@ -46,15 +36,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/change_btn_p"
-            android:layout_width="@dimen/min_button_width"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="624dp"
-            android:text="@string/change_password"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/footer_height"
+            android:layout_gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/top_bar_confirm"
+            app:navigationIcon="@drawable/back"
+            app:title="@string/change_password"
+            tools:layout_editor_absoluteX="0dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

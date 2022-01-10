@@ -5,10 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
 
 import android.Manifest;
-import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -21,38 +19,37 @@ import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.R;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Music;
-import com.brigade.rockit.database.ExceptionManager;
-import com.brigade.rockit.database.TaskListener;
-import com.brigade.rockit.database.UserManager;
+import com.brigade.rockit.data.TooManyPhotoException;
+import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.fragments.dialogs.SongDialog;
 import com.brigade.rockit.fragments.main.HomeFragment;
-import com.brigade.rockit.fragments.main.NewContentFragment;
 import com.brigade.rockit.fragments.music.BottomPlayerFragment;
-import com.brigade.rockit.fragments.music.NewMusicFragment;
-import com.brigade.rockit.fragments.profile.ProfileFragment;
 
 import java.io.File;
 import java.util.ArrayList;
 
+// Главная активность
 public class MainActivity extends AppCompatActivity {
 
-
-    private int request;
     private Uri takenPhotoUri;
-    private int maxPhotos;
-    private MainActivity thisActivity;
     private Fragment currentFragment;
     private View playerFragment;
+    private GetObjectListener listener;
+    private int maxPhotos = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        thisActivity = this;
 
         // Отображение главной страницы
-        setFragment(new HomeFragment());
+        if (savedInstanceState == null)
+            setFragment(new HomeFragment());
+        else
+            setFragment(getSupportFragmentManager().getFragment(savedInstanceState,
+                    "last_fragment"));
 
+        // Начальные установки для музыкального плеера
         playerFragment = findViewById(R.id.player_fragment);
         playerFragment.setVisibility(View.INVISIBLE);
         showBottomPlayer();
@@ -68,16 +65,18 @@ public class MainActivity extends AppCompatActivity {
     public void setFragment(Fragment fragment) {
         currentFragment = fragment;
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frgmnt_view,
-                fragment).commit();
+                fragment).addToBackStack(null).commit();
     }
 
-    // Установка цели
-    public void setRequest(int request) {
-        this.request = request;
+    // Предыдущий фрагмент
+    public void previousFragment() {
+        getSupportFragmentManager().popBackStack();
     }
+
 
     // Выбор фото из галереи
-    public void pickPhotos(int maxPhotos) {
+    public void pickPhotos(int maxPhotos, GetObjectListener listener) {
+        this.listener = listener;
         this.maxPhotos = maxPhotos;
         // Проверка разрешения на чтение хранилища телефона
         int permission = ActivityCompat.checkSelfPermission(this,
@@ -97,7 +96,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Получение аудио-файла
-    public void pickAudio() {
+    public void pickAudio(GetObjectListener listener) {
+        this.listener = listener;
         // Проверка разрешения на чтение хранилища телефона
         int permission = ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -114,7 +114,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Сделать новое фото
-    public void takePhoto() {
+    public void takePhoto(GetObjectListener listener) {
+        this.listener = listener;
         // Создание пути для сохранения фото
         File dir = new File(getCacheDir(), "/");
         File newFile = new File(dir, "new" + Math.random()*69);
@@ -147,13 +148,13 @@ public class MainActivity extends AppCompatActivity {
                 grantResults[0] == PackageManager.PERMISSION_GRANTED ) {
             switch (requestCode) {
                 case Constants.PICK_PHOTOS: // В случае с галереей, запуск выбора фото
-                    pickPhotos(maxPhotos);
+                    pickPhotos(maxPhotos, listener);
                     return;
                 case Constants.IMAGE_CAPTURE: // В случае с новым фото, запуск камеры
-                    takePhoto();
+                    takePhoto(listener);
                     return;
                 case Constants.PICK_AUDIO: // В случае с аудио, запуск выбора аудио-файла
-                    pickAudio();
+                    pickAudio(listener);
             }
 
         }
@@ -163,78 +164,37 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Uri uri = null;
-        ArrayList<Uri> imagesUri = new ArrayList<>();
-        boolean successfully = false;
         // Если данные были получены
         if (resultCode == RESULT_OK) {
+            ArrayList<Uri> uris = new ArrayList<>();
             switch (requestCode) {
-                // Получаем uri фото
+                // Выбор фото из галереи
                 case Constants.PICK_PHOTOS:
-                    uri = data.getData();
-
-                    if (uri != null)
-                        successfully = true;
+                    boolean successful = true;
                     if (data.getClipData() != null) {
                         if (data.getClipData().getItemCount() <= maxPhotos) {
-
                             for (int i = 0; i < data.getClipData().getItemCount(); i++) {
-                                ClipData.Item item = data.getClipData().getItemAt(i);
-                                Uri u = item.getUri();
-                                imagesUri.add(u);
+                                Uri u = data.getClipData().getItemAt(i).getUri();
+                                uris.add(u);
                             }
-                            successfully = true;
                         } else {
-                            successfully = false;
-                            Toast.makeText(this, getString(R.string.pick_photo_error) +
-                                    " " + maxPhotos, Toast.LENGTH_LONG).show();
+                            listener.onFailure(new TooManyPhotoException(maxPhotos));
+                            successful = false;
                         }
                     } else
-                        imagesUri.add(uri);
-
+                        uris.add(data.getData());
+                    if (successful)
+                        listener.onComplete(uris);
                     break;
+                // Съемка фото
                 case Constants.IMAGE_CAPTURE:
-                    uri = takenPhotoUri;
-                    imagesUri.add(uri);
-                    if (uri != null)
-                        successfully = true;
+                    uris.add(takenPhotoUri);
+                    listener.onComplete(uris);
                     break;
+                // Выбор аудио файла
                 case Constants.PICK_AUDIO:
-                    uri = data.getData();
-                    successfully = true;
-            }
-
-            if (successfully) {
-                switch (request) {
-                    case Constants.EDIT_PROFILE_PIC: // В случае цели замены аватарки
-                        UserManager userManager = new UserManager();
-                        userManager.changeProfilePicture(uri, new TaskListener() {
-                            @Override
-                            public void onComplete() {
-                                Toast.makeText(thisActivity, getString(R.string.changed_picture),
-                                        Toast.LENGTH_LONG).show();
-                            }
-                            @Override
-                            public void onFailure(Exception e) {
-                                ExceptionManager.showError(e, thisActivity);
-                            }
-                        });
-                        setFragment(new ProfileFragment(Data.getCurUser())); // Отображаем фрагмент профиля
-                        break;
-                    case Constants.PICK_POST_IMAGES: // Выбор фото для поста
-                        for (Uri uri1: imagesUri)
-                            Data.getCurPost().getImagesList().add(uri1); // Добавляем выбранные фото к списку фото
-                        setFragment(new NewContentFragment()); // Отображаем фрагмент редактирования поста
-                        break;
-                    case Constants.PICK_AUDIO: // Выбор аудио
-                        Data.getCurMusic().setUri(uri);
-                        setFragment(new NewMusicFragment());
-                        break;
-                    case Constants.PICK_COVER_IMAGE: // Выбор обложки для песни
-                        Data.getCurMusic().setCover(uri);
-                        setFragment(new NewMusicFragment());
-                        break;
-                }
+                    listener.onComplete(data.getData());
+                    break;
             }
         } else {
             Toast.makeText(this, getString(R.string.error_pick_file), Toast.LENGTH_LONG).show();
@@ -248,10 +208,12 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    // Получение текущего фрагмента
     public Fragment getCurrentFragment() {
         return currentFragment;
     }
 
+    // Отображение плеера
     public void showBottomPlayer() {
         if (Data.getMusicPlayer().isPlaying()) {
             playerFragment.setVisibility(View.VISIBLE);
@@ -259,9 +221,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void hideBottomPlayer() {
-        playerFragment.setVisibility(View.INVISIBLE);
+    // Сохранение данных
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Сохранение текущего фрагмента
+        getSupportFragmentManager().putFragment(outState, "last_fragment", currentFragment);
     }
+
 
 
 }

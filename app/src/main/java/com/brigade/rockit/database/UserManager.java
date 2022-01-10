@@ -356,7 +356,6 @@ public class UserManager {
     // Получение списка песен пользователя
     public void getUserMusic(String userId, GetObjectListener listener) {
         DocumentReference userRef = firestore.collection("users").document(userId);
-        // Получение списка песен
         userRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful() ) {
                 ArrayList<String> musicIds = (ArrayList<String>) task.getResult().get("music");
@@ -370,6 +369,53 @@ public class UserManager {
             }
         });
 
+    }
+
+    // Получение списка плейлистов пользователя
+    public void getUserPlaylists(String userId, GetObjectListener listener) {
+        DocumentReference userRef = firestore.collection("users").document(userId);
+        userRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() ) {
+                ArrayList<String> playlists = (ArrayList<String>) task.getResult().get("playlists");
+                if (playlists == null)
+                    playlists = new ArrayList<>();
+                listener.onComplete(playlists);
+
+            } else {
+                listener.onFailure(task.getException());
+            }
+        });
+    }
+
+    // Получение данных о пользователе
+    public void getUser(String id, GetObjectListener listener) {
+        ContentManager contentManager = new ContentManager();
+        firestore.collection("users").document(id).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot result = task.getResult();
+                User user = new User();
+                user.setLogin(result.get("login").toString());
+                user.setName(result.get("name").toString());
+                user.setSurname(result.get("surname").toString());
+                user.setBio(result.get("bio").toString());
+                user.setId(result.getId());
+                user.setFollowingList((ArrayList<String>) result.get("followingList"));
+                user.setFollowersList((ArrayList<String>) result.get("followersList"));
+                contentManager.getUri(result.get("profilePicture").toString(), new GetObjectListener() {
+                    @Override
+                    public void onComplete(Object object) {
+                        user.setPictureUri((Uri) object);
+                        listener.onComplete(user);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        listener.onFailure(e);
+                    }
+                });
+            } else
+                listener.onFailure(task.getException());
+        });
     }
 
 }

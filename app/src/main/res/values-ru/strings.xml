@@ -30,7 +30,6 @@
     <string name="sign_up">Регистрация</string>
     <string name="next">Далее</string>
     <string name="email_or_login">Адрес эл.почты или логин</string>
-    <string name="sign_in">Войти</string>
     <string name="sign_in_error">Ошибка входа</string>
     <string name="account_not_found">Учётная запись не найдена</string>
     <string name="invalid_password">Неверный пароль!</string>
@@ -70,12 +69,11 @@
     <string name="add_photo">Добавить фото</string>
     <string name="add_music">Добавить музыку</string>
     <string name="music">Музыка</string>
-    <string name="search_music">Найти музыку</string>
+    <string name="search_music">Исполнители, песни и плейлисты</string>
     <string name="my_music">Моя музыка</string>
     <string name="for_you">Рекомендации</string>
     <string name="song_name">Название песни</string>
     <string name="artist">Исполнитель</string>
-    <string name="add_cover">Добавить обложку</string>
     <string name="song_name_error">Введите название песни!</string>
     <string name="song_artist_error">Введите автора песни!</string>
     <string name="done">Готово</string>
@@ -89,7 +87,6 @@
     <string name="deleted_my_music">Песня успешно удалена из вашей музыки</string>
     <string name="deleted_music">Песня удалена</string>
     <string name="added_to_my_music">Песня добавлена в вашу музыку</string>
-    <string name="search_my_music">Найти музыку</string>
     <string name="nothing_found">Ничего не найдено</string>
     <string name="select_music_error">"Количество песен не должно превышать "</string>
     <string name="empty_post">Пост пустой!</string>
@@ -114,4 +111,25 @@
     <string name="queue">Очередь</string>
     <string name="verify_email">Пожалуйста, подтвердите ваш адрес эл. почты, пройдя по ссылке в нашем письме.</string>
     <string name="can_sign_in">После этого вы можете зайти в ваш аккаунт.</string>
+    <string name="playlists">Плейлисты</string>
+    <string name="title">Название</string>
+    <string name="description">Описание</string>
+    <string name="playlist_example_title">Например: Chill Vibes</string>
+    <string name="songs">Песни</string>
+    <string name="delete">Удалить</string>
+    <string name="new_playlist">Новый плейлист</string>
+    <string name="playlist_uploaded">Ваш плейлист успешно добавлен.</string>
+    <string name="delete_my_playlists">Удалить из моих плейлистов</string>
+    <string name="deleted_my_playlists">Удалено из ваших плейлистов</string>
+    <string name="add_playlist">Добавить в Мои плейлисты</string>
+    <string name="playlist_added">Плейлист добавлен.</string>
+    <string name="playlist_deleted">Плейлист удален.</string>
+    <string name="set_cover">Загрузить обложку</string>
+    <string name="agreement">Нажимая Далее, вы соглашаетесь с</string>
+    <string name="privacy_policy">Политикой Конфиденциальности</string>
+    <string name="sign_in">Вход</string>
+    <string name="new_post">Новый пост</string>
+    <string name="profile_pic">Фото профиля</string>
+    <string name="search">Поиск</string>
+    <string name="new_song">Новая песня</string>
 </resources>

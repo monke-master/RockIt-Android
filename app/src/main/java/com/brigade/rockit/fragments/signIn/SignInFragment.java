@@ -16,7 +16,9 @@ import com.brigade.rockit.activities.StartActivity;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.TaskListener;
 import com.brigade.rockit.database.UserManager;
+import com.google.android.material.appbar.MaterialToolbar;
 
+// Вход
 public class SignInFragment extends Fragment {
     private StartActivity startActivity;
     private UserManager manager;
@@ -32,7 +34,7 @@ public class SignInFragment extends Fragment {
         EditText emailEdit = view.findViewById(R.id.phone_edit);
         EditText passwordEdit = view.findViewById(R.id.pswrd_edit);
         Button signInBtn = view.findViewById(R.id.sign_in_btn);
-        Button backBtn = view.findViewById(R.id.back_btn);
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
 
         // Вход
         signInBtn.setOnClickListener(v -> {
@@ -54,10 +56,7 @@ public class SignInFragment extends Fragment {
                         Toast.LENGTH_LONG).show();
         });
 
-        // Возвращение на стартовый фрагмент
-        backBtn.setOnClickListener(v -> {
-            startActivity.goToStart();
-        });
+        toolbar.setNavigationOnClickListener(v -> startActivity.previousFragment());
 
         return view;
     }

@@ -9,15 +9,16 @@ import androidx.fragment.app.DialogFragment;
 
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
+import com.brigade.rockit.database.GetObjectListener;
 
-
+// Диалог выбора пути загрузки фото
 public class PhotoDialog extends DialogFragment {
 
-    private int request;
-    private int maxPhotos;
+    public GetObjectListener listener;
+    public int maxPhotos;
 
-    public PhotoDialog(int maxPhotos, int request) {
-        this.request = request;
+    public PhotoDialog(int maxPhotos, GetObjectListener listener) {
+        this.listener = listener;
         this.maxPhotos = maxPhotos;
     }
 
@@ -27,18 +28,18 @@ public class PhotoDialog extends DialogFragment {
         builder.setTitle(R.string.photo)
                 .setItems(R.array.photo_dialog, (dialog, which) -> {
                     MainActivity mainActivity = (MainActivity)getActivity();
-                    mainActivity.setRequest(request);
                     switch (which) {
                         case 0:
-                            mainActivity.pickPhotos(maxPhotos); // Галерея
+                            mainActivity.pickPhotos(maxPhotos, listener); // Галерея
                             break;
                         case 1:
-                            mainActivity.takePhoto(); // Камера
+                            mainActivity.takePhoto(listener); // Камера
                     }
 
                 });
 
         return builder.create();
     }
+
 
 }

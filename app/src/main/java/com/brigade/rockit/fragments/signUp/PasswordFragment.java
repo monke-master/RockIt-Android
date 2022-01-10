@@ -18,11 +18,12 @@ import com.brigade.rockit.activities.StartActivity;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.TaskListener;
 import com.brigade.rockit.database.UserManager;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+// Ввод пароля
 public class PasswordFragment extends Fragment {
 
 
@@ -36,7 +37,7 @@ public class PasswordFragment extends Fragment {
         EditText enterPassword = view.findViewById(R.id.enter_pswrd_edit);
         EditText repeatPassword = view.findViewById(R.id.repeat_pswrd_edit);
         Button nextBtn = view.findViewById(R.id.next_btn);
-        Button backBtn = view.findViewById(R.id.back_btn);
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
 
         // Ввод паролей
         nextBtn.setOnClickListener(v -> {
@@ -49,7 +50,7 @@ public class PasswordFragment extends Fragment {
                 manager.createUser(Data.getNewUser(), password1, new TaskListener() {
                     @Override
                     public void onComplete() { // Вход
-                        startActivity.nextRegFrag();
+                        startActivity.setFragment(new VerifyEmailFragment());
                     }
 
                     @Override
@@ -68,10 +69,7 @@ public class PasswordFragment extends Fragment {
             }
         });
 
-        // Возвращение на стартовый фрагмент
-        backBtn.setOnClickListener(v -> {
-            startActivity.goToStart();
-        });
+        toolbar.setNavigationOnClickListener(v -> startActivity.previousFragment());
 
         return view;
     }

@@ -24,11 +24,11 @@ android {
         applicationId "com.brigade.rockit"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 3
-        versionName "alpha 0.0.3"
+        versionCode 10
+        versionName "alpha 0.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        signingConfig signingConfigs.debug
+        signingConfig signingConfigs.testing
     }
 
     packagingOptions {
@@ -46,6 +46,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     buildFeatures {
+
         viewBinding true
     }
 }

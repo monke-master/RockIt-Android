@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "809845690801-tikop791080r23ehs8u34i3re8q73pon.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.brigade.rockit",
+            "certificate_hash": "bfbaac572a201df2e02bf1f13ae217e9e9eda52d"
+          }
+        },
+        {
           "client_id": "809845690801-tvk525eorkk69q66bq6uofivmc1a6367.apps.googleusercontent.com",
           "client_type": 3
         }

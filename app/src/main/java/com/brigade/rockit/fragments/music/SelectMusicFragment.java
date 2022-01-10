@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toolbar;
 
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
@@ -18,15 +19,20 @@ import com.brigade.rockit.data.Data;
 import com.brigade.rockit.adapter.MusicAdapter;
 import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.database.UserManager;
-import com.brigade.rockit.fragments.main.NewContentFragment;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 
-
+// Фрагмент выбора песен
 public class SelectMusicFragment extends Fragment {
 
     private MusicAdapter adapter;
+    private GetObjectListener listener;
 
+
+    public SelectMusicFragment(GetObjectListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,8 +40,8 @@ public class SelectMusicFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_select_music, container, false);
         MainActivity mainActivity = (MainActivity)getActivity();
 
-        Button backBtn = view.findViewById(R.id.back_btn);
-        Button nextBtn = view.findViewById(R.id.next_btn);
+        // Получение виджетов
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
         RecyclerView recyclerView = view.findViewById(R.id.songs_list);
 
         // Отображение песен
@@ -58,11 +64,14 @@ public class SelectMusicFragment extends Fragment {
             }
         });
 
-        backBtn.setOnClickListener(v -> mainActivity.setFragment(new NewContentFragment()));
-        nextBtn.setOnClickListener(v -> {
-            Data.getCurPost().setMusicIds(adapter.getSelectedList());
-            mainActivity.setFragment(new NewContentFragment());
+        toolbar.getMenu().getItem(0).setVisible(true);
+        toolbar.setOnMenuItemClickListener(item -> {
+            listener.onComplete(adapter.getSelectedList());
+            mainActivity.previousFragment();
+            return true;
         });
+
+        toolbar.setNavigationOnClickListener(v -> mainActivity.previousFragment());
 
         return view;
     }

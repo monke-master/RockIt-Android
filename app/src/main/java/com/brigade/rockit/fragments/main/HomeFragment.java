@@ -24,6 +24,7 @@ import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.TaskListener;
 import com.brigade.rockit.fragments.settings.OtherFragment;
 
+// Фрагмент с лентой новостей
 public class HomeFragment extends Fragment {
 
     @Override
@@ -54,11 +55,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // Пасхалка)
         logoImg.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/dQw4w9WgXcQ"));
             startActivity(intent);
         });
 
+        // Переход к активности настроек
         otherBtn.setOnClickListener(v -> {
             Intent intent = new Intent(mainActivity, OtherActivity.class);
             startActivity(intent);

@@ -1,6 +1,5 @@
 package com.brigade.rockit.fragments.music;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,20 +8,17 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.brigade.rockit.GlideApp;
 import com.brigade.rockit.R;
-import com.brigade.rockit.activities.MainActivity;
 import com.brigade.rockit.activities.PlayerActivity;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Music;
-import com.brigade.rockit.fragments.main.HomeFragment;
 
-
+// Полноэкранный плеер
 public class PlayerFragment extends Fragment {
 
 

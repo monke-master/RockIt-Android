@@ -22,16 +22,6 @@
             app:layout_constraintTop_toBottomOf="@+id/change_login_btn" />
 
         <Button
-            android:id="@+id/back_btn_acnt"
-            android:layout_width="@dimen/back_btn_width"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
             android:id="@+id/change_pswrd_btn"
             android:layout_width="@dimen/min_button_width"
             android:layout_height="wrap_content"
@@ -50,6 +40,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/change_pswrd_btn" />
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/footer_height"
+            android:layout_gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/back"
+            app:title="@string/account_settings"
+            tools:layout_editor_absoluteX="0dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

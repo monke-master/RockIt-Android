@@ -29,58 +29,51 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/song_name_edit" />
 
-            <Button
-                android:id="@+id/back_btn_nm"
-                android:layout_width="@dimen/back_btn_width"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/back"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <EditText
                 android:id="@+id/song_name_edit"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="48dp"
                 android:ems="10"
                 android:hint="@string/song_name"
                 android:inputType="textPersonName|textCapSentences"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.495"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/back_btn_nm" />
+                app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
             <Button
                 android:id="@+id/add_cover_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/add_cover"
+                android:text="@string/set_cover"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/artist_edit" />
 
-            <Button
-                android:id="@+id/done_btn_nm"
-                android:layout_width="@dimen/back_btn_width"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="608dp"
-                android:layout_marginEnd="16dp"
-                android:text="@string/done"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <ImageView
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
                 android:id="@+id/cover_img"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
+                android:layout_width="@dimen/image_size"
+                android:layout_height="@dimen/image_size"
                 android:layout_marginTop="52dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.496"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/add_cover_btn" />
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/footer_height"
+                android:layout_gravity="center"
+                app:layout_constraintTop_toTopOf="parent"
+                app:menu="@menu/top_bar_confirm"
+                app:navigationIcon="@drawable/delete"
+                app:title="@string/new_song"
+                tools:layout_editor_absoluteX="0dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>

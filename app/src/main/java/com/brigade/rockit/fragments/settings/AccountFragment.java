@@ -12,8 +12,9 @@ import android.widget.Button;
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
 import com.brigade.rockit.activities.OtherActivity;
+import com.google.android.material.appbar.MaterialToolbar;
 
-
+// Настройки аккаунта
 public class AccountFragment extends Fragment {
 
 
@@ -26,7 +27,7 @@ public class AccountFragment extends Fragment {
         Button changePswrdBtn = view.findViewById(R.id.change_pswrd_btn);
         Button changeLoginBtn = view.findViewById(R.id.change_login_btn);
         Button changeEmailBtn = view.findViewById(R.id.change_email_btn);
-        Button backBtn = view.findViewById(R.id.back_btn_acnt);
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
 
         changePswrdBtn.setOnClickListener(v -> {
             otherActivity.setFragment(new ChangePswrdFragment());
@@ -40,8 +41,8 @@ public class AccountFragment extends Fragment {
             otherActivity.setFragment(new ChangeEmailFragment());
         });
 
-        backBtn.setOnClickListener(v -> {
-            otherActivity.setFragment(new OtherFragment());
+        toolbar.setNavigationOnClickListener(v -> {
+            otherActivity.previousFragment();
         });
         return view;
     }

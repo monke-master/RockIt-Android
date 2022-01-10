@@ -1,20 +1,24 @@
 package com.brigade.rockit.fragments.profile;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.brigade.rockit.activities.OtherActivity;
 import com.brigade.rockit.adapter.PostAdapter;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.GlideApp;
@@ -28,15 +32,18 @@ import com.brigade.rockit.database.UserManager;
 import com.brigade.rockit.fragments.main.NewContentFragment;
 import com.brigade.rockit.fragments.settings.EditProfileFragment;
 import com.brigade.rockit.fragments.users.FollowPagerFragment;
+import com.google.android.material.appbar.MaterialToolbar;
 
+// Фрагмент профиля
 public class ProfileFragment extends Fragment {
-    private TextView nameTxt, loginTxt, bioTxt;
+    private TextView nameTxt, bioTxt;
     private ImageView profilePicImg;
     private MainActivity mainActivity;
     private User user;
     private TextView followersCount;
     private TextView followingCount;
     private UserManager manager;
+    private MaterialToolbar toolbar;
 
 
     public ProfileFragment(User user) {
@@ -52,21 +59,20 @@ public class ProfileFragment extends Fragment {
 
         // Получение виджетов
         nameTxt = view.findViewById(R.id.name_txt);
-        loginTxt = view.findViewById(R.id.login_txt);
         bioTxt = view.findViewById(R.id.bio_txt);
         profilePicImg = view.findViewById(R.id.profile_pic_img);
         Button editBtn = view.findViewById(R.id.edit_profile_btn);
         Button followBtn = view.findViewById(R.id.follow_btn);
-        Button newCntnBtn = view.findViewById(R.id.new_cntnt_btn);
+        Button newCntnBtn = view.findViewById(R.id.new_post_btn);
         RecyclerView postsList = view.findViewById(R.id.posts_list);
         followersCount = view.findViewById(R.id.followers_count);
         followingCount = view.findViewById(R.id.following_count);
         TextView followersTxt = view.findViewById(R.id.followers_txt);
         TextView followingTxt = view.findViewById(R.id.following_txt);
+        toolbar = view.findViewById(R.id.toolbar);
 
         if (user.getId().equals(Data.getCurUser().getId())) {
             followBtn.setVisibility(View.INVISIBLE);
-
         }
         else {
             if (Data.getCurUser().getFollowingList().contains(user.getId()))
@@ -74,20 +80,24 @@ public class ProfileFragment extends Fragment {
             editBtn.setVisibility(View.INVISIBLE);
         }
 
-
         // Просмотр фото провиля
         profilePicImg.setOnClickListener(v -> {
             mainActivity.setFragment(new ProfilePicFragment(user));
         });
 
+        // Редактирование профиля
         editBtn.setOnClickListener(v -> {
             mainActivity.setFragment(new EditProfileFragment());
         });
+
+        if (!user.getId().equals(Data.getCurUser().getId()))
+            newCntnBtn.setVisibility(View.GONE);
 
         newCntnBtn.setOnClickListener(v -> {
             mainActivity.setFragment(new NewContentFragment());
         });
 
+        // Подписка/отписка
         followBtn.setOnClickListener(v -> {
             if (followBtn.getText().equals(getString(R.string.follow))) { // Подписка на пользователя
                 manager.followUser(user, new TaskListener() {
@@ -123,6 +133,13 @@ public class ProfileFragment extends Fragment {
 
         });
 
+        // Переход на актиность настроек
+        toolbar.setOnMenuItemClickListener(item -> {
+            Intent intent = new Intent(mainActivity, OtherActivity.class);
+            startActivity(intent);
+            return true;
+        });
+
         // Переход на список подписок
         followingCount.setOnClickListener(v -> mainActivity.setFragment(
                 new FollowPagerFragment(user, 0))
@@ -133,9 +150,10 @@ public class ProfileFragment extends Fragment {
                 new FollowPagerFragment(user, 1))
         );
 
+        // Переход на фрагмент с подписчиками
         followersTxt.setOnClickListener(v -> mainActivity.setFragment(
                 new FollowPagerFragment(user, 1)));
-
+        // Переход на фрагмент с подписками
         followingTxt.setOnClickListener(v -> mainActivity.setFragment(
                 new FollowPagerFragment(user, 0)));
 
@@ -167,8 +185,8 @@ public class ProfileFragment extends Fragment {
         String name = user.getName() + " " + user.getSurname();
         String login = user.getLogin();
         String bio = user.getBio();
+        toolbar.setTitle("@" + login);
         nameTxt.setText(name);
-        loginTxt.setText("@" + login);
         bioTxt.setText(bio);
         GlideApp.with(mainActivity).load(user.getPictureUri()).circleCrop().into(profilePicImg);
 

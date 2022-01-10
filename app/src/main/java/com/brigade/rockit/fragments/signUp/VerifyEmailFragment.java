@@ -15,7 +15,9 @@ import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.TaskListener;
 import com.brigade.rockit.database.UserManager;
 import com.brigade.rockit.fragments.signIn.SignInFragment;
+import com.google.android.material.appbar.MaterialToolbar;
 
+// Подтверждение почты
 public class VerifyEmailFragment extends Fragment {
 
     @Override
@@ -24,8 +26,8 @@ public class VerifyEmailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_verify_email, container, false);
         StartActivity startActivity = (StartActivity)getActivity();
 
-        Button backBtn = view.findViewById(R.id.back_btn);
         Button nextBtn = view.findViewById(R.id.next_btn);
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
 
         UserManager manager = new UserManager();
         manager.verifyEmail(new TaskListener() {
@@ -42,10 +44,7 @@ public class VerifyEmailFragment extends Fragment {
 
         nextBtn.setOnClickListener(v -> startActivity.setFragment(new SignInFragment()));
 
-        // Возвращение на стартовый фрагмент
-        backBtn.setOnClickListener(v -> {
-            startActivity.goToStart();
-        });
+        toolbar.setNavigationOnClickListener(v -> startActivity.previousFragment());
 
         return view;
     }
