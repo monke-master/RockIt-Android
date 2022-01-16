@@ -2,15 +2,14 @@ package com.brigade.rockit.data;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.util.Log;
 
 import java.util.ArrayList;
 
 public class MusicPlayer {
     private MediaPlayer player;
-    private Music music;
+    private Song song;
     private Context context;
-    private ArrayList<Music> queue;
+    private ArrayList<Song> queue;
     private int curPosition;
 
     public MusicPlayer(Context context) {
@@ -19,15 +18,14 @@ public class MusicPlayer {
         player = new MediaPlayer();
     }
 
-    public void playSong(Music music) {
-        this.music = music;
+    public void playSong(Song song) {
+        this.song = song;
         player.stop();
-        player = MediaPlayer.create(context, music.getUri());
+        player = MediaPlayer.create(context, song.getUri());
         player.start();
         player.setOnCompletionListener(mp -> {
             playNext();
         });
-
     }
 
     public void stopSong() {
@@ -38,12 +36,12 @@ public class MusicPlayer {
         player.start();
     }
 
-    public Music getMusic() {
-        return music;
+    public Song getMusic() {
+        return song;
     }
 
-    public void setMusic(Music music) {
-        this.music = music;
+    public void setMusic(Song song) {
+        this.song = song;
     }
 
     public int getPosition() {
@@ -58,7 +56,7 @@ public class MusicPlayer {
         player.seekTo(progress);
     }
 
-    public void setQueue(ArrayList<Music> queue) {
+    public void setQueue(ArrayList<Song> queue) {
         this.queue = queue;
     }
 
@@ -70,7 +68,8 @@ public class MusicPlayer {
         curPosition++;
         if (curPosition == queue.size())
             curPosition = 0;
-        playSong(queue.get(curPosition));
+        if (queue.size() > 0)
+            playSong(queue.get(curPosition));
     }
 
     public void playPrevious() {
@@ -84,7 +83,7 @@ public class MusicPlayer {
         return player.isPlaying();
     }
 
-    public ArrayList<Music> getQueue() {
+    public ArrayList<Song> getQueue() {
         return queue;
     }
 

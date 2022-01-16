@@ -37,7 +37,7 @@ public class BottomPlayerFragment extends Fragment {
 
         // Вывод информации о песне
         nameTxt.setText(Data.getMusicPlayer().getMusic().getName());
-        artistTxt.setText(Data.getMusicPlayer().getMusic().getArtist());
+        artistTxt.setText(Data.getMusicPlayer().getMusic().getAuthor().getLogin());
 
         // Содержимое кнопки в зависимости от состояния плеера
         if (!Data.getMusicPlayer().isPlaying())

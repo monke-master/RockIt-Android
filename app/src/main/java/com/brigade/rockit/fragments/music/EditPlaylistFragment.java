@@ -5,13 +5,11 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,7 +21,7 @@ import com.brigade.rockit.adapter.MusicAdapter;
 import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Playlist;
 import com.brigade.rockit.database.ContentManager;
-import com.brigade.rockit.database.DateManager;
+import com.brigade.rockit.database.TimeManager;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.database.TaskListener;
@@ -135,8 +133,8 @@ public class EditPlaylistFragment extends Fragment {
             if (item.getItemId() == R.id.done_btn) {
                 playlist.setName(titleEdit.getText().toString());
                 playlist.setDescription(descrEdit.getText().toString());
-                DateManager dateManager = new DateManager();
-                playlist.setDate(dateManager.getDate());
+                TimeManager timeManager = new TimeManager();
+                playlist.setDate(timeManager.getDate());
                 ContentManager contentManager = new ContentManager();
                 contentManager.updatePlaylist(playlist, coverChanged, new TaskListener() {
                     @Override

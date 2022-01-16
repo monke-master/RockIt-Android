@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.R;
 import com.brigade.rockit.data.Data;
-import com.brigade.rockit.data.Music;
+import com.brigade.rockit.data.Song;
 import com.brigade.rockit.data.TooManyPhotoException;
 import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.fragments.dialogs.SongDialog;
@@ -42,12 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Отображение главной страницы
-        if (savedInstanceState == null)
-            setFragment(new HomeFragment());
-        else
-            setFragment(getSupportFragmentManager().getFragment(savedInstanceState,
-                    "last_fragment"));
+        setFragment(new HomeFragment());
 
         // Начальные установки для музыкального плеера
         playerFragment = findViewById(R.id.player_fragment);
@@ -203,8 +198,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     // Отображение настроек песни
-    public void showSongSettings(Music music) {
-        SongDialog dialog = new SongDialog(this, music);
+    public void showSongSettings(Song song) {
+        SongDialog dialog = new SongDialog(this, song);
         dialog.show();
     }
 
@@ -221,13 +216,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Сохранение данных
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        // Сохранение текущего фрагмента
-        getSupportFragmentManager().putFragment(outState, "last_fragment", currentFragment);
-    }
+
 
 
 

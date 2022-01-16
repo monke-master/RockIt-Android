@@ -4,7 +4,7 @@ import android.net.Uri;
 
 import java.util.ArrayList;
 
-public class Playlist {
+public class Album {
 
     private String name;
     private User author;
@@ -12,18 +12,13 @@ public class Playlist {
     private ArrayList<Song> songs;
     private ArrayList<String> songIds;
     private String date;
-    private String description;
+    private String genre;
     private String id;
-    private long added;
-    private long auditions;
+    private int added;
+    private int auditions;
     private String duration;
 
-
-    public Playlist() {
-        name = "";
-        description = "";
-        songs = new ArrayList<>();
-        songIds = new ArrayList<>();
+    public Album() {
         added = 0;
         auditions = 0;
     }
@@ -76,14 +71,6 @@ public class Playlist {
         this.songIds = songIds;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getId() {
         return id;
     }
@@ -92,19 +79,19 @@ public class Playlist {
         this.id = id;
     }
 
-    public long getAdded() {
+    public int getAdded() {
         return added;
     }
 
-    public void setAdded(long added) {
+    public void setAdded(int added) {
         this.added = added;
     }
 
-    public long getAuditions() {
+    public int getAuditions() {
         return auditions;
     }
 
-    public void setAuditions(long auditions) {
+    public void setAuditions(int auditions) {
         this.auditions = auditions;
     }
 
@@ -116,5 +103,11 @@ public class Playlist {
         this.duration = duration;
     }
 
+    public String getGenre() {
+        return genre;
+    }
 
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
 }

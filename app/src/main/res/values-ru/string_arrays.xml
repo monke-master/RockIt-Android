@@ -4,6 +4,10 @@
         <item>Выбрать из галереи</item>
         <item>Выбрать фото</item>
     </string-array>
+    <string-array name="music_dialog">
+        <item>Загрузить песню</item>
+        <item>Загрузить альбом</item>
+    </string-array>
     <string-array name="months">
         <item>Янвавря</item>
         <item>Февраля</item>

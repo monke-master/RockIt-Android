@@ -4,6 +4,10 @@
         <item>Choose existing photo</item>
         <item>Take photo</item>
     </string-array>
+    <string-array name="music_dialog">
+        <item>Upload song</item>
+        <item>Upload album</item>
+    </string-array>
     <string-array name="months">
         <item>January</item>
         <item>February</item>

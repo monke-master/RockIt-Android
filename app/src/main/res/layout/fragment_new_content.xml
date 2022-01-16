@@ -62,7 +62,8 @@
             android:layout_marginBottom="56dp"
             android:src="@drawable/music"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/add_photo_btn" />
+            app:layout_constraintStart_toEndOf="@+id/add_photo_btn"
+            app:srcCompat="@drawable/music" />
 
         <ImageView
             android:id="@+id/add_photo_btn"

@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.brigade.rockit.R;
@@ -22,6 +21,7 @@ import com.brigade.rockit.adapter.MusicAdapter;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.database.UserManager;
+import com.brigade.rockit.fragments.dialogs.NewSongDialog;
 
 import java.util.ArrayList;
 
@@ -82,7 +82,8 @@ public class MyMusicFragment extends Fragment {
 
         // Добавление музыки
         addMusic.setOnClickListener(v -> {
-            mainActivity.setFragment(new NewMusicFragment());
+            NewSongDialog dialog = new NewSongDialog();
+            dialog.show(getParentFragmentManager(), "music");
         });
 
         addPlaylist.setOnClickListener(v -> {

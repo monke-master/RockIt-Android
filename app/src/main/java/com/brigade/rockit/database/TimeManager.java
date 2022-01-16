@@ -8,7 +8,7 @@ import com.brigade.rockit.R;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class DateManager {
+public class TimeManager {
 
 
     public String formatDate(String date, Context context) {
@@ -47,5 +47,18 @@ public class DateManager {
                 calendar.get(Calendar.YEAR) + "/" + calendar.get(Calendar.HOUR_OF_DAY) + ":" +
                 minute;
         return date;
+    }
+
+    public String formatDuration(int millis) {
+        int seconds = millis / 1000;
+        String duration = seconds / 60 + ":" + seconds % 60;
+        return duration;
+    }
+
+    public int getMillis(String duration) {
+        int seconds = Integer.parseInt(duration.substring(0, duration.indexOf(":")))*60 +
+                Integer.parseInt(duration.substring(duration.indexOf(":")+1));
+        return seconds*1000;
+
     }
 }

@@ -1,34 +1,29 @@
 package com.brigade.rockit.database;
 
-import com.brigade.rockit.data.Song;
-import com.brigade.rockit.data.Playlist;
+import com.brigade.rockit.data.Album;
 
 import java.util.ArrayList;
 
-public class DatabasePlaylist {
+public class DatabaseAlbum {
 
     private String name;
     private String author;
     private String date;
     private String cover;
     private ArrayList<String> songs;
-    private String description;
-    private long added;
-    private long auditions;
+    private String genre;
+    private int added;
+    private int auditions;
     private String duration;
 
-    public DatabasePlaylist(Playlist playlist) {
-        songs = new ArrayList<>();
-        this.author = playlist.getAuthor().getId();
-        this.name = playlist.getName();
-        this.description = playlist.getDescription();
-        this.date = playlist.getDate();
-        this.songs = playlist.getSongIds();
-        this.added = playlist.getAdded();
-        this.auditions = playlist.getAuditions();
-        this.duration = playlist.getDuration();
-        for (Song song: playlist.getSongs())
-            this.songs.add(song.getId());
+    public DatabaseAlbum(Album album) {
+        this.name = album.getName();
+        this.author = album.getAuthor().getId();
+        this.date = album.getDate();
+        this.duration = album.getDuration();
+        this.added = album.getAdded();
+        this.genre = album.getGenre();
+        this.auditions = album.getAuditions();
     }
 
     public String getDate() {
@@ -71,27 +66,19 @@ public class DatabasePlaylist {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public long getAdded() {
+    public int getAdded() {
         return added;
     }
 
-    public void setAdded(long added) {
+    public void setAdded(int added) {
         this.added = added;
     }
 
-    public long getAuditions() {
+    public int getAuditions() {
         return auditions;
     }
 
-    public void setAuditions(long auditions) {
+    public void setAuditions(int auditions) {
         this.auditions = auditions;
     }
 
@@ -101,5 +88,13 @@ public class DatabasePlaylist {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 }

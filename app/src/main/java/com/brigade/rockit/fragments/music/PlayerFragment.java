@@ -16,7 +16,7 @@ import com.brigade.rockit.GlideApp;
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.PlayerActivity;
 import com.brigade.rockit.data.Data;
-import com.brigade.rockit.data.Music;
+import com.brigade.rockit.data.Song;
 
 // Полноэкранный плеер
 public class PlayerFragment extends Fragment {
@@ -38,10 +38,10 @@ public class PlayerFragment extends Fragment {
         ImageView prevBtn = view.findViewById(R.id.previous_btn);
 
         // Отображение информации о песне
-        Music music = Data.getMusicPlayer().getMusic();
-        nameTxt.setText(music.getName());
-        artistTxt.setText(music.getArtist());
-        GlideApp.with(getContext()).load(music.getCover()).into(coverImg);
+        Song song = Data.getMusicPlayer().getMusic();
+        nameTxt.setText(song.getName());
+        artistTxt.setText(song.getAuthor().getLogin());
+        GlideApp.with(getContext()).load(song.getCover()).into(coverImg);
         seekBar.setMax(Data.getMusicPlayer().getDuration() / 1000);
 
         // Содержимое кнопки в зависимости от состояния плеера

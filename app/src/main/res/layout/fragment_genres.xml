@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.song.SelectMusicFragment">
+    tools:context=".fragments.song.GenresFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,21 +12,20 @@
         android:orientation="vertical">
 
         <com.google.android.material.appbar.MaterialToolbar
+            app:menu="@menu/top_bar_confirm"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/footer_height"
             android:layout_gravity="center"
-            android:layout_marginTop="0dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/top_bar_confirm"
             app:navigationIcon="@drawable/back"
-            app:title="@string/my_music"
+            app:title="@string/pick_genre"
             tools:layout_editor_absoluteX="0dp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/songs_list"
+            android:id="@+id/genres_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
     </LinearLayout>
+
 </FrameLayout>

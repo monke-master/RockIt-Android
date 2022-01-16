@@ -3,21 +3,20 @@ package com.brigade.rockit.data;
 import android.net.Uri;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Post {
     private User author;
     private String date;
     private String text;
     private ArrayList<Uri> imagesList;
-    private ArrayList<Music> musicList;
+    private ArrayList<Song> songList;
     private String id;
     private ArrayList<String> imagesIds;
     private ArrayList<String> musicIds;
 
     public Post() {
         imagesList = new ArrayList<>();
-        musicList = new ArrayList<>();
+        songList = new ArrayList<>();
         imagesIds = new ArrayList<>();
         musicIds = new ArrayList<>();
         text = "";
@@ -40,8 +39,8 @@ public class Post {
     }
 
 
-    public void setMusicList(ArrayList<Music> musicList) {
-        this.musicList = musicList;
+    public void setMusicList(ArrayList<Song> songList) {
+        this.songList = songList;
     }
 
 
@@ -49,8 +48,8 @@ public class Post {
         return imagesList;
     }
 
-    public ArrayList<Music> getMusicList() {
-        return musicList;
+    public ArrayList<Song> getMusicList() {
+        return songList;
     }
 
     public String getText() {

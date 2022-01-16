@@ -51,44 +51,19 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
         public void bind(String id) {
             ContentManager contentManager = new ContentManager();
-            UserManager userManager = new UserManager();
             // Получение и отображение данных о плейлисте
             contentManager.getPlaylist(id, new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
-                    DatabasePlaylist dbPlaylist = (DatabasePlaylist) object;
-                    Playlist playlist = new Playlist(dbPlaylist);
+                    Playlist playlist = (Playlist)object;
                     playlist.setId(id);
                     nameTxt.setText(playlist.getName());
                     dateTxt.setText(playlist.getDate());
-                    userManager.getUser(dbPlaylist.getAuthor(), new GetObjectListener() {
-                        @Override
-                        public void onComplete(Object object) {
-                            playlist.setAuthor((User) object);
-                            authorTxt.setText(playlist.getAuthor().getLogin());
-                            contentManager.getUri(dbPlaylist.getCover(), new GetObjectListener() {
-                                @Override
-                                public void onComplete(Object object) {
-                                    playlist.setCoverUri((Uri) object);
-                                    GlideApp.with(itemView.getContext()).
-                                            load(playlist.getCoverUri()).into(coverImg);
-                                    mainLayout.setOnClickListener(v -> mainActivity.setFragment(
-                                            new PlaylistFragment(playlist)));
-                                }
-
-                                @Override
-                                public void onFailure(Exception e) {
-                                    ExceptionManager.showError(e, itemView.getContext());
-                                }
-                            });
-
-                        }
-
-                        @Override
-                        public void onFailure(Exception e) {
-                            ExceptionManager.showError(e, itemView.getContext());
-                        }
-                    });
+                    authorTxt.setText(playlist.getAuthor().getLogin());
+                    GlideApp.with(itemView.getContext()).
+                            load(playlist.getCoverUri()).into(coverImg);
+                    mainLayout.setOnClickListener(v -> mainActivity.setFragment(
+                            new PlaylistFragment(playlist)));
                 }
 
                 @Override

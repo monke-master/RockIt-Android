@@ -20,6 +20,8 @@ import com.brigade.rockit.activities.MainActivity;
 import com.brigade.rockit.adapter.MusicAdapter;
 import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Playlist;
+import com.brigade.rockit.data.Song;
+import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.fragments.dialogs.PlaylistDialog;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -53,8 +55,10 @@ public class PlaylistFragment extends Fragment {
         musicAdapter.setMode(Constants.PLAYLIST_MODE);
         songsList.setAdapter(musicAdapter);
         songsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        for (String id: playlist.getSongIds())
+        for (String id: playlist.getSongIds()) {
             musicAdapter.addItem(id);
+
+        }
 
         // Параметры плейлиста
         toolbar.setOnMenuItemClickListener(item -> {

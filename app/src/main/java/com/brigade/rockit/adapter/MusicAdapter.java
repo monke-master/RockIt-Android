@@ -16,10 +16,11 @@ import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
 import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Data;
-import com.brigade.rockit.data.Music;
+import com.brigade.rockit.data.Song;
 import com.brigade.rockit.database.ContentManager;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
+import com.brigade.rockit.database.TaskListener;
 
 import java.util.ArrayList;
 
@@ -27,12 +28,11 @@ import java.util.ArrayList;
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHolder>{
 
 
-    private ArrayList<Music> musicList;
+    private ArrayList<Song> songList;
     private ArrayList<String> musicIds;
     private MainActivity mainActivity;
     private int mode;
-    private ArrayList<String> selectedList;
-
+    private ArrayList<Song> selectedList;
 
     class MusicViewHolder extends RecyclerView.ViewHolder {
 
@@ -43,6 +43,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
         private ConstraintLayout layout;
         private ConstraintLayout mainLayout;
         private ImageView optionButton;
+        private Song thisSong;
 
 
         // Получение виджетов
@@ -60,19 +61,20 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
         // Отображения элемента с песней
         public void bind(MusicAdapter adapter, String musicId) {
 
-            ContentManager manager = new ContentManager();
+            ContentManager contentManager = new ContentManager();
             // Получение информации о песне
-            manager.getMusic(musicId, new GetObjectListener() {
+            contentManager.getSong(musicId, new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
-                    Music music = (Music)object;
-                    nameTxt.setText(music.getName());
-                    artistTxt.setText(music.getArtist());
-                    durationTxt.setText(music.getDuration());
-                    GlideApp.with(itemView.getContext()).load(music.getCover()).into(coverImg);
+                    Song song = (Song)object;
+                    nameTxt.setText(song.getName());
+                    durationTxt.setText(song.getDuration());
+                    artistTxt.setText(song.getAuthor().getLogin());
+                    GlideApp.with(itemView.getContext()).load(song.getCover()).into(coverImg);
 
-                    musicList.add(music);
-                    Data.getMusicPlayer().getQueue().add(music);
+                    songList.add(song);
+
+                    Data.getMusicPlayer().getQueue().add(song);
 
 
                     mainLayout.setOnClickListener(v -> {
@@ -81,16 +83,18 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
                     });
                     layout.setOnClickListener(v -> {
                         if (!(mode == Constants.SELECTING_MODE)) {
-                            playMusic(music);
+                            playMusic(song);
                         } else {
                             makeSelected(musicId);
                         }
                     });
 
+                    thisSong = song;
+
                     switch (mode) {
                         case Constants.PLAYLIST_MODE:
                             optionButton.setImageDrawable(mainActivity.getDrawable(R.drawable.other_2));
-                            optionButton.setOnClickListener(v -> mainActivity.showSongSettings(music));
+                            optionButton.setOnClickListener(v -> mainActivity.showSongSettings(song));
                             break;
                         case Constants.POST_MODE:
                             optionButton.setImageDrawable(mainActivity.getDrawable(R.drawable.delete));
@@ -109,6 +113,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
                 @Override
                 public void onFailure(Exception e) {
                     ExceptionManager.showError(e, mainActivity);
+
                 }
             });
 
@@ -124,17 +129,18 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
                             mainActivity.getString(R.string.select_music_error) + " " +
                                     Constants.MAX_POST_SONGS, Toast.LENGTH_LONG).show();
                 else {
-                    selectedList.add(musicId);
+                    selectedList.add(thisSong);
                     optionButton.setVisibility(View.VISIBLE);
                 }
             }
         }
         // Проигрывание песни
-        public void playMusic(Music music) {
+        public void playMusic(Song song) {
             Data.getMusicPlayer().stopSong();
-            Data.getMusicPlayer().playSong(music);
-            Data.getMusicPlayer().setCurPosition(musicList.indexOf(music));
+            Data.getMusicPlayer().playSong(song);
+            Data.getMusicPlayer().setCurPosition(songList.indexOf(song));
             mainActivity.showBottomPlayer();
+            song.increaseAuditions();
         }
 
     }
@@ -143,7 +149,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
 
     public MusicAdapter(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
-        musicList = new ArrayList<>();
+        songList = new ArrayList<>();
         selectedList = new ArrayList<>();
         musicIds = new ArrayList<>();
     }
@@ -155,7 +161,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
     @NonNull
     @Override
     public MusicViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_music_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_song_item, parent, false);
         return new MusicViewHolder(view);
     }
 
@@ -178,7 +184,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
     // Очистка списка
     public void clear() {
         musicIds.clear();
-        musicList.clear();
+        songList.clear();
         notifyDataSetChanged();
     }
 
@@ -187,15 +193,17 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
         notifyDataSetChanged();
     }
 
-    public ArrayList<String> getSelectedList() {
+    public ArrayList<Song> getSelectedList() {
         return selectedList;
     }
 
-    public ArrayList<Music> getMusicList() {
-        return musicList;
+    public ArrayList<Song> getMusicList() {
+        return songList;
     }
 
     public ArrayList<String> getMusicIds() {
         return musicIds;
     }
+
+
 }

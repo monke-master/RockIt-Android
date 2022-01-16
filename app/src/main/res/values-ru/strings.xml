@@ -68,7 +68,7 @@
     <string name="pick_photo_error">Количество фото не должно превышать</string>
     <string name="add_photo">Добавить фото</string>
     <string name="add_music">Добавить музыку</string>
-    <string name="music">Музыка</string>
+    <string name="song">Музыка</string>
     <string name="search_music">Исполнители, песни и плейлисты</string>
     <string name="my_music">Моя музыка</string>
     <string name="for_you">Рекомендации</string>
@@ -132,4 +132,5 @@
     <string name="profile_pic">Фото профиля</string>
     <string name="search">Поиск</string>
     <string name="new_song">Новая песня</string>
+    <string name="pick_genre">Выбрать жанр</string>
 </resources>
