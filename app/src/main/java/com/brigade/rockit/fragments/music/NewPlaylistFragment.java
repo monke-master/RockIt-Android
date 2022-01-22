@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import com.brigade.rockit.GlideApp;
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
+import com.brigade.rockit.adapter.AdapterListener;
 import com.brigade.rockit.adapter.PostingSongsAdapter;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Song;
@@ -51,7 +52,7 @@ public class NewPlaylistFragment extends Fragment {
         ImageView addMusicBtn = view.findViewById(R.id.add_music_btn);
         ImageView coverImg = view.findViewById(R.id.cover_img);
         RecyclerView songsList = view.findViewById(R.id.songs_list);
-        PostingSongsAdapter songsAdapter = new PostingSongsAdapter(getContext());
+        PostingSongsAdapter songsAdapter = new PostingSongsAdapter();
         songsList.setAdapter(songsAdapter);
         songsList.setLayoutManager(new LinearLayoutManager(mainActivity));
         // Если пользователь уже создавал плейлист, то отображаем черновик
@@ -65,8 +66,17 @@ public class NewPlaylistFragment extends Fragment {
         for (Song song: playlist.getSongs())
             songsAdapter.addItem(song);
         // Отслеживание удалений прикрепленных песен
-        songsAdapter.setOnItemDeleteListener(object ->
-            playlist.getSongs().remove((Song) object));
+        songsAdapter.setOnItemDeleteListener(new AdapterListener() {
+            @Override
+            public void onAdded(Object object) {
+
+            }
+
+            @Override
+            public void onDelete(Object object) {
+                playlist.getSongs().remove((Song) object);
+            }
+        });
 
         // Добавление обложки
         coverImg.setOnClickListener(v -> {
@@ -88,7 +98,8 @@ public class NewPlaylistFragment extends Fragment {
 
         // Добавление песен
         addMusicBtn.setOnClickListener(v -> {
-            mainActivity.setFragment(new SelectMusicFragment(new GetObjectListener() {
+            SelectMusicFragment fragment = new SelectMusicFragment();
+            fragment.setListener(new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
                     ArrayList<Song> songs = (ArrayList<Song>) object;
@@ -100,7 +111,8 @@ public class NewPlaylistFragment extends Fragment {
                 public void onFailure(Exception e) {
 
                 }
-            }));
+            });
+            mainActivity.setFragment(new SelectMusicFragment());
         });
         // Отображение кнопки подтверждения в зависимости от введенных полей
         titleEdit.addTextChangedListener(new TextWatcher() {

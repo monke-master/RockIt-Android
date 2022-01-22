@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.brigade.rockit.GlideApp;
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
-import com.brigade.rockit.adapter.MusicAdapter;
+import com.brigade.rockit.adapter.SongAdapter;
 import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Playlist;
 import com.brigade.rockit.database.ContentManager;
@@ -53,9 +53,8 @@ public class EditPlaylistFragment extends Fragment {
         ImageView addMusicBtn = view.findViewById(R.id.add_music_btn);
         ImageView coverImg = view.findViewById(R.id.cover_img);
         RecyclerView songsList = view.findViewById(R.id.songs_list);
-        MusicAdapter musicAdapter = new MusicAdapter(mainActivity);
-        musicAdapter.setMode(Constants.POST_MODE);
-        songsList.setAdapter(musicAdapter);
+        SongAdapter songAdapter = new SongAdapter(mainActivity);
+        songsList.setAdapter(songAdapter);
         songsList.setLayoutManager(new LinearLayoutManager(mainActivity));
 
         if (!titleEdit.equals(""))
@@ -65,7 +64,7 @@ public class EditPlaylistFragment extends Fragment {
         titleEdit.setText(playlist.getName());
         descrEdit.setText(playlist.getDescription());
         for (String id: playlist.getSongIds())
-            musicAdapter.addItem(id);
+            songAdapter.addItem(id);
         GlideApp.with(mainActivity).load(playlist.getCoverUri()).into(coverImg);
 
         // Замена обложки
@@ -89,7 +88,8 @@ public class EditPlaylistFragment extends Fragment {
 
         // Добавление песен
         addMusicBtn.setOnClickListener(v -> {
-            mainActivity.setFragment(new SelectMusicFragment(new GetObjectListener() {
+            SelectMusicFragment fragment = new SelectMusicFragment();
+            fragment.setListener(new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
                     ArrayList<String> songIds = (ArrayList<String>) object;
@@ -101,7 +101,8 @@ public class EditPlaylistFragment extends Fragment {
                 public void onFailure(Exception e) {
 
                 }
-            }));
+            });
+            mainActivity.setFragment(new SelectMusicFragment());
         });
 
         // Возвращение на предыдущий фрагмент

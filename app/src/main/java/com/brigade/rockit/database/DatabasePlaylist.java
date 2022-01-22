@@ -14,7 +14,6 @@ public class DatabasePlaylist {
     private ArrayList<String> songs;
     private String description;
     private long added;
-    private long auditions;
     private String duration;
 
     public DatabasePlaylist(Playlist playlist) {
@@ -25,7 +24,6 @@ public class DatabasePlaylist {
         this.date = playlist.getDate();
         this.songs = playlist.getSongIds();
         this.added = playlist.getAdded();
-        this.auditions = playlist.getAuditions();
         this.duration = playlist.getDuration();
         for (Song song: playlist.getSongs())
             this.songs.add(song.getId());
@@ -87,13 +85,6 @@ public class DatabasePlaylist {
         this.added = added;
     }
 
-    public long getAuditions() {
-        return auditions;
-    }
-
-    public void setAuditions(long auditions) {
-        this.auditions = auditions;
-    }
 
     public String getDuration() {
         return duration;

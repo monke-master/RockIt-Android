@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import com.brigade.rockit.GlideApp;
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
-import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Genre;
 import com.brigade.rockit.data.Song;
@@ -66,9 +65,8 @@ public class NewSongFragment extends Fragment {
         }
 
         Song song = Data.getNewMusic();
-        if (song.getCover() != null) {
-
-            GlideApp.with(mainActivity).load(song.getCover()).into(coverImage);
+        if (song.getCoverUri() != null) {
+            GlideApp.with(mainActivity).load(song.getCoverUri()).into(coverImage);
         }
 
         coverImage.setOnClickListener(v -> {
@@ -76,8 +74,8 @@ public class NewSongFragment extends Fragment {
                 @Override
                 public void onComplete(Object object) {
                     ArrayList<Uri> uris = (ArrayList<Uri>) object;
-                    song.setCover(uris.get(0));
-                    GlideApp.with(mainActivity).load(song.getCover()).into(coverImage);
+                    song.setCoverUri(uris.get(0));
+                    GlideApp.with(mainActivity).load(song.getCoverUri()).into(coverImage);
                 }
 
                 @Override
@@ -121,11 +119,10 @@ public class NewSongFragment extends Fragment {
                     extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
             Data.getNewMusic().setDuration(new TimeManager().formatDuration(millis));
             ContentManager contentManager = new ContentManager();
-            contentManager.uploadMusic(Data.getNewMusic(), new TaskListener() {
+            contentManager.uploadSong(Data.getNewMusic(), new TaskListener() {
                 @Override
                 public void onComplete() {
                     Data.setNewMusic(null);
-
                 }
 
                 @Override
@@ -139,12 +136,12 @@ public class NewSongFragment extends Fragment {
         });
 
         pickGenre.setOnClickListener(v -> {
-            GenresFragment fragment = new GenresFragment(Constants.SONG_GENRE);
+            GenresFragment fragment = new GenresFragment(1);
             fragment.setListener(new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
-                    ArrayList<Genre> genre = (ArrayList<Genre>)object;
-                    Data.getNewMusic().setGenre(genre.get(0).getId());
+                    ArrayList<String> genre = (ArrayList<String>)object;
+                    Data.getNewMusic().setGenre(genre.get(0));
                     toolbar.getMenu().getItem(0).setVisible(!nameEdit.getText().toString().equals(""));
                 }
 

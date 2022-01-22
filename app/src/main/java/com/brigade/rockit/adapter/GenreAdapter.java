@@ -24,11 +24,11 @@ import java.util.ArrayList;
 public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHolder> {
     private ArrayList<String> ids;
     private Context context;
-    private ArrayList<Genre> selectedGenres;
-    private int mode;
+    private ArrayList<String> selectedGenres;
     private GenreViewHolder selectedHolder;
     private GenreAdapter adapter;
     private TaskListener listener;
+    private int maxGenres;
 
 
     class GenreViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -69,7 +69,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
         @Override
         public void onClick(View v) {
             if (!selected) {
-                if ((mode == Constants.SONG_GENRE) && (selectedHolder != null))
+                if ((maxGenres == 1) && (selectedHolder != null))
                     selectedHolder.unselect();
                 select();
             } else
@@ -86,7 +86,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
         public void select() {
             selected = true;
             pickImg.setVisibility(View.VISIBLE);
-            selectedGenres.add(thisGenre);
+            selectedGenres.add(thisGenre.getId());
             selectedHolder = this;
         }
 
@@ -97,12 +97,12 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
         }
     }
 
-    public GenreAdapter(Context context, int mode) {
+    public GenreAdapter(Context context, int maxGenres) {
         ids = new ArrayList<>();
         selectedGenres = new ArrayList<>();
         adapter = this;
         this.context = context;
-        this.mode = mode;
+        this.maxGenres = maxGenres;
     }
 
     @NonNull
@@ -133,7 +133,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
         notifyDataSetChanged();
     }
 
-    public ArrayList<Genre> getSelectedGenres() {
+    public ArrayList<String> getSelectedGenres() {
         return selectedGenres;
     }
 

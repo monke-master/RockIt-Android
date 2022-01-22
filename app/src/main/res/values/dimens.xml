@@ -24,4 +24,5 @@
     <dimen name="title_size">22sp</dimen>
     <dimen name="playlists_height">280dp</dimen>
     <dimen name="genre_view_size">100dp</dimen>
+    <dimen name="song_cover_size">60dp</dimen>
 </resources>

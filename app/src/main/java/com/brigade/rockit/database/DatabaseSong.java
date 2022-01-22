@@ -11,6 +11,7 @@ public class DatabaseSong {
     private String date;
     private long added;
     private long auditions;
+    private String album;
 
 
     public DatabaseSong(Song song) {
@@ -21,6 +22,8 @@ public class DatabaseSong {
         this.date = song.getDate();
         this.added = song.getAdded();
         this.auditions = song.getAuditions();
+        this.cover = song.getCoverPath();
+        this.album = song.getAlbum();
     }
 
     public String getAuthorId() {
@@ -86,5 +89,13 @@ public class DatabaseSong {
 
     public void setAuditions(long auditions) {
         this.auditions = auditions;
+    }
+
+    public String getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(String album) {
+        this.album = album;
     }
 }

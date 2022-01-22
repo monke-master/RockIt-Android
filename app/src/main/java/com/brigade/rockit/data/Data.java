@@ -9,6 +9,7 @@ public class Data {
     private static Song newSong;
     private static MusicPlayer musicPlayer;
     private static Playlist newPlaylist;
+    private static Album newAlbum;
 
     public static DatabaseUser getNewUser() {
         return newUser;
@@ -54,5 +55,14 @@ public class Data {
 
     public static void setNewPlaylist(Playlist newPlaylist) {
         Data.newPlaylist = newPlaylist;
+    }
+
+
+    public static Album getNewAlbum() {
+        return newAlbum;
+    }
+
+    public static void setNewAlbum(Album newAlbum) {
+        Data.newAlbum = newAlbum;
     }
 }

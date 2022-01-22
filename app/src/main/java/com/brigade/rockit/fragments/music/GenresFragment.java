@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
@@ -25,11 +26,11 @@ import java.util.ArrayList;
 
 public class GenresFragment extends Fragment {
 
-    private int mode;
     private GetObjectListener listener;
+    private int maxGenres;
 
-    public GenresFragment(int mode) {
-        this.mode = mode;
+    public GenresFragment(int maxGenres) {
+        this.maxGenres = maxGenres;
     }
 
     public void setListener(GetObjectListener listener) {
@@ -43,8 +44,9 @@ public class GenresFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_genres, container, false);
 
         RecyclerView genresList = view.findViewById(R.id.genres_list);
+        TextView header = view.findViewById(R.id.header);
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
-        GenreAdapter adapter = new GenreAdapter(getContext(), mode);
+        GenreAdapter adapter = new GenreAdapter(getContext(), maxGenres);
         genresList.setAdapter(adapter);
         genresList.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
@@ -73,6 +75,9 @@ public class GenresFragment extends Fragment {
 
             }
         });
+
+        if (maxGenres == 1)
+            header.setVisibility(View.GONE);
 
         toolbar.setOnMenuItemClickListener(item -> {
             listener.onComplete(adapter.getSelectedGenres());

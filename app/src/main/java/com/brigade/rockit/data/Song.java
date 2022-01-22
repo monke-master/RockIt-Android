@@ -3,7 +3,6 @@ package com.brigade.rockit.data;
 import android.net.Uri;
 
 import com.brigade.rockit.database.ContentManager;
-import com.brigade.rockit.database.TaskListener;
 
 import java.util.Objects;
 
@@ -11,15 +10,15 @@ public class Song {
     private Uri uri;
     private User author;
     private String name;
-    private Uri cover;
+    private Uri coverUri;
     private String duration;
     private String id;
     private String genre;
     private String date;
     private long added;
     private long auditions;
-    private Playlist playlist;
-    private Album album;
+    private String album;
+    private String coverPath;
 
 
     public Song() {
@@ -45,12 +44,12 @@ public class Song {
         this.name = name;
     }
 
-    public Uri getCover() {
-        return cover;
+    public Uri getCoverUri() {
+        return coverUri;
     }
 
-    public void setCover(Uri cover) {
-        this.cover = cover;
+    public void setCoverUri(Uri coverUri) {
+        this.coverUri = coverUri;
     }
 
     public String getDuration() {
@@ -126,17 +125,23 @@ public class Song {
         auditions++;
         ContentManager contentManager = new ContentManager();
         contentManager.increaseAuditions("songs", id);
-        if (playlist != null)
-            contentManager.increaseAuditions("playlists", playlist.getId());
         if (album != null)
-            contentManager.increaseAuditions("albums", album.getId());
+            contentManager.increaseAuditions("albums", album);
     }
 
-    public void setPlaylist(Playlist playlist) {
-        this.playlist = playlist;
-    }
-
-    public void setAlbum(Album album) {
+    public void setAlbum(String album) {
         this.album = album;
+    }
+
+    public String getAlbum() {
+        return album;
+    }
+
+    public String getCoverPath() {
+        return coverPath;
+    }
+
+    public void setCoverPath(String coverPath) {
+        this.coverPath = coverPath;
     }
 }

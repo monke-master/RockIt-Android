@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.song.NewPlaylistFragment">
+    tools:context=".fragments.music.NewPlaylistFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -42,12 +42,12 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
-                app:title="@string/new_playlist"
-                app:navigationIcon="@drawable/delete"
-                android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/footer_height"
-                app:menu="@menu/top_bar_confirm" />
+                android:layout_gravity="center"
+                app:menu="@menu/top_bar_confirm"
+                app:navigationIcon="@drawable/delete"
+                app:title="@string/new_playlist" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

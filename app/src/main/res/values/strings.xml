@@ -138,4 +138,15 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="pick_genre">Pick genre</string>
+    <string name="album_name">Album name</string>
+    <string name="new_album">New album</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="auditions">auditions</string>
+    <string name="delete_album">Delete album</string>
+    <string name="album_deleted">Album deleted</string>
+    <string name="albums">Albums</string>
+    <string name="choose_genre">Choose at least 1 favourite genre</string>
+    <string name="new_from_following">New from artist you follow</string>
+    <string name="you_may_like">You may like</string>
 </resources>

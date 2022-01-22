@@ -10,6 +10,7 @@ public class Genre {
     private Uri picture;
     private ArrayList<String> subgenres;
     private String id;
+    private String parentId;
 
 
     public String getName() {
@@ -42,5 +43,13 @@ public class Genre {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 }

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.brigade.rockit.activities.MainActivity;
@@ -22,7 +21,6 @@ import com.brigade.rockit.data.Data;
 import com.brigade.rockit.database.AdapterManager;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.TaskListener;
-import com.brigade.rockit.fragments.settings.OtherFragment;
 
 // Фрагмент с лентой новостей
 public class HomeFragment extends Fragment {
@@ -34,7 +32,7 @@ public class HomeFragment extends Fragment {
         MainActivity mainActivity = (MainActivity)getActivity();
 
         // Получение виджетов
-        ImageView otherBtn = view.findViewById(R.id.other_btn);
+        ImageView otherBtn = view.findViewById(R.id.option_btn);
         RecyclerView newsFeed = view.findViewById(R.id.news_feed);
         ImageView logoImg = view.findViewById(R.id.logo_img);
 

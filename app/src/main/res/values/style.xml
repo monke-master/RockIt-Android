@@ -54,7 +54,9 @@
         <item name="height">@dimen/footer_height</item>
         <item name="buttonGravity">center_vertical</item>
         <item name="titleTextAppearance">@style/ToolbarTitle</item>
-
+    </style>
+    <style name="AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="background">@color/dark_grey</item>
     </style>
 
 </resources>

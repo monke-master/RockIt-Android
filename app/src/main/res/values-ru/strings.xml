@@ -133,4 +133,15 @@
     <string name="search">Поиск</string>
     <string name="new_song">Новая песня</string>
     <string name="pick_genre">Выбрать жанр</string>
+    <string name="album_name">Название альбома</string>
+    <string name="new_album">Новый альбом</string>
+    <string name="ok">Ок</string>
+    <string name="cancel">Cancel</string>
+    <string name="auditions">Прослушиваний</string>
+    <string name="delete_album">Удалить альбом</string>
+    <string name="album_deleted">Альбом удален</string>
+    <string name="albums">Альбомы</string>
+    <string name="choose_genre">Выберите хотя бы 1 любимый жанр</string>
+    <string name="new_from_following">Новинки от избранных исполнителей</string>
+    <string name="you_may_like">Вам может понравиться</string>
 </resources>

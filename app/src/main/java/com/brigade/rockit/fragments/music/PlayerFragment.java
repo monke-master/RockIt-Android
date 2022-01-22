@@ -41,7 +41,7 @@ public class PlayerFragment extends Fragment {
         Song song = Data.getMusicPlayer().getMusic();
         nameTxt.setText(song.getName());
         artistTxt.setText(song.getAuthor().getLogin());
-        GlideApp.with(getContext()).load(song.getCover()).into(coverImg);
+        GlideApp.with(getContext()).load(song.getCoverUri()).into(coverImg);
         seekBar.setMax(Data.getMusicPlayer().getDuration() / 1000);
 
         // Содержимое кнопки в зависимости от состояния плеера

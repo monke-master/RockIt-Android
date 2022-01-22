@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="albums_from_follow" type="id"/>
+    <item name="songs_from_follow" type="id"/>
+    <item name="songs_may_like" type="id"/>
+    <item name="albums_may_like" type="id"/>
+    <item name="from_follow_txt" type="id"/>
+    <item name="may_like_txt" type="id"/>
+</resources>

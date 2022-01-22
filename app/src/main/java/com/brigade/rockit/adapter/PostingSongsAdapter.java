@@ -1,6 +1,5 @@
 package com.brigade.rockit.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.brigade.rockit.R;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Song;
-import com.brigade.rockit.database.OnItemDeleteListener;
 
 
 import java.util.ArrayList;
@@ -21,9 +19,8 @@ import java.util.ArrayList;
 public class PostingSongsAdapter extends RecyclerView.Adapter<PostingSongsAdapter.SongViewHolder> {
 
     private ArrayList<Song> songList;
-    private Context context;
     private PostingSongsAdapter adapter;
-    private OnItemDeleteListener deleteListener;
+    private AdapterListener deleteListener;
 
     class SongViewHolder extends RecyclerView.ViewHolder {
 
@@ -45,11 +42,11 @@ public class PostingSongsAdapter extends RecyclerView.Adapter<PostingSongsAdapte
             authorTxt.setText(song.getAuthor().getLogin());
             playBtn.setOnClickListener(v -> {
                 if (Data.getMusicPlayer().isPlaying()) {
-                    playBtn.setImageDrawable(context.getDrawable(R.drawable.play));
+                    playBtn.setImageDrawable(itemView.getContext().getDrawable(R.drawable.play));
                     Data.getMusicPlayer().stopSong();
                 }
                 else {
-                    playBtn.setImageDrawable(context.getDrawable(R.drawable.pause));
+                    playBtn.setImageDrawable(itemView.getContext().getDrawable(R.drawable.pause));
                     if (Data.getMusicPlayer().getMusic() != null)
                         Data.getMusicPlayer().continueSong();
                     else
@@ -64,9 +61,8 @@ public class PostingSongsAdapter extends RecyclerView.Adapter<PostingSongsAdapte
         }
     }
 
-    public PostingSongsAdapter(Context context) {
+    public PostingSongsAdapter() {
         songList = new ArrayList<>();
-        this.context = context;
         adapter = this;
     }
 
@@ -99,7 +95,7 @@ public class PostingSongsAdapter extends RecyclerView.Adapter<PostingSongsAdapte
         notifyDataSetChanged();
     }
 
-    public void setOnItemDeleteListener(OnItemDeleteListener listener) {
+    public void setOnItemDeleteListener(AdapterListener listener) {
         this.deleteListener = listener;
     }
 

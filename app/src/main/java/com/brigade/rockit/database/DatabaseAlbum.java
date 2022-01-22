@@ -1,6 +1,7 @@
 package com.brigade.rockit.database;
 
 import com.brigade.rockit.data.Album;
+import com.brigade.rockit.data.Song;
 
 import java.util.ArrayList;
 
@@ -12,18 +13,20 @@ public class DatabaseAlbum {
     private String cover;
     private ArrayList<String> songs;
     private String genre;
-    private int added;
-    private int auditions;
+    private long auditions;
     private String duration;
 
     public DatabaseAlbum(Album album) {
+        songs = new ArrayList<>();
         this.name = album.getName();
         this.author = album.getAuthor().getId();
         this.date = album.getDate();
         this.duration = album.getDuration();
-        this.added = album.getAdded();
         this.genre = album.getGenre();
         this.auditions = album.getAuditions();
+        for (Song song: album.getSongs())
+            songs.add(song.getId());
+        this.cover = album.getCoverPath();
     }
 
     public String getDate() {
@@ -66,15 +69,7 @@ public class DatabaseAlbum {
         this.name = name;
     }
 
-    public int getAdded() {
-        return added;
-    }
-
-    public void setAdded(int added) {
-        this.added = added;
-    }
-
-    public int getAuditions() {
+    public long getAuditions() {
         return auditions;
     }
 

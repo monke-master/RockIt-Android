@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -14,25 +13,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.brigade.rockit.GlideApp;
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
-import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Song;
 import com.brigade.rockit.database.ContentManager;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
-import com.brigade.rockit.database.TaskListener;
+import com.brigade.rockit.fragments.dialogs.SongDialog;
 
 import java.util.ArrayList;
 
 // Адаптер для песен
-public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHolder>{
+public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MusicViewHolder>{
 
 
-    private ArrayList<Song> songList;
-    private ArrayList<String> musicIds;
+    private ArrayList<String> ids;
     private MainActivity mainActivity;
-    private int mode;
-    private ArrayList<Song> selectedList;
 
     class MusicViewHolder extends RecyclerView.ViewHolder {
 
@@ -41,9 +36,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
         private TextView artistTxt;
         private TextView durationTxt;
         private ConstraintLayout layout;
-        private ConstraintLayout mainLayout;
         private ImageView optionButton;
-        private Song thisSong;
 
 
         // Получение виджетов
@@ -54,12 +47,11 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
             artistTxt = itemView.findViewById(R.id.song_artist_txt);
             durationTxt = itemView.findViewById(R.id.duration_txt);
             layout = itemView.findViewById(R.id.clickable_layout);
-            mainLayout = itemView.findViewById(R.id.main_layout);
             optionButton = itemView.findViewById(R.id.option_btn);
         }
 
         // Отображения элемента с песней
-        public void bind(MusicAdapter adapter, String musicId) {
+        public void bind(String musicId) {
 
             ContentManager contentManager = new ContentManager();
             // Получение информации о песне
@@ -70,44 +62,17 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
                     nameTxt.setText(song.getName());
                     durationTxt.setText(song.getDuration());
                     artistTxt.setText(song.getAuthor().getLogin());
-                    GlideApp.with(itemView.getContext()).load(song.getCover()).into(coverImg);
-
-                    songList.add(song);
-
+                    GlideApp.with(itemView.getContext()).load(song.getCoverUri()).into(coverImg);
                     Data.getMusicPlayer().getQueue().add(song);
 
-
-                    mainLayout.setOnClickListener(v -> {
-                        if (mode == Constants.SELECTING_MODE)
-                            makeSelected(musicId);
-                    });
                     layout.setOnClickListener(v -> {
-                        if (!(mode == Constants.SELECTING_MODE)) {
-                            playMusic(song);
-                        } else {
-                            makeSelected(musicId);
-                        }
+                        playMusic(song);
                     });
 
-                    thisSong = song;
-
-                    switch (mode) {
-                        case Constants.PLAYLIST_MODE:
-                            optionButton.setImageDrawable(mainActivity.getDrawable(R.drawable.other_2));
-                            optionButton.setOnClickListener(v -> mainActivity.showSongSettings(song));
-                            break;
-                        case Constants.POST_MODE:
-                            optionButton.setImageDrawable(mainActivity.getDrawable(R.drawable.delete));
-                            optionButton.setOnClickListener(v -> {
-                                adapter.deleteItem(musicId);
-
-                            });
-                            break;
-                        case Constants.SELECTING_MODE:
-                            optionButton.setImageDrawable(mainActivity.getDrawable(R.drawable.pick));
-                            optionButton.setVisibility(View.INVISIBLE);
-                    }
-
+                    optionButton.setOnClickListener(v -> {
+                        SongDialog dialog = new SongDialog(itemView.getContext(), song);
+                        dialog.show();
+                    });
                 }
 
                 @Override
@@ -118,45 +83,23 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
             });
 
         }
-        // Выбор песни
-        public void makeSelected(String musicId) {
-            if (selectedList.contains(musicId)) {
-                selectedList.remove(musicId);
-                optionButton.setVisibility(View.INVISIBLE);
-            } else {
-                if (selectedList.size() + 1 > Constants.MAX_POST_SONGS)
-                    Toast.makeText(mainActivity,
-                            mainActivity.getString(R.string.select_music_error) + " " +
-                                    Constants.MAX_POST_SONGS, Toast.LENGTH_LONG).show();
-                else {
-                    selectedList.add(thisSong);
-                    optionButton.setVisibility(View.VISIBLE);
-                }
-            }
-        }
+
         // Проигрывание песни
         public void playMusic(Song song) {
             Data.getMusicPlayer().stopSong();
             Data.getMusicPlayer().playSong(song);
-            Data.getMusicPlayer().setCurPosition(songList.indexOf(song));
+            Data.getMusicPlayer().setCurPosition(ids.indexOf(song.getId()));
             mainActivity.showBottomPlayer();
             song.increaseAuditions();
         }
 
     }
 
-
-
-    public MusicAdapter(MainActivity mainActivity) {
+    public SongAdapter(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
-        songList = new ArrayList<>();
-        selectedList = new ArrayList<>();
-        musicIds = new ArrayList<>();
+        ids = new ArrayList<>();
     }
 
-    public void setMode(int mode) {
-        this.mode = mode;
-    }
 
     @NonNull
     @Override
@@ -167,43 +110,33 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MusicViewHolder holder, int position) {
-        holder.bind(this, musicIds.get(position));
+        holder.bind(ids.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return musicIds.size();
+        return ids.size();
     }
 
     // Добавление песни
     public void addItem(String id) {
-        musicIds.add(id);
+        ids.add(id);
         notifyDataSetChanged();
     }
 
     // Очистка списка
     public void clear() {
-        musicIds.clear();
-        songList.clear();
+        ids.clear();
         notifyDataSetChanged();
     }
 
     public void deleteItem(String id) {
-        musicIds.remove(id);
+        ids.remove(id);
         notifyDataSetChanged();
     }
 
-    public ArrayList<Song> getSelectedList() {
-        return selectedList;
+    public ArrayList<String> getIds() {
+        return ids;
     }
-
-    public ArrayList<Song> getMusicList() {
-        return songList;
-    }
-
-    public ArrayList<String> getMusicIds() {
-        return musicIds;
-    }
-
 
 }

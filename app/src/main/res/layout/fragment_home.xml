@@ -21,7 +21,7 @@
             android:background="@drawable/footer">
 
             <ImageView
-                android:id="@+id/other_btn"
+                android:id="@+id/option_btn"
                 android:layout_width="@dimen/footer_image_size"
                 android:layout_height="@dimen/footer_image_size"
                 android:layout_marginTop="8dp"

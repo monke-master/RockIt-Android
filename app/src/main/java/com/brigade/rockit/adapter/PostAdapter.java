@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.brigade.rockit.GlideApp;
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
-import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Post;
 import com.brigade.rockit.data.User;
@@ -58,7 +57,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             imagesList = itemView.findViewById(R.id.images_list);
             musicList = itemView.findViewById(R.id.songs_list);
             profileImg = itemView.findViewById(R.id.profile_img);
-            otherBtn = itemView.findViewById(R.id.other_btn);
+            otherBtn = itemView.findViewById(R.id.option_btn);
             otherBtn.setVisibility(View.INVISIBLE);
         }
 
@@ -125,12 +124,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 @Override
                 public void onComplete(Object object) {
                     post.setMusicIds((ArrayList<String>) object);
-                    MusicAdapter musicAdapter = new MusicAdapter(mainActivity);
-                    musicAdapter.setMode(Constants.PLAYLIST_MODE);
+                    SongAdapter songAdapter = new SongAdapter(mainActivity);
                     musicList.setLayoutManager(new LinearLayoutManager(mainActivity));
-                    musicList.setAdapter(musicAdapter);
+                    musicList.setAdapter(songAdapter);
                     for (String id: post.getMusicIds()) {
-                        musicAdapter.addItem(id);
+                        songAdapter.addItem(id);
                     }
                 }
 

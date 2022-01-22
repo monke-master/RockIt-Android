@@ -41,7 +41,7 @@ public class PlaylistDialog extends BottomSheetDialog {
             @Override
             public void onComplete(Object object) {
                 ArrayList<String> playlists = (ArrayList<String>) object;
-                if (playlists.contains(playlist.getId())) {
+                if (playlists.contains("playlists/" + playlist.getId())) {
                     addBtn.setText(context.getString(R.string.delete_my_playlists));
                     addBtn.setOnClickListener(v -> {
                         contentManager.deleteFromMyPlaylists(playlist.getId(), new TaskListener() {

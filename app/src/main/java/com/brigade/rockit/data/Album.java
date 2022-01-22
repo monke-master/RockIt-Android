@@ -9,17 +9,17 @@ public class Album {
     private String name;
     private User author;
     private Uri coverUri;
+    private String coverPath;
     private ArrayList<Song> songs;
     private ArrayList<String> songIds;
     private String date;
     private String genre;
     private String id;
-    private int added;
-    private int auditions;
+    private long auditions;
     private String duration;
 
     public Album() {
-        added = 0;
+        songs = new ArrayList<>();
         auditions = 0;
     }
 
@@ -79,19 +79,11 @@ public class Album {
         this.id = id;
     }
 
-    public int getAdded() {
-        return added;
-    }
-
-    public void setAdded(int added) {
-        this.added = added;
-    }
-
-    public int getAuditions() {
+    public long getAuditions() {
         return auditions;
     }
 
-    public void setAuditions(int auditions) {
+    public void setAuditions(long auditions) {
         this.auditions = auditions;
     }
 
@@ -109,5 +101,13 @@ public class Album {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public String getCoverPath() {
+        return coverPath;
+    }
+
+    public void setCoverPath(String coverPath) {
+        this.coverPath = coverPath;
     }
 }

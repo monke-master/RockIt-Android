@@ -15,9 +15,7 @@ public class Playlist {
     private String description;
     private String id;
     private long added;
-    private long auditions;
     private String duration;
-
 
     public Playlist() {
         name = "";
@@ -25,7 +23,6 @@ public class Playlist {
         songs = new ArrayList<>();
         songIds = new ArrayList<>();
         added = 0;
-        auditions = 0;
     }
 
     public String getName() {
@@ -98,14 +95,6 @@ public class Playlist {
 
     public void setAdded(long added) {
         this.added = added;
-    }
-
-    public long getAuditions() {
-        return auditions;
-    }
-
-    public void setAuditions(long auditions) {
-        this.auditions = auditions;
     }
 
     public String getDuration() {

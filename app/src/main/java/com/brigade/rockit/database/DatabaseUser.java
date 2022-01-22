@@ -15,13 +15,17 @@ public class DatabaseUser {
     private ArrayList<String> music;
     private ArrayList<User> followingList;
     private ArrayList<User> followersList;
-    private String phone;
+    private ArrayList<String> favouriteGenres;
 
     public DatabaseUser() {
         bio = "";
+        posts = new ArrayList<>();
+        music = new ArrayList<>();
+        followersList = new ArrayList<>();
+        followingList = new ArrayList<>();
+        favouriteGenres = new ArrayList<>();
         profilePicture = "profile_pictures/default.jpg";
     }
-
 
     public String getName() {
         return name;
@@ -87,11 +91,11 @@ public class DatabaseUser {
         return music;
     }
 
-    public String getPhone() {
-        return phone;
+    public ArrayList<String> getFavouriteGenres() {
+        return favouriteGenres;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setFavouriteGenres(ArrayList<String> favouriteGenres) {
+        this.favouriteGenres = favouriteGenres;
     }
 }

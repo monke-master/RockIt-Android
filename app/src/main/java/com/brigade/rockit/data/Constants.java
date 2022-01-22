@@ -20,14 +20,10 @@ public class Constants {
     public static final int MAX_POST_IMAGES = 5;
 
     public static final int MAX_POST_SONGS = 5;
-    public static final int PLAYLIST_MODE = 0;
-    public static final int SELECTING_MODE = 1;
-    public static final int POST_MODE = 2;
     public static int NEWS_FEED_SIZE = 100000;
     public static String STORAGE_PATH = "gs://rockit-71ddf.appspot.com";
 
     public static final int PICK_AUDIO = 3;
 
-    public static final int SONG_GENRE = 1;
-    public static final int FAVORITE_GENRES = 2;
+    public static final int MAX_MAY_LIKE_SIZE = 100;
 }

@@ -4,35 +4,90 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.song.NewAlbumFragment">
+    tools:context=".fragments.music.NewAlbumFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/footer_height"
+            android:layout_gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/top_bar_confirm"
+            app:navigationIcon="@drawable/delete"
+            app:title="@string/new_album"
+            tools:layout_editor_absoluteX="-2dp" />
+
         <EditText
-            android:id="@+id/song_name_edit2"
+            android:id="@+id/name_edit"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:ems="10"
-            android:hint="@string/song_name"
+            android:hint="@string/album_name"
             android:inputType="textPersonName|textCapSentences"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/cover_img" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/cover_img"
             android:layout_width="@dimen/image_size"
             android:layout_height="@dimen/image_size"
             android:layout_marginStart="105dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="106dp"
             android:src="@drawable/photo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+        <Button
+            android:id="@+id/pick_genre_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pick_genre"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name_edit" />
+
+        <TextView
+            android:id="@+id/songs_txt"
+            style="@style/Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="@string/songs"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.586" />
+
+        <ImageView
+            android:id="@+id/add_music_btn"
+            android:layout_width="@dimen/footer_image_size"
+            android:layout_height="@dimen/footer_image_size"
+            android:layout_marginEnd="24dp"
+            android:src="@drawable/plus"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.582" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/songs_list"
+            android:layout_width="409dp"
+            android:layout_height="291dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
