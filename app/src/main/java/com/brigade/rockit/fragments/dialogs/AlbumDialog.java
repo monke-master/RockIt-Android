@@ -13,12 +13,8 @@ import com.brigade.rockit.data.Album;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.database.ContentManager;
 import com.brigade.rockit.database.ExceptionManager;
-import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.database.TaskListener;
-import com.brigade.rockit.database.UserManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
-import java.util.ArrayList;
 
 public class AlbumDialog extends BottomSheetDialog {
 
@@ -33,12 +29,12 @@ public class AlbumDialog extends BottomSheetDialog {
         ContentManager contentManager = new ContentManager();
 
         if (album.getAuthor().getId().equals(Data.getCurUser().getId())) {
-            addBtn.setText(R.string.delete_my_playlists);
+            addBtn.setText(R.string.delete_from_my_playlists);
             addBtn.setOnClickListener(v -> {
                 contentManager.deleteFromMyPlaylists("albums/" + album.getId(), new TaskListener() {
                     @Override
                     public void onComplete() {
-                        Toast.makeText(getContext(), getContext().getString(R.string.deleted_my_playlists),
+                        Toast.makeText(getContext(), getContext().getString(R.string.deleted_from_my_playlists),
                                 Toast.LENGTH_LONG).show();
                         activity.previousFragment();
                     }

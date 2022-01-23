@@ -35,7 +35,7 @@ public class SongDialog extends BottomSheetDialog {
                     contentManager.deleteSong(song, new TaskListener() {
                     @Override
                     public void onComplete() {
-                        Toast.makeText(context, context.getString(R.string.deleted_music),
+                        Toast.makeText(context, context.getString(R.string.song_deleted),
                                 Toast.LENGTH_LONG).show();
                     }
 
@@ -57,12 +57,12 @@ public class SongDialog extends BottomSheetDialog {
 
                 ArrayList<String> musicIds = (ArrayList<String>) object;
                 if (musicIds.contains(song.getId())) { // Удаление из "Моей музыки"
-                    myMusicBtn.setText(R.string.delete_my_music);
+                    myMusicBtn.setText(R.string.delete_from_my_music);
                     myMusicBtn.setOnClickListener(v -> {
                         contentManager.deleteSongFromMyMusic(song, new TaskListener() {
                             @Override
                             public void onComplete() {
-                                Toast.makeText(context, context.getString(R.string.deleted_my_music),
+                                Toast.makeText(context, context.getString(R.string.deleted_from_my_music),
                                         Toast.LENGTH_LONG).show();
                             }
 
@@ -79,7 +79,7 @@ public class SongDialog extends BottomSheetDialog {
                         contentManager.addToMyMusic(song.getId(), new TaskListener() {
                             @Override
                             public void onComplete() {
-                                Toast.makeText(context, context.getString(R.string.added_to_my_music),
+                                Toast.makeText(context, context.getString(R.string.song_added),
                                         Toast.LENGTH_LONG).show();
                             }
 

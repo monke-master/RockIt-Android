@@ -20,7 +20,6 @@ import com.brigade.rockit.R;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Song;
 import com.brigade.rockit.data.TooManyPhotoException;
-import com.brigade.rockit.data.User;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.database.TaskListener;
@@ -224,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         } else {
-            Toast.makeText(this, getString(R.string.error_pick_file), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.pick_file_error), Toast.LENGTH_LONG).show();
         }
     }
 

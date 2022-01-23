@@ -28,7 +28,6 @@ android {
         versionName "alpha 0.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        signingConfig signingConfigs.testing
     }
 
     packagingOptions {

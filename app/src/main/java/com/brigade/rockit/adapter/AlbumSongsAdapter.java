@@ -21,15 +21,14 @@ import com.brigade.rockit.fragments.dialogs.SongDialog;
 
 import java.util.ArrayList;
 
+// Адаптер для песен в альбоме
 public class AlbumSongsAdapter extends RecyclerView.Adapter<AlbumSongsAdapter.AlbumSongViewHolder> {
 
     private ArrayList<String> songsIds;
     private MainActivity mainActivity;
     private AdapterListener adapterListener;
 
-    public void setAdapterListener(AdapterListener adapterListener) {
-        this.adapterListener = adapterListener;
-    }
+
 
     class AlbumSongViewHolder extends RecyclerView.ViewHolder{
 
@@ -41,6 +40,7 @@ public class AlbumSongsAdapter extends RecyclerView.Adapter<AlbumSongsAdapter.Al
 
         public AlbumSongViewHolder(@NonNull View itemView) {
             super(itemView);
+            // Получение виджетов
             nameTxt = itemView.findViewById(R.id.name_txt);
             durationTxt = itemView.findViewById(R.id.duration_txt);
             layout = itemView.findViewById(R.id.layout);
@@ -117,5 +117,9 @@ public class AlbumSongsAdapter extends RecyclerView.Adapter<AlbumSongsAdapter.Al
     public void addItem(String item) {
         songsIds.add(item);
         notifyDataSetChanged();
+    }
+
+    public void setAdapterListener(AdapterListener adapterListener) {
+        this.adapterListener = adapterListener;
     }
 }

@@ -58,7 +58,7 @@ public class EditProfileFragment extends Fragment {
                     userManager.changeName(newName, new TaskListener() { // Смена имени
                         @Override
                         public void onComplete() {
-                            Toast.makeText(getContext(), getActivity().getString(R.string.successfully_edit_name),
+                            Toast.makeText(getContext(), getActivity().getString(R.string.name_changed),
                                     Toast.LENGTH_LONG).show();
                         }
 
@@ -79,7 +79,7 @@ public class EditProfileFragment extends Fragment {
                     userManager.changeSurname(newSurname, new TaskListener() {  // Смена фамилии
                         @Override
                         public void onComplete() {
-                            Toast.makeText(getContext(), getString(R.string.successfully_edit_surname),
+                            Toast.makeText(getContext(), getString(R.string.surname_changed),
                                     Toast.LENGTH_LONG).show();
                         }
 
@@ -100,7 +100,7 @@ public class EditProfileFragment extends Fragment {
                     userManager.changeBio(newBio, new TaskListener() { // Изменение кр. инфоомации
                         @Override
                         public void onComplete() {
-                            Toast.makeText(getContext(), getString(R.string.successfully_edit_bio),
+                            Toast.makeText(getContext(), getString(R.string.bio_changed),
                                     Toast.LENGTH_LONG).show();
                         }
 

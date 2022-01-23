@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+// Адаптер для жанров(здесь куча шибок)
 public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHolder> {
     private ArrayList<String> ids;
     private Context context;
@@ -40,6 +41,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
 
         public GenreViewHolder(@NonNull View itemView) {
             super(itemView);
+            // Получение виджетов
             pictureImg = itemView.findViewById(R.id.genre_img);
             pickImg = itemView.findViewById(R.id.pick_image);
             nameTxt = itemView.findViewById(R.id.name_txt);
@@ -50,6 +52,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
         }
 
         public void bind(int position) {
+            // ПОлучение данных о жанре из базы данных
             new ContentManager().getGenre(ids.get(position), new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
