@@ -29,7 +29,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-// Фрагмент с рекомендациями(в разработке)
+// Фрагмент с рекомендациями
 public class ForYouFragment extends Fragment {
 
 

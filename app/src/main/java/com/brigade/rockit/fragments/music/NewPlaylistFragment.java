@@ -26,7 +26,7 @@ import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Song;
 import com.brigade.rockit.data.Playlist;
 import com.brigade.rockit.database.ContentManager;
-import com.brigade.rockit.database.TimeManager;
+import com.brigade.rockit.data.TimeManager;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.database.TaskListener;
@@ -103,7 +103,7 @@ public class NewPlaylistFragment extends Fragment {
                 @Override
                 public void onComplete(Object object) {
                     ArrayList<Song> songs = (ArrayList<Song>) object;
-                    for (Song song : songs)
+                    for (Song song: songs)
                         playlist.getSongs().add(song);
                 }
 
@@ -112,7 +112,7 @@ public class NewPlaylistFragment extends Fragment {
 
                 }
             });
-            mainActivity.setFragment(new SelectMusicFragment());
+            mainActivity.setFragment(fragment);
         });
         // Отображение кнопки подтверждения в зависимости от введенных полей
         titleEdit.addTextChangedListener(new TextWatcher() {

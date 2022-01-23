@@ -61,13 +61,13 @@ public class FooterFragment extends Fragment {
     }
 
     public void setIcons() {
-        homeBtn.setImageDrawable(getResources().getDrawable(R.drawable.home_brown,
+        homeBtn.setImageDrawable(getResources().getDrawable(R.drawable.home_gray,
                 getContext().getTheme()));
-        profileBtn.setImageDrawable(getResources().getDrawable(R.drawable.profile_brown,
+        profileBtn.setImageDrawable(getResources().getDrawable(R.drawable.profile_gray,
                 getContext().getTheme()));
-        musicBtn.setImageDrawable(getResources().getDrawable(R.drawable.music_brown,
+        musicBtn.setImageDrawable(getResources().getDrawable(R.drawable.music_gray,
                 getContext().getTheme()));
-        searchBtn.setImageDrawable(getResources().getDrawable(R.drawable.search_brown,
+        searchBtn.setImageDrawable(getResources().getDrawable(R.drawable.search_gray,
                 getContext().getTheme()));
         if (mainActivity.getCurrentFragment() instanceof HomeFragment)
             homeBtn.setImageDrawable(getResources().getDrawable(R.drawable.home,

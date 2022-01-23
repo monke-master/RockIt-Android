@@ -1,7 +1,6 @@
 package com.brigade.rockit.database;
 
 import android.net.Uri;
-import android.util.Log;
 
 import com.brigade.rockit.data.Album;
 import com.brigade.rockit.data.Constants;
@@ -9,17 +8,16 @@ import com.brigade.rockit.data.Genre;
 import com.brigade.rockit.data.Song;
 import com.brigade.rockit.data.Playlist;
 import com.brigade.rockit.data.Post;
+import com.brigade.rockit.data.TimeManager;
 import com.brigade.rockit.data.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -219,7 +217,7 @@ public class ContentManager {
         TimeManager manager = new TimeManager();
         dbPost.setDate(manager.getDate());
         // Получение id прикрепленных файлов
-        dbPost.setMusicIds(post.getMusicIds());
+        dbPost.setSongsIds(post.getSongsIds());
         // Загрузка в бд
         firestore.collection("posts").add(dbPost).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -334,20 +332,18 @@ public class ContentManager {
         });
     }
 
-    // Получение текстовой информации о посте
-    public void getPostTextInfo(String postId, GetObjectListener listener) {
+    public void getPost(String postId, GetObjectListener listener) {
         firestore.collection("posts").document(postId).get().addOnCompleteListener(task1 -> {
             if (task1.isSuccessful()) {
                 DocumentSnapshot doc = task1.getResult();
-                DatabasePost dbPost = new DatabasePost();
-                dbPost.setAuthorId(doc.get("authorId").toString());
-                dbPost.setDate(doc.get("date").toString());
-                dbPost.setText(doc.get("text").toString());
                 Post post = new Post();
-                post.setText(dbPost.getText());
-                post.setDate(dbPost.getDate());
+                post.setText(doc.get("text").toString());
+                post.setDate(doc.get("date").toString());
+                post.setImagesIds((ArrayList<String>) doc.get("imageIds"));
+                post.setSongsIds((ArrayList<String>) doc.get("songsIds"));
+                post.setId(postId);
                 UserManager userManager = new UserManager();
-                userManager.getUser(dbPost.getAuthorId(), new GetObjectListener() {
+                userManager.getUser(doc.get("authorId").toString(), new GetObjectListener() {
                     @Override
                     public void onComplete(Object object) {
                         post.setAuthor((User) object);
@@ -360,26 +356,6 @@ public class ContentManager {
                     }
                 });
             }
-        });
-    }
-
-    // Получение списка id изображений поста
-    public void getImageIds(String postId, GetObjectListener listener) {
-        firestore.collection("posts").document(postId).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                listener.onComplete(task.getResult().get("imageIds"));
-            } else
-                listener.onFailure(task.getException());
-        });
-    }
-
-    // Получение списка id песен поста
-    public void getMusicIds(String postId, GetObjectListener listener) {
-        firestore.collection("posts").document(postId).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                listener.onComplete(task.getResult().get("musicIds"));
-            } else
-                listener.onFailure(task.getException());
         });
     }
 

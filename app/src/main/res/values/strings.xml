@@ -62,8 +62,8 @@
     <string name="pick_photo_error">"The maximum number of photos is "</string>
     <string name="add_photo">Add photo</string>
     <string name="add_song">Add song</string>
-    <string name="song">Music</string>
-    <string name="my_music">My song</string>
+    <string name="song">Song</string>
+    <string name="my_music">My songs</string>
     <string name="for_you">For you</string>
     <string name="song_name">Song name</string>
     <string name="artist">Artist</string>
@@ -122,7 +122,7 @@
     <string name="new_album">New album</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    <string name="auditions">auditions</string>
+
     <string name="delete_album">Delete album</string>
     <string name="album_deleted">Album deleted</string>
     <string name="albums">Albums</string>
@@ -133,4 +133,12 @@
     <string name="enter_email">Enter Email Address</string>
     <string name="email_using">Your email address will be used for signing in to your account</string>
     <string name="confirm_email">Confirm Email Address</string>
+    <string name="audition">audition</string>
+    <string name="auditions">auditions</string>
+    <string name="auditions_genitive"></string>
+    <string name="songs_genitive"></string>
+    <string name="song_genitive"></string>
+    <string name="hours">hr</string>
+    <string name="minutes">min</string>
+    <string name="seconds">sec</string>
 </resources>

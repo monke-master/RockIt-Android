@@ -11,7 +11,8 @@
     <color name="dark_grey">#252527</color>
     <color name="brown">#33211B</color>
     <color name="grey">#373737</color>
-    <color name="light_grey">#888888</color>
+    <color name="light_grey">#797979</color>
     <color name="light_grey_2">#C4C4C4</color>
     <color name="grey_2">#80494949</color>
+    <color name="white_1">#FFFDF8</color>
 </resources>

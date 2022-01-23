@@ -28,13 +28,6 @@ public class SelectMusicFragment extends Fragment {
     private SelectingSongAdapter adapter;
     private GetObjectListener listener;
 
-
-    public SelectMusicFragment() {
-
-    }
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

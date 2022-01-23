@@ -2,7 +2,7 @@
 <resources>
     <style name="TextButton" parent="android:style/Widget.Button">
         <item name="android:background">@drawable/rounded_button</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/white_1</item>
         <item name="android:textSize">@dimen/default_text_size</item>
         <item name="android:height">@dimen/min_button_height</item>
         <item name="android:width">@dimen/min_button_width</item>
@@ -17,7 +17,7 @@
     </style>
     <style name="Header" parent="Widget.AppCompat.TextView">
         <item name="android:textSize">@dimen/header_text_size</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:gravity">center</item>
     </style>
     <style name="Header2" parent="Widget.AppCompat.TextView">
@@ -26,14 +26,14 @@
     </style>
     <style name="Header3" parent="Widget.AppCompat.TextView">
         <item name="android:textSize">@dimen/header3_text_size</item>
-        <item name="android:textColor">@color/light_grey_2</item>
+        <item name="android:textColor">@color/light_grey</item>
     </style>
     <style name="Text" parent="Widget.AppCompat.TextView">
         <item name="android:textSize">@dimen/default_text_size</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/black</item>
     </style>
     <style name="ToolbarTitle" parent="Widget.AppCompat.TextView">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/title_size</item>
     </style>
     <style name="TabLayout" parent="Widget.Design.TabLayout">
@@ -50,7 +50,7 @@
         <item name="buttonStyle">@style/TextButton</item>
     </style>
     <style name="Toolbar">
-        <item name="android:background">@color/dark_red</item>
+        <item name="android:background">@color/white_1</item>
         <item name="height">@dimen/footer_height</item>
         <item name="buttonGravity">center_vertical</item>
         <item name="titleTextAppearance">@style/ToolbarTitle</item>

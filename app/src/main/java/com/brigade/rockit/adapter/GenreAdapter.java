@@ -1,7 +1,6 @@
 package com.brigade.rockit.adapter;
 
-import android.content.Context;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,19 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brigade.rockit.R;
-import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Genre;
 import com.brigade.rockit.database.ContentManager;
+import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.database.TaskListener;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-// Адаптер для жанров(здесь куча шибок)
+// Адаптер для жанров
 public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHolder> {
     private ArrayList<String> ids;
-    private Context context;
     private ArrayList<String> selectedGenres;
     private GenreViewHolder selectedHolder;
     private GenreAdapter adapter;
@@ -51,20 +49,20 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
             itemView.setOnClickListener(this);
         }
 
-        public void bind(int position) {
-            // ПОлучение данных о жанре из базы данных
-            new ContentManager().getGenre(ids.get(position), new GetObjectListener() {
+        public void bind(String id) {
+            // Получение данных о жанре из базы данных
+            new ContentManager().getGenre(id, new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
                     Genre genre = (Genre) object;
                     nameTxt.setText(genre.getName());
-                    Glide.with(context).load(genre.getPicture()).circleCrop().into(pictureImg);
+                    Glide.with(itemView.getContext()).load(genre.getPicture()).circleCrop().into(pictureImg);
                     thisGenre = genre;
                 }
 
                 @Override
                 public void onFailure(Exception e) {
-
+                    ExceptionManager.showError(e, itemView.getContext());
                 }
             });
         }
@@ -79,8 +77,10 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
                 unselect();
             if (thisGenre.getSubgenres().size() > 0) {
                 if (!ids.contains(thisGenre.getSubgenres().get(0))) {
-                    for (String id : thisGenre.getSubgenres())
+                    for (String id : thisGenre.getSubgenres()) {
                         adapter.insertItemAfter(id, ids.indexOf(thisGenre.getId()));
+                    }
+
                 }
             }
             listener.onComplete();
@@ -100,11 +100,10 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
         }
     }
 
-    public GenreAdapter(Context context, int maxGenres) {
+    public GenreAdapter(int maxGenres) {
         ids = new ArrayList<>();
         selectedGenres = new ArrayList<>();
         adapter = this;
-        this.context = context;
         this.maxGenres = maxGenres;
     }
 
@@ -118,7 +117,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
 
     @Override
     public void onBindViewHolder(@NonNull GenreViewHolder holder, int position) {
-        holder.bind(position);
+        holder.bind(ids.get(position));
     }
 
     @Override
@@ -126,14 +125,15 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
         return ids.size();
     }
 
+    // Добавление элемента
     public void addItem(String id) {
         ids.add(id);
         notifyDataSetChanged();
     }
-
+    // Вставка элемента в массив
     public void insertItemAfter(String id, int pos) {
         ids.add(pos + 1, id);
-        notifyDataSetChanged();
+        notifyItemInserted(pos + 1);
     }
 
     public ArrayList<String> getSelectedGenres() {

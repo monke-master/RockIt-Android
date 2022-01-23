@@ -46,7 +46,7 @@ public class GenresFragment extends Fragment {
         RecyclerView genresList = view.findViewById(R.id.genres_list);
         TextView header = view.findViewById(R.id.header);
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
-        GenreAdapter adapter = new GenreAdapter(getContext(), maxGenres);
+        GenreAdapter adapter = new GenreAdapter(maxGenres);
         genresList.setAdapter(adapter);
         genresList.setLayoutManager(new GridLayoutManager(getContext(), 3));
 

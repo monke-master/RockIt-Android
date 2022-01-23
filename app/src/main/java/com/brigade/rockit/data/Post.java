@@ -12,13 +12,13 @@ public class Post {
     private ArrayList<Song> songList;
     private String id;
     private ArrayList<String> imagesIds;
-    private ArrayList<String> musicIds;
+    private ArrayList<String> songsIds;
 
     public Post() {
         imagesList = new ArrayList<>();
         songList = new ArrayList<>();
         imagesIds = new ArrayList<>();
-        musicIds = new ArrayList<>();
+        songsIds = new ArrayList<>();
         text = "";
     }
 
@@ -80,11 +80,11 @@ public class Post {
         this.imagesIds = imagesIds;
     }
 
-    public ArrayList<String> getMusicIds() {
-        return musicIds;
+    public ArrayList<String> getSongsIds() {
+        return songsIds;
     }
 
-    public void setMusicIds(ArrayList<String> musicIds) {
-        this.musicIds = musicIds;
+    public void setSongsIds(ArrayList<String> songsIds) {
+        this.songsIds = songsIds;
     }
 }

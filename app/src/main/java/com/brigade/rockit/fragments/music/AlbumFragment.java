@@ -18,7 +18,9 @@ import com.brigade.rockit.activities.MainActivity;
 import com.brigade.rockit.adapter.AlbumSongsAdapter;
 import com.brigade.rockit.data.Album;
 import com.brigade.rockit.adapter.AdapterListener;
+import com.brigade.rockit.data.CaseManager;
 import com.brigade.rockit.data.Song;
+import com.brigade.rockit.data.TimeManager;
 import com.brigade.rockit.fragments.dialogs.AlbumDialog;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -51,8 +53,11 @@ public class AlbumFragment extends Fragment {
         nameTxt.setText(album.getName());
         authorTxt.setText(album.getAuthor().getLogin());
         dateTxt.setText(album.getGenre() + " " + album.getDate());
-        durationTxt.setText(album.getDuration());
-        auditionsTxt.setText(album.getAuditions() + getString(R.string.auditions));
+        CaseManager caseManager = new CaseManager(getContext());
+        TimeManager timeManager = new TimeManager();
+        durationTxt.setText(album.getSongIds().size() + " " + caseManager.getSongsCase(album.getSongIds().size())
+                + " " + timeManager.albumDurationFormat(album.getDuration(), getContext()));
+        auditionsTxt.setText(album.getAuditions() + "" + caseManager.getAuditionsCase(album.getAuditions()));
 
         AlbumSongsAdapter songAdapter = new AlbumSongsAdapter(mainActivity);
         songsList.setAdapter(songAdapter);

@@ -62,22 +62,57 @@ public class ProfileFragment extends Fragment {
         bioTxt = view.findViewById(R.id.bio_txt);
         profilePicImg = view.findViewById(R.id.profile_pic_img);
         Button editBtn = view.findViewById(R.id.edit_profile_btn);
-        Button followBtn = view.findViewById(R.id.follow_btn);
         Button newCntnBtn = view.findViewById(R.id.new_post_btn);
         RecyclerView postsList = view.findViewById(R.id.posts_list);
         followersCount = view.findViewById(R.id.followers_count);
         followingCount = view.findViewById(R.id.following_count);
-        TextView followersTxt = view.findViewById(R.id.followers_txt);
-        TextView followingTxt = view.findViewById(R.id.following_txt);
         toolbar = view.findViewById(R.id.toolbar);
 
         if (user.getId().equals(Data.getCurUser().getId())) {
-            followBtn.setVisibility(View.INVISIBLE);
-        }
-        else {
-            if (Data.getCurUser().getFollowingList().contains(user.getId()))
-                followBtn.setText(getString(R.string.unfollow));
-            editBtn.setVisibility(View.INVISIBLE);
+            // Редактирование профиля
+            editBtn.setOnClickListener(v -> {
+                mainActivity.setFragment(new EditProfileFragment());
+            });
+        } else {
+            if (Data.getCurUser().getFollowersList().contains(user.getId())) {
+                editBtn.setText(R.string.unfollow);
+                editBtn.setOnClickListener(v -> {
+                    manager.unfollowUser(user, new TaskListener() {
+                        @Override
+                        public void onComplete() { // Отписка от пользователя
+                            editBtn.setText(R.string.follow);
+                            followersCount.setText(String.valueOf(user.getFollowersList().size() - 1));
+                            user.getFollowersList().remove(Data.getCurUser().getId());
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            ExceptionManager.showError(e, getContext());
+                        }
+                    });
+                });
+            } else {
+                editBtn.setText(getString(R.string.follow));
+                // Подписка/отписка
+                editBtn.setOnClickListener(v -> {
+                    if (editBtn.getText().equals(getString(R.string.follow))) { // Подписка на пользователя
+                        manager.followUser(user, new TaskListener() {
+                            @Override
+                            public void onComplete() {
+                                editBtn.setText(R.string.unfollow);
+                                followersCount.setText(String.valueOf(user.getFollowersList().size() + 1));
+                                user.getFollowersList().add(Data.getCurUser().getId());
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+                                ExceptionManager.showError(e, getContext());
+                            }
+                        });
+
+                    }
+                });
+            }
         }
 
         // Просмотр фото провиля
@@ -85,10 +120,7 @@ public class ProfileFragment extends Fragment {
             mainActivity.setFragment(new ProfilePicFragment(user));
         });
 
-        // Редактирование профиля
-        editBtn.setOnClickListener(v -> {
-            mainActivity.setFragment(new EditProfileFragment());
-        });
+
 
         if (!user.getId().equals(Data.getCurUser().getId()))
             newCntnBtn.setVisibility(View.GONE);
@@ -97,41 +129,7 @@ public class ProfileFragment extends Fragment {
             mainActivity.setFragment(new NewContentFragment());
         });
 
-        // Подписка/отписка
-        followBtn.setOnClickListener(v -> {
-            if (followBtn.getText().equals(getString(R.string.follow))) { // Подписка на пользователя
-                manager.followUser(user, new TaskListener() {
-                    @Override
-                    public void onComplete() {
-                        followBtn.setText(R.string.unfollow);
-                        followersCount.setText(String.valueOf(user.getFollowersList().size() + 1));
-                        user.getFollowersList().add(Data.getCurUser().getId());
-                    }
 
-                    @Override
-                    public void onFailure(Exception e) {
-                        ExceptionManager.showError(e, getContext());
-                    }
-                });
-
-            } else {
-                manager.unfollowUser(user, new TaskListener() {
-                    @Override
-                    public void onComplete() { // Отписка от пользователя
-                        followBtn.setText(R.string.follow);
-                        followersCount.setText(String.valueOf(user.getFollowersList().size() - 1));
-                        user.getFollowersList().remove(Data.getCurUser().getId());
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        ExceptionManager.showError(e, getContext());
-                    }
-                });
-
-            }
-
-        });
 
         // Переход на актиность настроек
         toolbar.setOnMenuItemClickListener(item -> {
@@ -151,10 +149,10 @@ public class ProfileFragment extends Fragment {
         );
 
         // Переход на фрагмент с подписчиками
-        followersTxt.setOnClickListener(v -> mainActivity.setFragment(
+        followersCount.setOnClickListener(v -> mainActivity.setFragment(
                 new FollowPagerFragment(user, 1)));
         // Переход на фрагмент с подписками
-        followingTxt.setOnClickListener(v -> mainActivity.setFragment(
+        followingCount.setOnClickListener(v -> mainActivity.setFragment(
                 new FollowPagerFragment(user, 0)));
 
         // Отображение постов
@@ -194,8 +192,10 @@ public class ProfileFragment extends Fragment {
         manager.getFollowInfo(user, new TaskListener() {
             @Override
             public void onComplete() {
-                followersCount.setText(String.valueOf(user.getFollowersList().size()));
-                followingCount.setText(String.valueOf(user.getFollowingList().size()));
+                followersCount.setText(user.getFollowersList().size() + "\n" +
+                        getString(R.string.followers));
+                followingCount.setText(user.getFollowingList().size()  + "\n" +
+                        getString(R.string.following));
             }
 
             @Override

@@ -18,7 +18,7 @@ import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Post;
 import com.brigade.rockit.data.User;
 import com.brigade.rockit.database.ContentManager;
-import com.brigade.rockit.database.TimeManager;
+import com.brigade.rockit.data.TimeManager;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.fragments.dialogs.PostDialog;
@@ -43,7 +43,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         private TextView dateTxt;
         private TextView textTxt;
         private RecyclerView imagesList;
-        private RecyclerView musicList;
+        private RecyclerView songsList;
         private ImageView profileImg;
         private ImageView otherBtn;
 
@@ -55,32 +55,57 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             dateTxt = itemView.findViewById(R.id.date_txt);
             textTxt = itemView.findViewById(R.id.text_txt);
             imagesList = itemView.findViewById(R.id.images_list);
-            musicList = itemView.findViewById(R.id.songs_list);
+            songsList = itemView.findViewById(R.id.songs_list);
             profileImg = itemView.findViewById(R.id.profile_img);
             otherBtn = itemView.findViewById(R.id.option_btn);
-            otherBtn.setVisibility(View.INVISIBLE);
+            otherBtn.setVisibility(View.GONE);
+            textTxt.setVisibility(View.GONE);
+            imagesList.setVisibility(View.GONE);
+            songsList.setVisibility(View.GONE);
+            nameTxt.setText("");
+            loginTxt.setText("");
+            dateTxt.setText("");
         }
 
         // При отображении поста
         public void bind(String postId) {
-            Post post = new Post();
-            post.setId(postId);
             ContentManager manager = new ContentManager();
-            manager.getPostTextInfo(postId, new GetObjectListener() { // Получение текстовой информации
+            manager.getPost(postId, new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
-                    Post resultPost = (Post)object;
-                    post.setAuthor(resultPost.getAuthor());
-                    post.setText(resultPost.getText());
-                    post.setDate(resultPost.getDate());
+                    Post post = (Post)object;
                     User author = post.getAuthor();
-                    textTxt.setText(post.getText());
+                    // Отображение даты поста, имени и логина автора
                     TimeManager timeManager = new TimeManager();
                     dateTxt.setText(timeManager.formatDate(post.getDate(), mainActivity));
                     nameTxt.setText(author.getName() + " " + author.getSurname());
                     loginTxt.setText("@" + author.getLogin());
+
+                    if (!textTxt.equals("")) {
+                        textTxt.setText(post.getText());
+                        textTxt.setVisibility(View.VISIBLE);
+                    }
+                    // Картинка профиля автора
                     GlideApp.with(mainActivity).load(author.getPictureUri()).circleCrop().into(profileImg);
-                    // Параметры поста
+
+                    ImageAdapter imagesAdapter = new ImageAdapter(mainActivity);
+                    imagesList.setAdapter(imagesAdapter);
+                    imagesList.setLayoutManager(new LinearLayoutManager(mainActivity,
+                            LinearLayoutManager.HORIZONTAL, false));
+                    for (String id: post.getImagesIds()) {
+                        imagesList.setVisibility(View.VISIBLE);
+                        imagesAdapter.addItem(id);
+                    }
+
+                    SongAdapter songAdapter = new SongAdapter(mainActivity);
+                    songsList.setLayoutManager(new LinearLayoutManager(mainActivity));
+                    songsList.setAdapter(songAdapter);
+                    for (String id: post.getSongsIds()) {
+                        songsList.setVisibility(View.VISIBLE);
+                        songAdapter.addItem(id);
+                    }
+
+                    // Настройки поста
                     if (post.getAuthor().getLogin().equals(Data.getCurUser().getLogin())) {
                         otherBtn.setVisibility(View.VISIBLE);
                         otherBtn.setOnClickListener(v -> {
@@ -96,45 +121,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
                 @Override
                 public void onFailure(Exception e) {
-                    ExceptionManager.showError(e, mainActivity);
-                }
-            });
-
-            // Получение и отображение фотографий поста
-            manager.getImageIds(postId, new GetObjectListener() {
-                @Override
-                public void onComplete(Object object) {
-                    post.setImagesIds((ArrayList<String>) object);
-                    ImageAdapter imagesAdapter = new ImageAdapter(mainActivity);
-                    imagesList.setAdapter(imagesAdapter);
-                    imagesList.setLayoutManager(new LinearLayoutManager(mainActivity,
-                            LinearLayoutManager.HORIZONTAL, false));
-                    for (String id: post.getImagesIds()) {
-                        imagesAdapter.addItem(id);
-                    }
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-                    ExceptionManager.showError(e, mainActivity);
-                }
-            });
-            // Получение и отображение песен поста
-            manager.getMusicIds(postId, new GetObjectListener() {
-                @Override
-                public void onComplete(Object object) {
-                    post.setMusicIds((ArrayList<String>) object);
-                    SongAdapter songAdapter = new SongAdapter(mainActivity);
-                    musicList.setLayoutManager(new LinearLayoutManager(mainActivity));
-                    musicList.setAdapter(songAdapter);
-                    for (String id: post.getMusicIds()) {
-                        songAdapter.addItem(id);
-                    }
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-                    ExceptionManager.showError(e, mainActivity);
+                    ExceptionManager.showError(e, itemView.getContext());
                 }
             });
 

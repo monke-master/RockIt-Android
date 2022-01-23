@@ -2,22 +2,20 @@ package com.brigade.rockit.database;
 
 import android.util.Log;
 
-import com.brigade.rockit.adapter.SongAdapter;
 import com.brigade.rockit.data.Album;
 import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Genre;
 import com.brigade.rockit.data.Song;
+import com.brigade.rockit.data.TimeManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 public class RecommendationManager {
 

@@ -1,4 +1,4 @@
-package com.brigade.rockit.database;
+package com.brigade.rockit.data;
 
 
 import android.content.Context;
@@ -89,6 +89,15 @@ public class TimeManager {
             e.printStackTrace();
         }
         return 0;
+    }
 
+    public String albumDurationFormat(String duration, Context context) {
+        int minutes = Integer.valueOf(duration.substring(0, duration.indexOf(":")));
+        int seconds = Integer.valueOf(duration.substring(duration.indexOf(":") + 1));
+        if (minutes > 60)
+            return minutes / 60 + " " + context.getString(R.string.hours) + " " + minutes % 60 + " "
+                    + context.getString(R.string.minutes);
+        return minutes + " " + context.getString(R.string.minutes) + " " + seconds + " " +
+                context.getString(R.string.seconds);
     }
 }

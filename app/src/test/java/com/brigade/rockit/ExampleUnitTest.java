@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-import com.brigade.rockit.database.TimeManager;
+import com.brigade.rockit.data.TimeManager;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

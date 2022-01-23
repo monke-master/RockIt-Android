@@ -21,6 +21,7 @@ import com.brigade.rockit.adapter.PostImagesAdapter;
 import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Post;
+import com.brigade.rockit.data.Song;
 import com.brigade.rockit.database.ContentManager;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
@@ -68,7 +69,7 @@ public class NewContentFragment extends Fragment {
             imageAdapter.addItem(uri);
         }
 
-        for (String musicId: post.getMusicIds())
+        for (String musicId: post.getSongsIds())
             songAdapter.addItem(musicId);
 
         // Добавление фото
@@ -79,9 +80,9 @@ public class NewContentFragment extends Fragment {
                             @Override
                             public void onComplete(Object object) {
                                 ArrayList<Uri> uris = (ArrayList<Uri>)object;
-                                post.setImagesList((ArrayList<Uri>) object);
-                                for (Uri uri: post.getImagesList()) {
+                                for (Uri uri: uris) {
                                     imageAdapter.addItem(uri);
+                                    post.getImagesList().add(uri);
                                 }
                             }
 
@@ -98,22 +99,22 @@ public class NewContentFragment extends Fragment {
 
         // Добавление музыки
         addMusicBtn.setOnClickListener(v -> {
-            if (Data.getNewPost().getMusicIds().size() < Constants.MAX_POST_SONGS) {
+            if (Data.getNewPost().getSongsIds().size() < Constants.MAX_POST_SONGS) {
                 SelectMusicFragment fragment = new SelectMusicFragment();
                 fragment.setListener(new GetObjectListener() {
                     @Override
                     public void onComplete(Object object) {
-                        ArrayList<String> songIds = (ArrayList<String>) object;
-                        for (String id: songIds)
-                            post.getMusicIds().add(id);
+                        ArrayList<Song> songs = (ArrayList<Song>) object;
+                        for (Song song: songs)
+                            post.getSongsIds().add(song.getId());
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-
+                        ExceptionManager.showError(e, getContext());
                     }
                 });
-                mainActivity.setFragment(new SelectMusicFragment());
+                mainActivity.setFragment(fragment);
             } else
                 Toast.makeText(mainActivity, getString(R.string.select_music_error) +
                         Constants.MAX_POST_SONGS, Toast.LENGTH_LONG).show();
@@ -125,9 +126,9 @@ public class NewContentFragment extends Fragment {
         toolbar.setOnMenuItemClickListener(item -> {
             String text = textEdit.getText().toString();
             post.setText(text);
-            post.setMusicIds(songAdapter.getIds());
+            post.setSongsIds(songAdapter.getIds());
             if (!post.getText().equals("") || (post.getImagesList().size() > 0) ||
-                    (post.getMusicIds().size() > 0)) {
+                    (post.getSongsIds().size() > 0)) {
                 ContentManager contentManager = new ContentManager();
                 contentManager.uploadPost(post, new TaskListener() {
                     @Override
