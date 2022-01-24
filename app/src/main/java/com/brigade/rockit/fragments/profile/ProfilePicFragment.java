@@ -93,6 +93,8 @@ public class ProfilePicFragment extends Fragment {
             return true;
         });
 
+        toolbar.setNavigationOnClickListener(v -> mainActivity.previousFragment());
+
 
         return view;
     }

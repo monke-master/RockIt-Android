@@ -36,7 +36,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             manager.getUri(id, new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
-                    GlideApp.with(context).load((Object) object).fitCenter().into(imageView);
+                    GlideApp.with(context).load((Object) object).into(imageView);
                 }
 
                 @Override

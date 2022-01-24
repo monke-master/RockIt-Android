@@ -40,6 +40,9 @@ public class SelectingSongAdapter extends RecyclerView.Adapter<SelectingSongAdap
             pickImg = itemView.findViewById(R.id.pick_img);
             layout = itemView.findViewById(R.id.layout);
             pickImg.setVisibility(View.INVISIBLE);
+
+            authorTxt.setText("");
+            nameTxt.setText("");
         }
 
         public void bind(String id) {
@@ -65,7 +68,7 @@ public class SelectingSongAdapter extends RecyclerView.Adapter<SelectingSongAdap
             if (selectedSongs.contains(song)) {
                 selectedSongs.remove(song);
                 pickImg.setVisibility(View.INVISIBLE);
-                layout.setBackgroundColor(itemView.getContext().getColor(R.color.dark_grey));
+                layout.setBackgroundColor(itemView.getContext().getColor(R.color.white_1));
             } else {
                 selectedSongs.add(song);
                 pickImg.setVisibility(View.VISIBLE);

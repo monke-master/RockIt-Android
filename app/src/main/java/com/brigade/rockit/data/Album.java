@@ -13,7 +13,7 @@ public class Album {
     private ArrayList<Song> songs;
     private ArrayList<String> songIds;
     private String date;
-    private String genre;
+    private Genre genre;
     private String id;
     private long auditions;
     private String duration;
@@ -95,11 +95,11 @@ public class Album {
         this.duration = duration;
     }
 
-    public String getGenre() {
+    public Genre getGenre() {
         return genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(Genre genre) {
         this.genre = genre;
     }
 

@@ -22,7 +22,7 @@ public class DatabaseAlbum {
         this.author = album.getAuthor().getId();
         this.date = album.getDate();
         this.duration = album.getDuration();
-        this.genre = album.getGenre();
+        this.genre = album.getGenre().getId();
         this.auditions = album.getAuditions();
         for (Song song: album.getSongs())
             songs.add(song.getId());

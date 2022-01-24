@@ -4,14 +4,12 @@ package com.brigade.rockit.fragments.profile;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,7 +28,6 @@ import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.TaskListener;
 import com.brigade.rockit.database.UserManager;
 import com.brigade.rockit.fragments.main.NewContentFragment;
-import com.brigade.rockit.fragments.settings.EditProfileFragment;
 import com.brigade.rockit.fragments.users.FollowPagerFragment;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -42,7 +39,7 @@ public class ProfileFragment extends Fragment {
     private User user;
     private TextView followersCount;
     private TextView followingCount;
-    private UserManager manager;
+    private UserManager userManager;
     private MaterialToolbar toolbar;
 
 
@@ -55,7 +52,7 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         mainActivity = (MainActivity)getActivity();
-        manager = new UserManager();
+        userManager = new UserManager();
 
         // Получение виджетов
         nameTxt = view.findViewById(R.id.name_txt);
@@ -74,33 +71,29 @@ public class ProfileFragment extends Fragment {
                 mainActivity.setFragment(new EditProfileFragment());
             });
         } else {
-            if (Data.getCurUser().getFollowersList().contains(user.getId())) {
-                editBtn.setText(R.string.unfollow);
-                editBtn.setOnClickListener(v -> {
-                    manager.unfollowUser(user, new TaskListener() {
+            editBtn.setOnClickListener(v -> {
+                if (Data.getCurUser().getFollowingList().contains(user.getId())) {
+                    editBtn.setText(R.string.follow);
+                    followersCount.setText(user.getFollowersList().size() - 1 + "\n" +
+                            getString(R.string.followers));
+                    userManager.unfollowUser(user, new TaskListener() {
                         @Override
                         public void onComplete() { // Отписка от пользователя
-                            editBtn.setText(R.string.follow);
-                            followersCount.setText(String.valueOf(user.getFollowersList().size() - 1));
                             user.getFollowersList().remove(Data.getCurUser().getId());
                         }
-
                         @Override
                         public void onFailure(Exception e) {
                             ExceptionManager.showError(e, getContext());
                         }
                     });
-                });
-            } else {
-                editBtn.setText(getString(R.string.follow));
-                // Подписка/отписка
-                editBtn.setOnClickListener(v -> {
+                } else {
                     if (editBtn.getText().equals(getString(R.string.follow))) { // Подписка на пользователя
-                        manager.followUser(user, new TaskListener() {
+                        editBtn.setText(R.string.unfollow);
+                        followersCount.setText(user.getFollowersList().size() + 1 + "\n" +
+                                getString(R.string.followers));
+                        userManager.followUser(user, new TaskListener() {
                             @Override
                             public void onComplete() {
-                                editBtn.setText(R.string.unfollow);
-                                followersCount.setText(String.valueOf(user.getFollowersList().size() + 1));
                                 user.getFollowersList().add(Data.getCurUser().getId());
                             }
 
@@ -109,18 +102,19 @@ public class ProfileFragment extends Fragment {
                                 ExceptionManager.showError(e, getContext());
                             }
                         });
-
                     }
-                });
-            }
+                }
+            });
+            if (Data.getCurUser().getFollowingList().contains(user.getId()))
+                editBtn.setText(R.string.unfollow);
+            else
+                editBtn.setText(getString(R.string.follow));
         }
 
         // Просмотр фото провиля
         profilePicImg.setOnClickListener(v -> {
             mainActivity.setFragment(new ProfilePicFragment(user));
         });
-
-
 
         if (!user.getId().equals(Data.getCurUser().getId()))
             newCntnBtn.setVisibility(View.GONE);
@@ -189,7 +183,7 @@ public class ProfileFragment extends Fragment {
         GlideApp.with(mainActivity).load(user.getPictureUri()).circleCrop().into(profilePicImg);
 
         // Отоюражение кол-ва подписок и подписчиков
-        manager.getFollowInfo(user, new TaskListener() {
+        userManager.getFollowInfo(user, new TaskListener() {
             @Override
             public void onComplete() {
                 followersCount.setText(user.getFollowersList().size() + "\n" +

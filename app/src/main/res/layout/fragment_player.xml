@@ -32,7 +32,7 @@
             app:layout_constraintTop_toBottomOf="@+id/cover_img" />
 
         <TextView
-            android:id="@+id/artist_txt"
+            android:id="@+id/author_txt"
             style="@style/Header2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.504"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/artist_txt" />
+            app:layout_constraintTop_toBottomOf="@+id/author_txt" />
 
         <ImageView
             android:id="@+id/play_btn"
@@ -62,7 +62,7 @@
             android:src="@drawable/pause"
             app:layout_constraintEnd_toStartOf="@+id/next_btn"
             app:layout_constraintStart_toEndOf="@+id/previous_btn"
-            app:layout_constraintTop_toBottomOf="@+id/artist_txt" />
+            app:layout_constraintTop_toBottomOf="@+id/author_txt" />
 
         <ImageView
             android:id="@+id/next_btn"
@@ -72,7 +72,7 @@
             android:layout_marginEnd="56dp"
             android:src="@drawable/next"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/artist_txt" />
+            app:layout_constraintTop_toBottomOf="@+id/author_txt" />
 
         <ImageView
             android:id="@+id/previous_btn"
@@ -82,7 +82,7 @@
             android:layout_marginTop="32dp"
             android:src="@drawable/ic_previous"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/artist_txt" />
+            app:layout_constraintTop_toBottomOf="@+id/author_txt" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

@@ -308,8 +308,15 @@ public class UserManager {
                 FieldValue.arrayUnion(user.getId())).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 firestore.collection("users").document(user.getId()).
-                        update("followersList", FieldValue.arrayUnion(auth.getUid()));
-                listener.onComplete();
+                        update("followersList", FieldValue.arrayUnion(auth.getUid())).
+                        addOnCompleteListener(task1 -> {
+                         if (task1.isSuccessful()) {
+                             Data.getCurUser().getFollowingList().add(user.getId());
+                             listener.onComplete();
+                         } else
+                             listener.onFailure(task1.getException());
+                });
+
             } else
                 listener.onFailure(task.getException());
         });
@@ -322,8 +329,14 @@ public class UserManager {
                 FieldValue.arrayRemove(user.getId())).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 firestore.collection("users").document(user.getId()).
-                        update("followersList", FieldValue.arrayRemove(auth.getUid()));
-                listener.onComplete();
+                        update("followersList", FieldValue.arrayRemove(auth.getUid())).
+                        addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()) {
+                                Data.getCurUser().getFollowingList().remove(user.getId());
+                                listener.onComplete();
+                            } else
+                                listener.onFailure(task1.getException());
+                });
             } else
                 listener.onFailure(task.getException());
         });

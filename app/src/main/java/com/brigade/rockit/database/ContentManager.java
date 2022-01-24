@@ -371,7 +371,6 @@ public class ContentManager {
                DocumentSnapshot doc = task.getResult();
                Song song = new Song();
                song.setName(doc.get("name").toString());
-               song.setGenre(doc.get("genre").toString());
                song.setDuration(doc.get("duration").toString());
                song.setAdded((long)doc.get("added"));
                song.setDate(doc.get("date").toString());
@@ -388,15 +387,29 @@ public class ContentManager {
                            public void onComplete(Object object) {
                                song.setCoverUri((Uri)object);
                                new UserManager().getUser(doc.get("authorId").toString(), new GetObjectListener() {
+
                                    @Override
                                    public void onComplete(Object object) {
                                        song.setAuthor((User)object);
-                                       listener.onComplete(song);
+                                       getGenre(doc.get("genre").toString(), new GetObjectListener() {
+                                           @Override
+                                           public void onComplete(Object object) {
+                                               song.setGenre((Genre) object);
+                                               listener.onComplete(song);
+                                           }
+
+                                           @Override
+                                           public void onFailure(Exception e) {
+                                               listener.onFailure(e);
+                                           }
+                                       });
+
+
                                    }
 
                                    @Override
                                    public void onFailure(Exception e) {
-
+                                       listener.onFailure(e);
                                    }
                                });
 
@@ -679,7 +692,7 @@ public class ContentManager {
         ArrayList<Song> uploadedSongs = new ArrayList<>();
         for (Song song: album.getSongs()) {
             song.setAlbum(album.getId());
-            song.setCoverPath("songs_covers/" + id);
+            song.setCoverPath("song_covers/" + id);
             uploadSong(song, new TaskListener() {
                 @Override
                 public void onComplete() {
@@ -749,7 +762,7 @@ public class ContentManager {
                                     @Override
                                     public void onComplete(Object object) {
                                         Genre genre = (Genre)object;
-                                        album.setGenre(genre.getName());
+                                        album.setGenre(genre);
                                         listener.onComplete(album);
                                     }
 

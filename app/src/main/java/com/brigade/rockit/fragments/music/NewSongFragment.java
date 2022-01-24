@@ -4,6 +4,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
@@ -14,11 +15,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.brigade.rockit.GlideApp;
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
 import com.brigade.rockit.data.Data;
+import com.brigade.rockit.data.Genre;
 import com.brigade.rockit.data.Song;
 import com.brigade.rockit.database.ContentManager;
 import com.brigade.rockit.data.TimeManager;
@@ -45,7 +48,8 @@ public class NewSongFragment extends Fragment {
         EditText nameEdit = view.findViewById(R.id.song_name_edit);
         ImageView coverImage = view.findViewById(R.id.cover_img);
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
-        Button pickGenre = view.findViewById(R.id.pick_genre);
+        ConstraintLayout pickGenre = view.findViewById(R.id.pick_genre);
+        TextView genreTxt = view.findViewById(R.id.genre_txt);
 
         // Отображение введенной информации, если она есть
         if (Data.getNewMusic() == null) {
@@ -67,6 +71,11 @@ public class NewSongFragment extends Fragment {
         if (song.getCoverUri() != null) {
             GlideApp.with(mainActivity).load(song.getCoverUri()).into(coverImage);
         }
+
+        if (song.getGenre() != null)
+            genreTxt.setText(song.getGenre().getName());
+        else
+            genreTxt.setText("");
 
         coverImage.setOnClickListener(v -> {
             PhotoDialog dialog = new PhotoDialog(1, new GetObjectListener() {
@@ -139,7 +148,7 @@ public class NewSongFragment extends Fragment {
             fragment.setListener(new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
-                    ArrayList<String> genre = (ArrayList<String>)object;
+                    ArrayList<Genre> genre = (ArrayList<Genre>)object;
                     Data.getNewMusic().setGenre(genre.get(0));
                     toolbar.getMenu().getItem(0).setVisible(!nameEdit.getText().toString().equals(""));
                 }

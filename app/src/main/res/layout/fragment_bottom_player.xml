@@ -10,7 +10,7 @@
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/dark_grey">
+        android:background="@color/white_1">
 
 
         <TextView
@@ -19,16 +19,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:text="Name"
             app:layout_constraintEnd_toStartOf="@+id/close_btn"
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toEndOf="@+id/play_btn"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/artist_txt"
+            android:id="@+id/author_txt"
             style="@style/Header2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Author"
             app:layout_constraintEnd_toStartOf="@+id/close_btn"
             app:layout_constraintStart_toEndOf="@+id/play_btn"
             app:layout_constraintTop_toBottomOf="@+id/song_name_txt" />

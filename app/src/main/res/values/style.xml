@@ -38,8 +38,8 @@
     </style>
     <style name="TabLayout" parent="Widget.Design.TabLayout">
         <item name="tabTextColor">@color/light_grey</item>
-        <item name="tabSelectedTextColor">@color/white</item>
-        <item name="tabIndicatorColor">@color/dark_red</item>
+        <item name="tabSelectedTextColor">@color/black</item>
+        <item name="tabIndicatorColor">@color/black</item>
     </style>
     <style name="SeekBar" parent="Widget.AppCompat.SeekBar">
         <item name="android:progressBackgroundTint">@color/dark_red</item>

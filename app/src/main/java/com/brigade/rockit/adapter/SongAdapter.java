@@ -35,9 +35,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MusicViewHolde
         private TextView nameTxt;
         private TextView artistTxt;
         private TextView durationTxt;
-        private ConstraintLayout layout;
         private ImageView optionButton;
-
+        private ConstraintLayout layout;
 
         // Получение виджетов
         public MusicViewHolder(@NonNull View itemView) {
@@ -46,8 +45,12 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MusicViewHolde
             nameTxt = itemView.findViewById(R.id.song_name_txt);
             artistTxt = itemView.findViewById(R.id.song_artist_txt);
             durationTxt = itemView.findViewById(R.id.duration_txt);
-            layout = itemView.findViewById(R.id.clickable_layout);
             optionButton = itemView.findViewById(R.id.option_btn);
+            layout = itemView.findViewById(R.id.layout);
+
+            nameTxt.setText("");
+            artistTxt.setText("");
+            durationTxt.setText("");
         }
 
         // Отображения элемента с песней
@@ -81,8 +84,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MusicViewHolde
 
                 }
             });
-
         }
+
+
 
         // Проигрывание песни
         public void playMusic(Song song) {
@@ -92,6 +96,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MusicViewHolde
             mainActivity.showBottomPlayer();
             song.increaseAuditions();
         }
+
 
     }
 

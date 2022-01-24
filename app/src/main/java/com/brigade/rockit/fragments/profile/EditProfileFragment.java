@@ -1,9 +1,11 @@
-package com.brigade.rockit.fragments.settings;
+package com.brigade.rockit.fragments.profile;
 
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.TaskListener;
 import com.brigade.rockit.database.UserManager;
 import com.brigade.rockit.fragments.profile.ProfileFragment;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,19 +40,77 @@ public class EditProfileFragment extends Fragment {
         EditText nameEdit = view.findViewById(R.id.new_name_edit);
         EditText surnameEdit = view.findViewById(R.id.new_surname_edit);
         EditText bioEdit = view.findViewById(R.id.bio_edit);
-        Button backBtn = view.findViewById(R.id.back_btn_ep);
-        Button changeBtn = view.findViewById(R.id.change_btn);
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
 
         nameEdit.setText(Data.getCurUser().getName());
         surnameEdit.setText(Data.getCurUser().getSurname());
         bioEdit.setText(Data.getCurUser().getBio());
 
-        changeBtn.setOnClickListener(v -> {
+        nameEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String name = s.toString();
+                toolbar.getMenu().getItem(0).setVisible(!(name.equals("") ||
+                        name.equals(Data.getCurUser().getName()) ||
+                        surnameEdit.getText().toString().equals("")));
+
+            }
+        });
+
+        surnameEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String surname = s.toString();
+                toolbar.getMenu().getItem(0).setVisible(!(surname.equals("") ||
+                        surname.equals(Data.getCurUser().getSurname()) ||
+                        nameEdit.getText().toString().equals("")));
+            }
+        });
+
+        bioEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String bio = s.toString();
+                toolbar.getMenu().getItem(0).setVisible(!(bio.equals(Data.getCurUser().getBio())
+                        || nameEdit.getText().toString().equals("") ||
+                        surnameEdit.getText().toString().equals("")));
+            }
+        });
+
+        toolbar.setOnMenuItemClickListener(item -> {
             String newName = nameEdit.getText().toString();
             String newSurname = surnameEdit.getText().toString();
             String newBio = bioEdit.getText().toString();
-            if (newBio == null)
-                newBio = "";
             boolean successfully = true;
             UserManager userManager = new UserManager();
             // Если пользователь ввел новое имя
@@ -117,11 +178,10 @@ public class EditProfileFragment extends Fragment {
             }
             if (successfully)
                 mainActivity.setFragment(new ProfileFragment(Data.getCurUser()));
+            return true;
         });
 
-        backBtn.setOnClickListener(v -> {
-            mainActivity.setFragment(new ProfileFragment(Data.getCurUser()));
-        });
+        toolbar.setNavigationOnClickListener(v -> mainActivity.previousFragment());
 
         return view;
     }
@@ -136,4 +196,5 @@ public class EditProfileFragment extends Fragment {
     private boolean validateBio(String bio) {
         return bio.length() <= Constants.MAX_BIO_LENGTH;
     }
+
 }

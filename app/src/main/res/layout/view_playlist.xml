@@ -8,13 +8,13 @@
 
     <ImageView
         android:id="@+id/cover_img"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
         android:layout_width="@dimen/playlist_cover_size"
         android:layout_height="@dimen/playlist_cover_size"
-        android:layout_marginLeft="@dimen/playlist_margin"
-        android:layout_marginTop="@dimen/playlist_margin"
-        android:layout_marginRight="@dimen/playlist_margin"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,10 +26,9 @@
         style="@style/Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text=""
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"
+        android:text="Title"
+        app:layout_constraintStart_toStartOf="@+id/cover_img"
         app:layout_constraintTop_toBottomOf="@+id/cover_img" />
 
     <TextView
@@ -37,10 +36,8 @@
         style="@style/Header3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text=""
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="Author"
+        app:layout_constraintStart_toStartOf="@+id/cover_img"
         app:layout_constraintTop_toBottomOf="@+id/name_txt" />
 
     <TextView
@@ -48,10 +45,9 @@
         style="@style/Header3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text=""
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="8dp"
+        android:text="Date"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/cover_img"
         app:layout_constraintTop_toBottomOf="@+id/author_txt" />
 </androidx.constraintlayout.widget.ConstraintLayout>

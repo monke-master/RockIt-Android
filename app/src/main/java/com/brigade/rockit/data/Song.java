@@ -13,7 +13,7 @@ public class Song {
     private Uri coverUri;
     private String duration;
     private String id;
-    private String genre;
+    private Genre genre;
     private String date;
     private long added;
     private long auditions;
@@ -81,11 +81,11 @@ public class Song {
         return Objects.hash(id);
     }
 
-    public String getGenre() {
+    public Genre getGenre() {
         return genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(Genre genre) {
         this.genre = genre;
     }
 

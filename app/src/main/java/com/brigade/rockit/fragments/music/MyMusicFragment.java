@@ -24,6 +24,7 @@ import com.brigade.rockit.database.UserManager;
 import com.brigade.rockit.fragments.dialogs.NewMusicDialog;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 // Фрагмент с плейлистами и музыкой пользователя
 public class MyMusicFragment extends Fragment {
@@ -52,6 +53,7 @@ public class MyMusicFragment extends Fragment {
             @Override
             public void onComplete(Object object) {
                 ArrayList<String> musicIds = (ArrayList<String>) object;
+                Collections.reverse(musicIds);
                 for (String id: musicIds)
                     songAdapter.addItem(id);
             }

@@ -4,6 +4,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,12 +17,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
 import com.brigade.rockit.adapter.PostingSongsAdapter;
 import com.brigade.rockit.data.Album;
 import com.brigade.rockit.data.Data;
+import com.brigade.rockit.data.Genre;
 import com.brigade.rockit.data.Song;
 import com.brigade.rockit.database.ContentManager;
 import com.brigade.rockit.database.ExceptionManager;
@@ -49,8 +52,9 @@ public class NewAlbumFragment extends Fragment {
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
         ImageView coverImg = view.findViewById(R.id.cover_img);
         EditText nameEdit = view.findViewById(R.id.name_edit);
+        TextView genreTxt = view.findViewById(R.id.genre_txt);
         ImageView addMusicBtn = view.findViewById(R.id.add_music_btn);
-        Button pickGenreBtn = view.findViewById(R.id.pick_genre_btn);
+        ConstraintLayout pickGenre = view.findViewById(R.id.pick_genre);
         RecyclerView songsList = view.findViewById(R.id.songs_list);
         songsList.setLayoutManager(new LinearLayoutManager(getContext()));
         PostingSongsAdapter songsAdapter = new PostingSongsAdapter();
@@ -65,6 +69,11 @@ public class NewAlbumFragment extends Fragment {
             songsAdapter.addItem(song);
         if (album.getCoverUri() != null)
             Glide.with(getContext()).load(album.getCoverUri()).into(coverImg);
+
+        if (album.getGenre() != null)
+            genreTxt.setText(album.getGenre().getName());
+        else
+            genreTxt.setText("");
 
         // Загрузка обложки
         coverImg.setOnClickListener(v -> {
@@ -85,15 +94,16 @@ public class NewAlbumFragment extends Fragment {
         });
 
         // Выбор жанра
-        pickGenreBtn.setOnClickListener(v -> {
+        pickGenre.setOnClickListener(v -> {
             GenresFragment fragment = new GenresFragment(1);
             fragment.setListener(new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
-                    ArrayList<String> genres = (ArrayList<String>) object;
+                    ArrayList<Genre> genres = (ArrayList<Genre>) object;
                     album.setGenre(genres.get(0));
                     toolbar.getMenu().getItem(0).setVisible(!(nameEdit.toString().equals("") ||
                             (album.getSongs().size() == 0) || (album.getGenre() == null)));
+                    genreTxt.setText(album.getGenre().getName());
                 }
 
                 @Override

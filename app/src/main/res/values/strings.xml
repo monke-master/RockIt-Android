@@ -141,4 +141,6 @@
     <string name="hours">hr</string>
     <string name="minutes">min</string>
     <string name="seconds">sec</string>
+    <string name="edit_profile">Edit</string>
+    <string name="your_playlist">Your playlist</string>
 </resources>

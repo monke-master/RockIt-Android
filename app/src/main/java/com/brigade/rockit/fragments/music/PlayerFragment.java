@@ -31,7 +31,7 @@ public class PlayerFragment extends Fragment {
         // Получение виджетов
         SeekBar seekBar = view.findViewById(R.id.seekBar);
         TextView nameTxt = view.findViewById(R.id.song_name_txt);
-        TextView artistTxt = view.findViewById(R.id.artist_txt);
+        TextView artistTxt = view.findViewById(R.id.author_txt);
         ImageView coverImg = view.findViewById(R.id.cover_img);
         ImageView playBtn = view.findViewById(R.id.play_btn);
         ImageView nextBtn = view.findViewById(R.id.next_btn);

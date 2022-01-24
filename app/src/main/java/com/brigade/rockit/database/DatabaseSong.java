@@ -18,7 +18,7 @@ public class DatabaseSong {
         this.name = song.getName();
         this.authorId = song.getAuthor().getId();
         this.duration = song.getDuration();
-        this.genre = song.getGenre();
+        this.genre = song.getGenre().getId();
         this.date = song.getDate();
         this.added = song.getAdded();
         this.auditions = song.getAuditions();

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 // Адаптер для жанров
 public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHolder> {
     private ArrayList<String> ids;
-    private ArrayList<String> selectedGenres;
+    private ArrayList<Genre> selectedGenres;
     private GenreViewHolder selectedHolder;
     private GenreAdapter adapter;
     private TaskListener listener;
@@ -89,7 +89,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
         public void select() {
             selected = true;
             pickImg.setVisibility(View.VISIBLE);
-            selectedGenres.add(thisGenre.getId());
+            selectedGenres.add(thisGenre);
             selectedHolder = this;
         }
 
@@ -136,7 +136,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
         notifyItemInserted(pos + 1);
     }
 
-    public ArrayList<String> getSelectedGenres() {
+    public ArrayList<Genre> getSelectedGenres() {
         return selectedGenres;
     }
 

@@ -79,8 +79,8 @@
     <string name="empty_post">Пост пустой!</string>
     <string name="delete_post">Удалить пост</string>
     <string name="search_user">Найти пользователя</string>
-    <string name="follow">Подписка</string>
-    <string name="unfollow">Отписка</string>
+    <string name="follow">Подписаться</string>
+    <string name="unfollow">Отписаться</string>
     <string name="followers">Подписчики</string>
     <string name="following">Подписки</string>
     <string name="network_error">Ошибка загрузки. Проверьте ваше подключение к интернету</string>
@@ -139,4 +139,6 @@
     <string name="hours">ч</string>
     <string name="minutes">мин</string>
     <string name="seconds">сек</string>
+    <string name="edit_profile">Редактировать</string>
+    <string name="your_playlist">Ваш плейлист</string>
 </resources>

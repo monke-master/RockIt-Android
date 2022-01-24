@@ -35,6 +35,9 @@ public class PostingSongsAdapter extends RecyclerView.Adapter<PostingSongsAdapte
             deleteBtn = itemView.findViewById(R.id.delete_btn);
             nameTxt = itemView.findViewById(R.id.name_txt);
             authorTxt = itemView.findViewById(R.id.author_txt);
+
+            nameTxt.setText("");
+            authorTxt.setText("");
         }
 
         public void bind(Song song) {

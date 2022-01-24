@@ -52,7 +52,7 @@ public class AlbumFragment extends Fragment {
         GlideApp.with(mainActivity).load(album.getCoverUri()).into(coverImg);
         nameTxt.setText(album.getName());
         authorTxt.setText(album.getAuthor().getLogin());
-        dateTxt.setText(album.getGenre() + " " + album.getDate());
+        dateTxt.setText(album.getGenre().getName() + " " + album.getDate());
         CaseManager caseManager = new CaseManager(getContext());
         TimeManager timeManager = new TimeManager();
         durationTxt.setText(album.getSongIds().size() + " " + caseManager.getSongsCase(album.getSongIds().size())
