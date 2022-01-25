@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.song.PlayerFragment">
+    tools:context=".fragments.music.PlayerFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -58,31 +58,31 @@
             android:id="@+id/play_btn"
             android:layout_width="@dimen/player_btn_size"
             android:layout_height="@dimen/player_btn_size"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
             android:src="@drawable/pause"
-            app:layout_constraintEnd_toStartOf="@+id/next_btn"
-            app:layout_constraintStart_toEndOf="@+id/previous_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/author_txt" />
 
         <ImageView
             android:id="@+id/next_btn"
             android:layout_width="@dimen/footer_image_size"
             android:layout_height="@dimen/footer_image_size"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="56dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
             android:src="@drawable/next"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/author_txt" />
+            app:layout_constraintStart_toEndOf="@+id/play_btn"
+            app:layout_constraintTop_toTopOf="@+id/play_btn" />
 
         <ImageView
             android:id="@+id/previous_btn"
             android:layout_width="@dimen/footer_image_size"
             android:layout_height="@dimen/footer_image_size"
-            android:layout_marginStart="56dp"
-            android:layout_marginTop="32dp"
-            android:src="@drawable/ic_previous"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/author_txt" />
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="24dp"
+            android:src="@drawable/previous"
+            app:layout_constraintEnd_toStartOf="@+id/play_btn"
+            app:layout_constraintTop_toTopOf="@+id/play_btn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

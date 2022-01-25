@@ -12,9 +12,8 @@
 
         <EditText
             android:id="@+id/new_pswrd_edit"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
             android:ems="10"
             android:hint="@string/new_password"
             android:inputType="textPassword"
@@ -25,7 +24,7 @@
 
         <EditText
             android:id="@+id/cur_pswrd_edit"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="108dp"
             android:ems="10"

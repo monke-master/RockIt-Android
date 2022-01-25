@@ -32,6 +32,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private ArrayList<String> ids;
     private MainActivity mainActivity;
 
+    // ViewHolder для альбома
     class AlbumViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView coverImg;
@@ -57,10 +58,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public void bind(String id) {
             id = id.substring(id.indexOf("/") + 1);
             ContentManager contentManager = new ContentManager();
+            // Получение данных альбома
             contentManager.getAlbum(id, new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
                     Album album = (Album) object;
+                    // Отображение полученных данных
                     TimeManager timeManager = new TimeManager();
                     nameTxt.setText(album.getName());
                     authorTxt.setText(album.getAuthor().getLogin());
@@ -78,6 +81,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
+    // ViewHolder для плейлиста
     class PlaylistViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView coverImg;

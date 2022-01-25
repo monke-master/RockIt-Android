@@ -60,6 +60,7 @@
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.0.4 - testing/app/src/main/res/menu/top_bar_other.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.0.4 - testing/app/src/main/res/menu/top_bar_other_2.xml" value="0.3625" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.0.4 - testing/app/src/main/res/menu/top_bar_playlist.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3828125" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable/back.xml" value="0.3828125" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable/circle.xml" value="0.3828125" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable/delete.xml" value="0.3828125" />
@@ -67,6 +68,7 @@
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable/footer.xml" value="0.3828125" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable/home.xml" value="0.3828125" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable/home_gray.xml" value="0.3828125" />
+        <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3828125" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable/ic_music.xml" value="0.3828125" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable/ic_other.xml" value="0.3828125" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable/music.xml" value="0.3671875" />
@@ -80,6 +82,7 @@
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable/pick_song.xml" value="0.3828125" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable/play.xml" value="0.3828125" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable/plus.xml" value="0.3828125" />
+        <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable/previous.xml" value="0.3828125" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable/profile.xml" value="0.3828125" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable/rounded_button.xml" value="0.3828125" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/drawable/rounded_edit_view.xml" value="0.3828125" />
@@ -93,17 +96,22 @@
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/dialog_photo.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/dialog_playlist.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/dialog_post.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/dialog_song_settings.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_account.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_album.xml" value="0.5" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_bottom_player.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_change_login.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_change_pswrd.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_edit_profile.xml" value="0.9" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_email.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_follow_pager.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_footer.xml" value="0.5" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_for_you.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_genres.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_home.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_login.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_music.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_music_pager.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_my_music.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_new_activity.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_new_album.xml" value="0.5474339035769828" />
@@ -111,16 +119,20 @@
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_new_music.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_new_playlist.xml" value="0.25" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_new_song.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_other.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_password.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_player.xml" value="0.1625" />
+        <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_player.xml" value="0.5" />
+        <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_player_pager.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_playlist.xml" value="0.3619791666666667" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_profile.xml" value="0.5" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_profile_pic.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_search_music.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_search_user.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_select_music.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_sign_in.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_start.xml" value="0.25" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_users.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/fragment_verify_email.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/view_album_song.xml" value="0.5" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/view_genre.xml" value="0.8179611650485437" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/view_image.xml" value="0.36666666666666664" />
@@ -132,6 +144,9 @@
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/view_selecting_song.xml" value="0.5" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/layout/view_song_item.xml" value="0.67" />
         <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/menu/top_bar_confirm.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3828125" />
+        <entry key="..\:/AndroidProjects/RockIt-alpha 0.1.0/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.3828125" />
+        <entry key="..\:/AndroidProjects/RockIt-alpha 1.0.0/app/src/main/res/layout/fragment_my_music.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidProjects/RockIt-edit_profile/app/src/main/res/drawable/back.xml" value="0.3828125" />
         <entry key="..\:/AndroidProjects/RockIt-edit_profile/app/src/main/res/drawable/back_btn.xml" value="0.3828125" />
         <entry key="..\:/AndroidProjects/RockIt-edit_profile/app/src/main/res/drawable/edit_text_cursor.xml" value="0.3828125" />

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.R;
 import com.brigade.rockit.data.Data;
+import com.brigade.rockit.data.Genre;
 import com.brigade.rockit.data.Song;
 import com.brigade.rockit.data.TooManyPhotoException;
 import com.brigade.rockit.database.ExceptionManager;
@@ -49,36 +50,46 @@ public class MainActivity extends AppCompatActivity {
         thisActivity = this;
 
         setFragment(new HomeFragment());
-        if (Data.getCurUser().getFavouriteGenres().size() == 0) {
-            GenresFragment fragment = new GenresFragment(100);
-            fragment.setListener(new GetObjectListener() {
-                @Override
-                public void onComplete(Object object) {
-                    Data.getCurUser().setFavouriteGenres((ArrayList<String>) object);
-                    new UserManager().setFavouriteGenres((ArrayList<String>) object, new TaskListener() {
-                        @Override
-                        public void onComplete() {
-
-                        }
-
-                        @Override
-                        public void onFailure(Exception e) {
-                            ExceptionManager.showError(e, thisActivity);
-                        }
-                    });
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-                }
-            });
-            setFragment(fragment);
-        }
+        // Если пользователь не выбирал жанры, то
+        if (Data.getCurUser().getFavouriteGenres() == null) {
+            // Переходим на фрагмент выбора жанров
+            selectFavouriteGenres();
+        } else if (Data.getCurUser().getFavouriteGenres().size() == 0)
+            selectFavouriteGenres();
 
         // Начальные установки для музыкального плеера
         playerFragment = findViewById(R.id.player_fragment);
         playerFragment.setVisibility(View.INVISIBLE);
         showBottomPlayer();
+    }
+
+    private void selectFavouriteGenres() {
+        GenresFragment fragment = new GenresFragment(100);
+        fragment.setListener(new GetObjectListener() {
+            @Override
+            public void onComplete(Object object) {
+                ArrayList<String> genresIds = new ArrayList<>();
+                for (Genre genre: (ArrayList<Genre>)object)
+                    genresIds.add(genre.getId());
+                Data.getCurUser().setFavouriteGenres(genresIds);
+                new UserManager().setFavouriteGenres(genresIds, new TaskListener() {
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        ExceptionManager.showError(e, thisActivity);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+            }
+        });
+        setFragment(fragment);
     }
 
     @Override

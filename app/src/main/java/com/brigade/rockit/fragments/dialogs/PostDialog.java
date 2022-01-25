@@ -13,6 +13,7 @@ import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.TaskListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+// Диалог параметров поста
 public class PostDialog extends BottomSheetDialog {
 
     // Настройки поста

@@ -16,6 +16,7 @@ import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
 import com.brigade.rockit.database.GetObjectListener;
 
+// Диалог загрузки трека альбома
 public class NewSongDialog extends DialogFragment {
 
     private GetObjectListener listener;
@@ -23,7 +24,7 @@ public class NewSongDialog extends DialogFragment {
     // Диалог загрузки фото
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialog);
-        builder.setTitle(R.string.photo);
+        builder.setTitle(R.string.song);
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_new_song, null);
 
         EditText nameEdit = view.findViewById(R.id.name_edit);

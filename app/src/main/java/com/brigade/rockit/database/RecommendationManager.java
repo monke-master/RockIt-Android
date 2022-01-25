@@ -38,7 +38,9 @@ public class RecommendationManager {
         timeManager = new TimeManager();
     }
 
+    // Получение новых песен от исполнителей, на которых подписан пользователь
     public void getNewSongs(GetObjectListener listener) {
+        // Получение подписок пользователя
         ArrayList<String> performers = Data.getCurUser().getFollowingList();
         ArrayList<Song> newSongs = new ArrayList<>();
         ArrayList<String> searchedUsers = new ArrayList<>();
@@ -54,11 +56,15 @@ public class RecommendationManager {
                         sortSongsByDate(newSongs);
                         listener.onComplete(newSongs);
                     }
+                    // Проходим по песням пользователя
                     for (String songId: songs) {
+                        // Получение данных о песне
                         contentManager.getSong(songId, new GetObjectListener() {
                             @Override
                             public void onComplete(Object object) {
                                 Song song = (Song) object;
+                                // Если песня была опубликована пользователем недавно,
+                                // добавляем ее в рекомендации
                                 if ((Math.abs(timeManager.getDayDiff(song.getDate(),
                                         timeManager.getDate())) <= 120) && song.getAuthor().getId().equals(id)) {
                                     newSongs.add(song);
@@ -70,9 +76,7 @@ public class RecommendationManager {
                                     sortSongsByDate(newSongs);
                                     listener.onComplete(newSongs);
                                 }
-
                             }
-
                             @Override
                             public void onFailure(Exception e) {
                                 listener.onFailure(e);
@@ -88,6 +92,7 @@ public class RecommendationManager {
         }
     }
 
+    // СОртировка песен по дате публикации
     private void sortSongsByDate(ArrayList<Song> songs) {
         Collections.sort(songs, (o1, o2) -> {
             int diff = (int)timeManager.getDayDiff(o1.getDate(), o2.getDate());
@@ -99,11 +104,14 @@ public class RecommendationManager {
         });
     }
 
+    // Получение новых альбомов у исполнителей, на которых подписан пользователь
     public void getNewAlbums(GetObjectListener listener) {
+        // Получение подписок пользователя
         ArrayList<String> performers = Data.getCurUser().getFollowingList();
         ArrayList<Album> newAlbums = new ArrayList<>();
         ArrayList<String> searchedUsers = new ArrayList<>();
         for (String id: performers) {
+            // Получение плейлистов пользователя
             userManager.getUserPlaylists(id, new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
@@ -116,7 +124,10 @@ public class RecommendationManager {
                         sortAlbumsByDate(newAlbums);
                         listener.onComplete(newAlbums);
                     }
+                    // Проходим по плейлистам
                     for (String playlistId: playlists) {
+                        // Если это недавно добавленный эти пользователем альбом, то
+                        // добавляем в рекомендации
                         if (playlistId.contains("albums/")) {
                             playlistId = playlistId.substring(playlistId.indexOf("/") + 1);
                             contentManager.getAlbum(playlistId, new GetObjectListener() {
@@ -154,6 +165,7 @@ public class RecommendationManager {
         }
     }
 
+    // Сортировка альбомов по дате публикации
     private void sortAlbumsByDate(ArrayList<Album> albums) {
         Collections.sort(albums, (o1, o2) -> {
             int diff = (int) timeManager.getDayDiff(o1.getDate(), o2.getDate());
@@ -165,30 +177,38 @@ public class RecommendationManager {
         });
     }
 
+    // Получение песен, которые могут понравиться пользователю
     public void getMayLikeSongs(GetObjectListener listener) {
         // Получаем все песни
         firestore.collection("songs").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+                // Песни с любимыми жанрами пользователя
                 ArrayList<Song> withFavGenreSongs = new ArrayList<>();
+                // Песни с любимыми жанрами
                 ArrayList<Song> mayLikeSongs = new ArrayList<>();
+                // ПРросмотренные песни
                 ArrayList<String> searchedSongs = new ArrayList<>();
                 QuerySnapshot result = task.getResult();
-                // Песни по жанрам
+                // Проходим по песням
                 for (DocumentSnapshot doc: result) {
                     String genreId = doc.get("genre").toString();
+                    // Получаем жанр песни
                     contentManager.getGenre(genreId, new GetObjectListener() {
                         @Override
                         public void onComplete(Object object) {
                             Genre genre = (Genre) object;
+                            // ПРоверка на то, может ли пользователю эта песня понравиться
                             ArrayList<String> favouriteGenres = Data.getCurUser().getFavouriteGenres();
-                            boolean mayLike = favouriteGenres.contains(genre.getParentId());
+                            boolean mayLike = favouriteGenres.contains(genre.getParentId()) ||
+                                    favouriteGenres.contains(genre.getId());
                             for (String id : genre.getSubgenres()) {
                                 if (favouriteGenres.contains(id)) {
                                     mayLike = true;
                                     break;
                                 }
                             }
-                            if (favouriteGenres.contains(genre.getId()) || mayLike) {
+                            // Если может
+                            if (mayLike) {
                                 contentManager.getSong(doc.getId(), new GetObjectListener() {
                                     @Override
                                     public void onComplete(Object object) {
@@ -252,6 +272,7 @@ public class RecommendationManager {
         });
     }
 
+    // Сортировка песен по популярности
     private void sortSongsByPopularity(ArrayList<Song> songs) {
         Collections.sort(songs, (o1, o2) -> {
             float p1, p2;
@@ -273,30 +294,37 @@ public class RecommendationManager {
         });
     }
 
+    // Получение альбомов, которые могут понравиться пользователю
     public void getMayLikeAlbums(GetObjectListener listener) {
         // Получаем все альбомы
         firestore.collection("albums").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+                // Альбомы с жанрами, которые нравятся пользователю
                 ArrayList<Album> withFavGenreAlbums= new ArrayList<>();
+                // Альбомы с жанрами, которые могут понравиться полльзователю
                 ArrayList<Album> mayLikeAlbums = new ArrayList<>();
                 ArrayList<String> searchedAlbums = new ArrayList<>();
                 QuerySnapshot result = task.getResult();
-                // Песни по жанрам
+                // Проходим по альбомам
                 for (DocumentSnapshot doc: result) {
                     String genreId = doc.get("genre").toString();
+                    // Получаем жанр альбома
                     contentManager.getGenre(genreId, new GetObjectListener() {
                         @Override
                         public void onComplete(Object object) {
                             Genre genre = (Genre) object;
                             ArrayList<String> favouriteGenres = Data.getCurUser().getFavouriteGenres();
-                            boolean mayLike = favouriteGenres.contains(genre.getParentId());
+                            // Проверка на то, может ли альбом понравиться пользователю
+                            boolean mayLike = favouriteGenres.contains(genre.getParentId()) ||
+                                    favouriteGenres.contains(genre.getId());
                             for (String id : genre.getSubgenres()) {
                                 if (favouriteGenres.contains(id)) {
                                     mayLike = true;
                                     break;
                                 }
                             }
-                            if (favouriteGenres.contains(genre.getId()) || mayLike) {
+                            // Если может
+                            if (mayLike) {
                                 contentManager.getAlbum(doc.getId(), new GetObjectListener() {
                                     @Override
                                     public void onComplete(Object object) {
@@ -364,6 +392,7 @@ public class RecommendationManager {
         });
     }
 
+    // Сортировка альбомов по популярности
     private void sortAlbumsByPopularity(ArrayList<Album> albums) {
         Collections.sort(albums, (o1, o2) -> {
             long p1 = o1.getAuditions();

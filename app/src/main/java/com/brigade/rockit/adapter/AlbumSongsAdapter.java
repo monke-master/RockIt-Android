@@ -46,6 +46,9 @@ public class AlbumSongsAdapter extends RecyclerView.Adapter<AlbumSongsAdapter.Al
             layout = itemView.findViewById(R.id.layout);
             optionButton = itemView.findViewById(R.id.option_btn);
             positionTxt = itemView.findViewById(R.id.pos_txt);
+
+            nameTxt.setText("");
+            durationTxt.setText("");
         }
 
         public void bind(String id) {
@@ -54,6 +57,7 @@ public class AlbumSongsAdapter extends RecyclerView.Adapter<AlbumSongsAdapter.Al
             contentManager.getSong(id, new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
+                    // Отображение информации о песне
                     Song song = (Song)object;
                     nameTxt.setText(song.getName());
                     durationTxt.setText(song.getDuration());

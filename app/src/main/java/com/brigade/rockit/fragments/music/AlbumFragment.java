@@ -38,6 +38,8 @@ public class AlbumFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_album, container, false);
         MainActivity mainActivity = (MainActivity) getActivity();
+        CaseManager caseManager = new CaseManager(getContext());
+        TimeManager timeManager = new TimeManager();
 
         // Получение виджетов
         ImageView coverImg = view.findViewById(R.id.cover_img);
@@ -48,16 +50,16 @@ public class AlbumFragment extends Fragment {
         TextView auditionsTxt = view.findViewById(R.id.auditions_txt);
         RecyclerView songsList = view.findViewById(R.id.songs_list);
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
+
+
         // Отображение данных плейлиста
         GlideApp.with(mainActivity).load(album.getCoverUri()).into(coverImg);
         nameTxt.setText(album.getName());
         authorTxt.setText(album.getAuthor().getLogin());
-        dateTxt.setText(album.getGenre().getName() + " " + album.getDate());
-        CaseManager caseManager = new CaseManager(getContext());
-        TimeManager timeManager = new TimeManager();
+        dateTxt.setText(album.getGenre().getName() + " " + timeManager.getYear(album.getDate()));
         durationTxt.setText(album.getSongIds().size() + " " + caseManager.getSongsCase(album.getSongIds().size())
                 + " " + timeManager.albumDurationFormat(album.getDuration(), getContext()));
-        auditionsTxt.setText(album.getAuditions() + "" + caseManager.getAuditionsCase(album.getAuditions()));
+        auditionsTxt.setText(album.getAuditions() + " " + caseManager.getAuditionsCase(album.getAuditions()));
 
         AlbumSongsAdapter songAdapter = new AlbumSongsAdapter(mainActivity);
         songsList.setAdapter(songAdapter);

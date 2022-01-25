@@ -21,7 +21,7 @@ public class Constants {
 
     public static final int MAX_POST_SONGS = 5;
     public static int NEWS_FEED_SIZE = 100000;
-    public static String STORAGE_PATH = "gs://rockit-71ddf.appspot.com";
+    public static String STORAGE_PATH = "gs://rockit-e8345.appspot.com";
 
     public static final int PICK_AUDIO = 3;
 

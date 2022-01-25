@@ -426,6 +426,7 @@ public class UserManager {
         });
     }
 
+    // Установка любимых жанров
     public void setFavouriteGenres(ArrayList<String> genres, TaskListener listener) {
         firestore.collection("users").document(uid).update("favouriteGenres", genres).addOnCompleteListener(task -> {
             if (task.isSuccessful())

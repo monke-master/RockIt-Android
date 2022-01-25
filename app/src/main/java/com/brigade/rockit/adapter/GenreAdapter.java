@@ -67,6 +67,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
             });
         }
 
+        // Отслеживание нажатий
         @Override
         public void onClick(View v) {
             if (!selected) {

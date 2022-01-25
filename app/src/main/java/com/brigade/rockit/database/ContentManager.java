@@ -617,6 +617,7 @@ public class ContentManager {
         });
     }
 
+    // Получение жанров из базы данных
     public void getGenresList(GetObjectListener listener) {
         firestore.collection("genres").get().addOnCompleteListener(task -> {
            if (task.isSuccessful()) {
@@ -629,16 +630,18 @@ public class ContentManager {
         });
     }
 
+    // Получение жанра по id
     public void getGenre(String id, GetObjectListener listener) {
         firestore.collection("genres").document(id).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot result = task.getResult();
+                // Если жанр не найден, ищем в поджанрах
                 if (result.get("name") != null) {
                     Genre genre = new Genre();
                     genre.setId(id);
                     genre.setName(result.get("name").toString());
                     genre.setSubgenres((ArrayList<String>) result.get("subgenres"));
-                    getUri(result.get("picture").toString(), new GetObjectListener() {
+                    getUri("genres_pictures/" + id + ".png", new GetObjectListener() {
                         @Override
                         public void onComplete(Object object) {
                             genre.setPicture((Uri) object);
@@ -658,6 +661,7 @@ public class ContentManager {
         });
     }
 
+    // Получение поджанра по id
     public void getSubgenre(String id, GetObjectListener listener) {
         firestore.collection("subgenres").document(id).get().addOnCompleteListener(task1 -> {
             if (task1.isSuccessful()) {
@@ -667,7 +671,7 @@ public class ContentManager {
                 genre.setName(result.get("name").toString());
                 genre.setSubgenres((ArrayList<String>) result.get("subgenres"));
                 genre.setParentId(result.get("parent").toString());
-                getUri(result.get("picture").toString(), new GetObjectListener() {
+                getUri("genres_pictures/" + id + ".png", new GetObjectListener() {
                     @Override
                     public void onComplete(Object object) {
                         genre.setPicture((Uri) object);
@@ -684,12 +688,13 @@ public class ContentManager {
         });
     }
 
+    // Загрузка по id
     public void uploadAlbum(Album album, TaskListener listener) {
         // Генерация id
         String id = UUID.randomUUID().toString();
         album.setId(id);
-        // Загрузка песен
         ArrayList<Song> uploadedSongs = new ArrayList<>();
+        // Загрузка песен альбома
         for (Song song: album.getSongs()) {
             song.setAlbum(album.getId());
             song.setCoverPath("song_covers/" + id);
@@ -709,7 +714,7 @@ public class ContentManager {
 
                                 @Override
                                 public void onFailure(Exception e) {
-
+                                    listener.onFailure(e);
                                 }
                             });
                         } else {
@@ -727,6 +732,7 @@ public class ContentManager {
         }
     }
 
+    // СОздание документа с данными альбома
     public void createAlbumDoc(Album album, TaskListener listener) {
         DatabaseAlbum dbAlbum = new DatabaseAlbum(album);
         firestore.collection("albums").document(album.getId()).set(dbAlbum).addOnCompleteListener(task -> {
@@ -737,6 +743,7 @@ public class ContentManager {
         });
     }
 
+    // Получение альбома
     public void getAlbum(String albumId, GetObjectListener listener) {
         firestore.collection("albums").document(albumId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -749,15 +756,18 @@ public class ContentManager {
                 album.setDuration(result.get("duration").toString());
                 album.setSongIds((ArrayList<String>) result.get("songs"));
                 album.setCoverPath(result.get("cover").toString());
+                // Получение данных об авторе альбома
                 UserManager userManager = new UserManager();
                 userManager.getUser(result.get("author").toString(), new GetObjectListener() {
                     @Override
                     public void onComplete(Object object) {
                         album.setAuthor((User) object);
+                        // Получение обложки альбома
                         getUri(result.get("cover").toString(), new GetObjectListener() {
                             @Override
                             public void onComplete(Object object) {
                                 album.setCoverUri((Uri)object);
+                                // Получение жанра
                                 getGenre(result.get("genre").toString(), new GetObjectListener() {
                                     @Override
                                     public void onComplete(Object object) {
@@ -792,6 +802,7 @@ public class ContentManager {
         });
     }
 
+    // Удаление альбома из базы данных
     public void deleteAlbum(Album album, TaskListener listener) {
         // Удаление альбома у пользователя
         firestore.collection("users").document(album.getAuthor().getId()).

@@ -11,6 +11,7 @@ import com.brigade.rockit.activities.MainActivity;
 import com.brigade.rockit.fragments.music.NewAlbumFragment;
 import com.brigade.rockit.fragments.music.NewSongFragment;
 
+// Диалог добавления музыки
 public class NewMusicDialog extends DialogFragment{
 
     public NewMusicDialog() {

@@ -202,6 +202,7 @@ public class AdapterManager {
         });
     }
 
+    // Поиск и отображение альбомов
     public void showSearchedAlbums(PlaylistAdapter adapter, String searching, TaskListener listener) {
         firestore.collection("albums").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {

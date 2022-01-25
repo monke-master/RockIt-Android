@@ -16,6 +16,7 @@ import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.TaskListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+// Диалог параметров альбома
 public class AlbumDialog extends BottomSheetDialog {
 
     public AlbumDialog(@NonNull Context context, MainActivity activity, Album album) {

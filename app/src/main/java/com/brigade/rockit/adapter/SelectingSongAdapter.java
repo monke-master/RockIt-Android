@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+// Адаптер для списка выбираемых песен
 public class SelectingSongAdapter extends RecyclerView.Adapter<SelectingSongAdapter.SelectingSongViewHolder> {
 
     private ArrayList<String> ids;
@@ -34,6 +35,7 @@ public class SelectingSongAdapter extends RecyclerView.Adapter<SelectingSongAdap
 
         public SelectingSongViewHolder(@NonNull View itemView) {
             super(itemView);
+            // Получение виджетов
             nameTxt = itemView.findViewById(R.id.name_txt);
             authorTxt = itemView.findViewById(R.id.author_txt);
             coverImg = itemView.findViewById(R.id.cover_img);
@@ -47,10 +49,12 @@ public class SelectingSongAdapter extends RecyclerView.Adapter<SelectingSongAdap
 
         public void bind(String id) {
             ContentManager contentManager = new ContentManager();
+            // Получение данных песни
             contentManager.getSong(id, new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
                     Song song = (Song) object;
+                    // Отображение полученных данных
                     nameTxt.setText(song.getName());
                     authorTxt.setText(song.getAuthor().getLogin());
                     Glide.with(coverImg).load(song.getCoverUri()).into(coverImg);
@@ -64,6 +68,7 @@ public class SelectingSongAdapter extends RecyclerView.Adapter<SelectingSongAdap
             });
         }
 
+        // Выбор песни
         public void select(Song song) {
             if (selectedSongs.contains(song)) {
                 selectedSongs.remove(song);

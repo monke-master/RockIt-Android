@@ -19,6 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 
+// Диалог параметров трека
 public class SongDialog extends BottomSheetDialog {
 
     public SongDialog(@NonNull Context context, Song song) {

@@ -7,6 +7,7 @@ import com.brigade.rockit.R;
 
 import java.util.Locale;
 
+// Класс для выбора падежа и числа слова
 public class CaseManager {
 
     private Context context;

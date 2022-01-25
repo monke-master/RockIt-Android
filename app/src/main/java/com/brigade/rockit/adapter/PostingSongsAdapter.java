@@ -16,6 +16,7 @@ import com.brigade.rockit.data.Song;
 
 import java.util.ArrayList;
 
+// Адаптер для списка публикуемых песен
 public class PostingSongsAdapter extends RecyclerView.Adapter<PostingSongsAdapter.SongViewHolder> {
 
     private ArrayList<Song> songList;
@@ -31,6 +32,7 @@ public class PostingSongsAdapter extends RecyclerView.Adapter<PostingSongsAdapte
 
         public SongViewHolder(@NonNull View itemView) {
             super(itemView);
+            // Получение виджетов
             playBtn = itemView.findViewById(R.id.play_btn);
             deleteBtn = itemView.findViewById(R.id.delete_btn);
             nameTxt = itemView.findViewById(R.id.name_txt);
@@ -40,6 +42,7 @@ public class PostingSongsAdapter extends RecyclerView.Adapter<PostingSongsAdapte
             authorTxt.setText("");
         }
 
+        // Отображение данных и отслеживание нажатий
         public void bind(Song song) {
             nameTxt.setText(song.getName());
             authorTxt.setText(song.getAuthor().getLogin());
