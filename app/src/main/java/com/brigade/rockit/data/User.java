@@ -9,13 +9,14 @@ public class User {
     private String email;
     private String name;
     private String surname;
-    private String phone;
     private String login;
     private String bio;
     private Uri pictureUri;
     private String id;
     private ArrayList<String> followingList;
     private ArrayList<String> followersList;
+    private ArrayList<String> favouriteGenres;
+
 
     public User() {
         bio = "";
@@ -109,11 +110,12 @@ public class User {
         this.followersList = followersList;
     }
 
-    public String getPhone() {
-        return phone;
+
+    public ArrayList<String> getFavouriteGenres() {
+        return favouriteGenres;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setFavouriteGenres(ArrayList<String> favouriteGenres) {
+        this.favouriteGenres = favouriteGenres;
     }
 }

@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Data;
+import com.brigade.rockit.data.Genre;
 import com.brigade.rockit.data.User;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -135,15 +136,9 @@ public class UserManager {
                     Data.getCurUser().setEmail(doc.get("email").toString());
                     Data.getCurUser().setBio(doc.get("bio").toString());
                     Data.getCurUser().setId(uid);
-                    ArrayList<String> followingList = new ArrayList<>();
-                    ArrayList<String> followersList = new ArrayList<>();
-                    if (doc.get("followingList") != null)
-                        followingList = (ArrayList<String>) doc.get("followingList");
-                    if (doc.get("followersList") != null)
-                        followersList = (ArrayList<String>) doc.get("followersList");
-                    Data.getCurUser().setFollowingList(followingList);
-                    Data.getCurUser().setFollowersList(followersList);
-
+                    Data.getCurUser().setFollowingList((ArrayList<String>) doc.get("followingList"));
+                    Data.getCurUser().setFollowersList((ArrayList<String>) doc.get("followersList"));
+                    Data.getCurUser().setFavouriteGenres((ArrayList<String>) doc.get("favouriteGenres"));
                     storage.getReference(profilePic).getDownloadUrl().addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
                             Data.getCurUser().setPictureUri(task1.getResult());
@@ -313,8 +308,15 @@ public class UserManager {
                 FieldValue.arrayUnion(user.getId())).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 firestore.collection("users").document(user.getId()).
-                        update("followersList", FieldValue.arrayUnion(auth.getUid()));
-                listener.onComplete();
+                        update("followersList", FieldValue.arrayUnion(auth.getUid())).
+                        addOnCompleteListener(task1 -> {
+                         if (task1.isSuccessful()) {
+                             Data.getCurUser().getFollowingList().add(user.getId());
+                             listener.onComplete();
+                         } else
+                             listener.onFailure(task1.getException());
+                });
+
             } else
                 listener.onFailure(task.getException());
         });
@@ -327,8 +329,14 @@ public class UserManager {
                 FieldValue.arrayRemove(user.getId())).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 firestore.collection("users").document(user.getId()).
-                        update("followersList", FieldValue.arrayRemove(auth.getUid()));
-                listener.onComplete();
+                        update("followersList", FieldValue.arrayRemove(auth.getUid())).
+                        addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()) {
+                                Data.getCurUser().getFollowingList().remove(user.getId());
+                                listener.onComplete();
+                            } else
+                                listener.onFailure(task1.getException());
+                });
             } else
                 listener.onFailure(task.getException());
         });
@@ -398,7 +406,7 @@ public class UserManager {
                 user.setName(result.get("name").toString());
                 user.setSurname(result.get("surname").toString());
                 user.setBio(result.get("bio").toString());
-                user.setId(result.getId());
+                user.setId(id);
                 user.setFollowingList((ArrayList<String>) result.get("followingList"));
                 user.setFollowersList((ArrayList<String>) result.get("followersList"));
                 contentManager.getUri(result.get("profilePicture").toString(), new GetObjectListener() {
@@ -414,6 +422,16 @@ public class UserManager {
                     }
                 });
             } else
+                listener.onFailure(task.getException());
+        });
+    }
+
+    // Установка любимых жанров
+    public void setFavouriteGenres(ArrayList<String> genres, TaskListener listener) {
+        firestore.collection("users").document(uid).update("favouriteGenres", genres).addOnCompleteListener(task -> {
+            if (task.isSuccessful())
+                listener.onComplete();
+            else
                 listener.onFailure(task.getException());
         });
     }

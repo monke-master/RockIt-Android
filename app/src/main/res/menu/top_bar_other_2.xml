@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/other_btn"
-        android:icon="@drawable/ic_other"
+        android:id="@+id/option_btn"
+        android:icon="@drawable/other"
         android:title="@string/other"
         app:showAsAction="always" />
 </menu>

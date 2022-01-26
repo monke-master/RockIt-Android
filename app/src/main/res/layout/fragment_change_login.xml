@@ -12,7 +12,7 @@
 
         <EditText
             android:id="@+id/new_login_edit"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="148dp"
             android:ems="10"
@@ -28,10 +28,10 @@
             style="@style/Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="52dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="32dp"
             android:text="@string/current_login"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/new_login_edit"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
         <TextView
@@ -39,10 +39,10 @@
             style="@style/Header2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
             android:text="@string/login"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/new_login_edit"
             app:layout_constraintTop_toBottomOf="@+id/cur_login_view" />
 
         <com.google.android.material.appbar.MaterialToolbar

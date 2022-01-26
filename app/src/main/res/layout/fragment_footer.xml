@@ -19,27 +19,27 @@
             android:layout_width="@dimen/footer_image_size"
             android:layout_height="@dimen/footer_image_size"
             android:layout_weight="1"
-            android:src="@drawable/home_brown" />
+            android:src="@drawable/home_gray" />
 
         <ImageView
             android:id="@+id/search_btn"
             android:layout_width="@dimen/footer_image_size"
             android:layout_height="@dimen/footer_image_size"
             android:layout_weight="1"
-            android:src="@drawable/search_brown" />
+            android:src="@drawable/search_gray" />
 
         <ImageView
             android:id="@+id/music_btn"
             android:layout_width="@dimen/footer_image_size"
             android:layout_height="@dimen/footer_image_size"
             android:layout_weight="1"
-            android:src="@drawable/music_brown" />
+            android:src="@drawable/music_gray" />
 
         <ImageView
             android:id="@+id/profile_btn"
             android:layout_width="@dimen/footer_image_size"
             android:layout_height="@dimen/footer_image_size"
             android:layout_weight="1"
-            android:src="@drawable/profile_brown" />
+            android:src="@drawable/profile_gray" />
     </LinearLayout>
 </FrameLayout>

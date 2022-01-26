@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.brigade.rockit.R;
-import com.brigade.rockit.adapter.MusicAdapter;
 
 // Фрагмент очереди песен(в разработке)
 public class QueueFragment extends Fragment {

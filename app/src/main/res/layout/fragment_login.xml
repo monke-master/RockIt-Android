@@ -24,12 +24,12 @@
             android:id="@+id/login_edit"
             android:layout_width="300dp"
             android:layout_height="0dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="4dp"
             android:ems="10"
             android:hint="@string/login"
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.504"
+            app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/surname_edit" />
 
@@ -49,12 +49,12 @@
             android:id="@+id/surname_edit"
             android:layout_width="300dp"
             android:layout_height="0dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="4dp"
             android:ems="10"
             android:hint="@string/surname"
             android:inputType="textPersonName|textCapSentences"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.504"
+            app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name_edit" />
 

@@ -5,13 +5,11 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,11 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.brigade.rockit.GlideApp;
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
-import com.brigade.rockit.adapter.MusicAdapter;
-import com.brigade.rockit.data.Constants;
+import com.brigade.rockit.adapter.SongAdapter;
 import com.brigade.rockit.data.Playlist;
 import com.brigade.rockit.database.ContentManager;
-import com.brigade.rockit.database.DateManager;
+import com.brigade.rockit.data.TimeManager;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.database.TaskListener;
@@ -55,9 +52,8 @@ public class EditPlaylistFragment extends Fragment {
         ImageView addMusicBtn = view.findViewById(R.id.add_music_btn);
         ImageView coverImg = view.findViewById(R.id.cover_img);
         RecyclerView songsList = view.findViewById(R.id.songs_list);
-        MusicAdapter musicAdapter = new MusicAdapter(mainActivity);
-        musicAdapter.setMode(Constants.POST_MODE);
-        songsList.setAdapter(musicAdapter);
+        SongAdapter songAdapter = new SongAdapter(mainActivity);
+        songsList.setAdapter(songAdapter);
         songsList.setLayoutManager(new LinearLayoutManager(mainActivity));
 
         if (!titleEdit.equals(""))
@@ -67,7 +63,7 @@ public class EditPlaylistFragment extends Fragment {
         titleEdit.setText(playlist.getName());
         descrEdit.setText(playlist.getDescription());
         for (String id: playlist.getSongIds())
-            musicAdapter.addItem(id);
+            songAdapter.addItem(id);
         GlideApp.with(mainActivity).load(playlist.getCoverUri()).into(coverImg);
 
         // Замена обложки
@@ -91,7 +87,8 @@ public class EditPlaylistFragment extends Fragment {
 
         // Добавление песен
         addMusicBtn.setOnClickListener(v -> {
-            mainActivity.setFragment(new SelectMusicFragment(new GetObjectListener() {
+            SelectMusicFragment fragment = new SelectMusicFragment();
+            fragment.setListener(new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
                     ArrayList<String> songIds = (ArrayList<String>) object;
@@ -103,7 +100,8 @@ public class EditPlaylistFragment extends Fragment {
                 public void onFailure(Exception e) {
 
                 }
-            }));
+            });
+            mainActivity.setFragment(new SelectMusicFragment());
         });
 
         // Возвращение на предыдущий фрагмент
@@ -135,8 +133,8 @@ public class EditPlaylistFragment extends Fragment {
             if (item.getItemId() == R.id.done_btn) {
                 playlist.setName(titleEdit.getText().toString());
                 playlist.setDescription(descrEdit.getText().toString());
-                DateManager dateManager = new DateManager();
-                playlist.setDate(dateManager.getDate());
+                TimeManager timeManager = new TimeManager();
+                playlist.setDate(timeManager.getDate());
                 ContentManager contentManager = new ContentManager();
                 contentManager.updatePlaylist(playlist, coverChanged, new TaskListener() {
                     @Override

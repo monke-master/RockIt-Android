@@ -2,8 +2,6 @@ package com.brigade.rockit.data;
 
 import android.net.Uri;
 
-import com.brigade.rockit.database.DatabasePlaylist;
-
 import java.util.ArrayList;
 
 public class Playlist {
@@ -11,23 +9,20 @@ public class Playlist {
     private String name;
     private User author;
     private Uri coverUri;
-    private ArrayList<Music> songs;
+    private ArrayList<Song> songs;
     private ArrayList<String> songIds;
     private String date;
     private String description;
     private String id;
+    private long added;
+    private String duration;
 
     public Playlist() {
         name = "";
         description = "";
         songs = new ArrayList<>();
         songIds = new ArrayList<>();
-    }
-
-    public Playlist(DatabasePlaylist dbPlaylist) {
-        this.name = dbPlaylist.getName();
-        this.date = dbPlaylist.getDate();
-        this.songIds = dbPlaylist.getSongs();
+        added = 0;
     }
 
     public String getName() {
@@ -54,11 +49,11 @@ public class Playlist {
         this.coverUri = coverUri;
     }
 
-    public ArrayList<Music> getSongs() {
+    public ArrayList<Song> getSongs() {
         return songs;
     }
 
-    public void setSongs(ArrayList<Music> songs) {
+    public void setSongs(ArrayList<Song> songs) {
         this.songs = songs;
     }
 
@@ -93,4 +88,22 @@ public class Playlist {
     public void setId(String id) {
         this.id = id;
     }
+
+    public long getAdded() {
+        return added;
+    }
+
+    public void setAdded(long added) {
+        this.added = added;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+
 }

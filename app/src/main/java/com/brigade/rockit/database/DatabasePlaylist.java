@@ -1,6 +1,6 @@
 package com.brigade.rockit.database;
 
-import com.brigade.rockit.data.Music;
+import com.brigade.rockit.data.Song;
 import com.brigade.rockit.data.Playlist;
 
 import java.util.ArrayList;
@@ -13,17 +13,20 @@ public class DatabasePlaylist {
     private String cover;
     private ArrayList<String> songs;
     private String description;
-
-    public DatabasePlaylist() {
-
-    }
+    private long added;
+    private String duration;
 
     public DatabasePlaylist(Playlist playlist) {
         songs = new ArrayList<>();
         this.author = playlist.getAuthor().getId();
         this.name = playlist.getName();
+        this.description = playlist.getDescription();
         this.date = playlist.getDate();
         this.songs = playlist.getSongIds();
+        this.added = playlist.getAdded();
+        this.duration = playlist.getDuration();
+        for (Song song: playlist.getSongs())
+            this.songs.add(song.getId());
     }
 
     public String getDate() {
@@ -72,5 +75,22 @@ public class DatabasePlaylist {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public long getAdded() {
+        return added;
+    }
+
+    public void setAdded(long added) {
+        this.added = added;
+    }
+
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 }

@@ -31,13 +31,13 @@ public class BottomPlayerFragment extends Fragment {
         ImageView playBtn = view.findViewById(R.id.play_btn);
         ImageView closeBtn = view.findViewById(R.id.close_btn);
         TextView nameTxt = view.findViewById(R.id.song_name_txt);
-        TextView artistTxt = view.findViewById(R.id.artist_txt);
+        TextView artistTxt = view.findViewById(R.id.author_txt);
         ConstraintLayout layout = view.findViewById(R.id.main_layout);
 
 
         // Вывод информации о песне
         nameTxt.setText(Data.getMusicPlayer().getMusic().getName());
-        artistTxt.setText(Data.getMusicPlayer().getMusic().getArtist());
+        artistTxt.setText(Data.getMusicPlayer().getMusic().getAuthor().getLogin());
 
         // Содержимое кнопки в зависимости от состояния плеера
         if (!Data.getMusicPlayer().isPlaying())

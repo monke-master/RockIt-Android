@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.brigade.rockit.R;
@@ -18,17 +17,19 @@ import com.brigade.rockit.activities.MainActivity;
 import com.brigade.rockit.adapter.PlaylistAdapter;
 import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.Data;
-import com.brigade.rockit.adapter.MusicAdapter;
+import com.brigade.rockit.adapter.SongAdapter;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
 import com.brigade.rockit.database.UserManager;
+import com.brigade.rockit.fragments.dialogs.NewMusicDialog;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 // Фрагмент с плейлистами и музыкой пользователя
 public class MyMusicFragment extends Fragment {
 
-    private MusicAdapter musicAdapter;
+    private SongAdapter songAdapter;
     private MainActivity mainActivity;
 
     @Override
@@ -45,16 +46,16 @@ public class MyMusicFragment extends Fragment {
 
         // Отображение песен
         songsList.setLayoutManager(new LinearLayoutManager(mainActivity));
-        musicAdapter = new MusicAdapter(mainActivity);
-        musicAdapter.setMode(Constants.PLAYLIST_MODE);
-        songsList.setAdapter(musicAdapter);
+        songAdapter = new SongAdapter(mainActivity);
+        songsList.setAdapter(songAdapter);
         UserManager manager = new UserManager();
         manager.getUserMusic(Data.getCurUser().getId(), new GetObjectListener() {
             @Override
             public void onComplete(Object object) {
                 ArrayList<String> musicIds = (ArrayList<String>) object;
+                Collections.reverse(musicIds);
                 for (String id: musicIds)
-                    musicAdapter.addItem(id);
+                    songAdapter.addItem(id);
             }
 
             @Override
@@ -82,7 +83,8 @@ public class MyMusicFragment extends Fragment {
 
         // Добавление музыки
         addMusic.setOnClickListener(v -> {
-            mainActivity.setFragment(new NewMusicFragment());
+            NewMusicDialog dialog = new NewMusicDialog();
+            dialog.show(getParentFragmentManager(), "music");
         });
 
         addPlaylist.setOnClickListener(v -> {

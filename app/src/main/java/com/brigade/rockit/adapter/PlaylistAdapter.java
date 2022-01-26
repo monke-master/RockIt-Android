@@ -1,6 +1,5 @@
 package com.brigade.rockit.adapter;
 
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,23 +13,75 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.brigade.rockit.GlideApp;
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
+import com.brigade.rockit.data.Album;
+import com.brigade.rockit.data.Data;
 import com.brigade.rockit.data.Playlist;
-import com.brigade.rockit.data.User;
+import com.brigade.rockit.data.TimeManager;
 import com.brigade.rockit.database.ContentManager;
-import com.brigade.rockit.database.DatabasePlaylist;
 import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
-import com.brigade.rockit.database.UserManager;
+import com.brigade.rockit.fragments.music.AlbumFragment;
 import com.brigade.rockit.fragments.music.PlaylistFragment;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
 // Адаптер для плейлиста
-public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder> {
+public class PlaylistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private ArrayList<String> playlistIds;
+    private ArrayList<String> ids;
     private MainActivity mainActivity;
 
+    // ViewHolder для альбома
+    class AlbumViewHolder extends RecyclerView.ViewHolder {
+
+        private ImageView coverImg;
+        private TextView nameTxt;
+        private TextView authorTxt;
+        private TextView dateTxt;
+        private ConstraintLayout mainLayout;
+
+        public AlbumViewHolder(@NonNull View itemView) {
+            super(itemView);
+            // Получение виджетов
+            coverImg = itemView.findViewById(R.id.cover_img);
+            nameTxt = itemView.findViewById(R.id.name_txt);
+            authorTxt = itemView.findViewById(R.id.author_txt);
+            dateTxt = itemView.findViewById(R.id.date_txt);
+            mainLayout = itemView.findViewById(R.id.main_layout);
+
+            nameTxt.setText("");
+            authorTxt.setText("");
+            dateTxt.setText("");
+        }
+
+        public void bind(String id) {
+            id = id.substring(id.indexOf("/") + 1);
+            ContentManager contentManager = new ContentManager();
+            // Получение данных альбома
+            contentManager.getAlbum(id, new GetObjectListener() {
+                @Override
+                public void onComplete(Object object) {
+                    Album album = (Album) object;
+                    // Отображение полученных данных
+                    TimeManager timeManager = new TimeManager();
+                    nameTxt.setText(album.getName());
+                    authorTxt.setText(album.getAuthor().getLogin());
+                    dateTxt.setText(String.valueOf(timeManager.getYear(album.getDate())));
+                    Glide.with(itemView.getContext()).load(album.getCoverUri()).into(coverImg);
+                    mainLayout.setOnClickListener(v -> mainActivity.setFragment(new AlbumFragment(album)));
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    ExceptionManager.showError(e, itemView.getContext());
+                }
+            });
+        }
+
+    }
+
+    // ViewHolder для плейлиста
     class PlaylistViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView coverImg;
@@ -47,48 +98,34 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
             authorTxt = itemView.findViewById(R.id.author_txt);
             dateTxt = itemView.findViewById(R.id.date_txt);
             mainLayout = itemView.findViewById(R.id.main_layout);
+
+            nameTxt.setText("");
+            authorTxt.setText("");
+            dateTxt.setText("");
         }
 
         public void bind(String id) {
             ContentManager contentManager = new ContentManager();
-            UserManager userManager = new UserManager();
             // Получение и отображение данных о плейлисте
+            id = id.substring(id.indexOf("/") + 1);
             contentManager.getPlaylist(id, new GetObjectListener() {
                 @Override
                 public void onComplete(Object object) {
-                    DatabasePlaylist dbPlaylist = (DatabasePlaylist) object;
-                    Playlist playlist = new Playlist(dbPlaylist);
-                    playlist.setId(id);
+                    Playlist playlist = (Playlist)object;
                     nameTxt.setText(playlist.getName());
-                    dateTxt.setText(playlist.getDate());
-                    userManager.getUser(dbPlaylist.getAuthor(), new GetObjectListener() {
-                        @Override
-                        public void onComplete(Object object) {
-                            playlist.setAuthor((User) object);
-                            authorTxt.setText(playlist.getAuthor().getLogin());
-                            contentManager.getUri(dbPlaylist.getCover(), new GetObjectListener() {
-                                @Override
-                                public void onComplete(Object object) {
-                                    playlist.setCoverUri((Uri) object);
-                                    GlideApp.with(itemView.getContext()).
-                                            load(playlist.getCoverUri()).into(coverImg);
-                                    mainLayout.setOnClickListener(v -> mainActivity.setFragment(
-                                            new PlaylistFragment(playlist)));
-                                }
+                    TimeManager timeManager = new TimeManager();
+                    if (playlist.getAuthor().getLogin().equals(Data.getCurUser().getLogin())) {
+                        dateTxt.setVisibility(View.GONE);
+                        authorTxt.setText(itemView.getContext().getString(R.string.your_playlist));
+                    } else {
+                        authorTxt.setText(playlist.getAuthor().getLogin());
+                        dateTxt.setText(String.valueOf(timeManager.getYear(playlist.getDate())));
+                    }
 
-                                @Override
-                                public void onFailure(Exception e) {
-                                    ExceptionManager.showError(e, itemView.getContext());
-                                }
-                            });
-
-                        }
-
-                        @Override
-                        public void onFailure(Exception e) {
-                            ExceptionManager.showError(e, itemView.getContext());
-                        }
-                    });
+                    GlideApp.with(itemView.getContext()).
+                            load(playlist.getCoverUri()).into(coverImg);
+                    mainLayout.setOnClickListener(v -> mainActivity.setFragment(
+                            new PlaylistFragment(playlist)));
                 }
 
                 @Override
@@ -100,38 +137,59 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
     }
 
     public PlaylistAdapter(MainActivity mainActivity) {
-        playlistIds = new ArrayList<>();
+        ids = new ArrayList<>();
         this.mainActivity = mainActivity;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (ids.get(position).contains("album"))
+            return 0;
+        return 1;
     }
 
     @NonNull
     @Override
-    public PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_playlist, parent, false);
+        switch (viewType) {
+            case 0: return new AlbumViewHolder(view);
+            case 1: return new PlaylistViewHolder(view);
+        }
         return new PlaylistViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position) {
-        holder.bind(playlistIds.get(position));
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        switch (holder.getItemViewType()) {
+            case 0:
+                AlbumViewHolder albumViewHolder = (AlbumViewHolder) holder;
+                albumViewHolder.bind(ids.get(position));
+                break;
+            case 1:
+                PlaylistViewHolder playlistViewHolder = (PlaylistViewHolder) holder;
+                playlistViewHolder.bind(ids.get(position));
+                break;
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return playlistIds.size();
+        return ids.size();
     }
 
     public void addItem(String playlistId) {
-        playlistIds.add(playlistId);
+        ids.add(playlistId);
         notifyDataSetChanged();
     }
 
-    public ArrayList<String> getPlaylistIds() {
-        return playlistIds;
+    public ArrayList<String> getIds() {
+        return ids;
     }
 
     public void clear() {
-        playlistIds.clear();
+        ids.clear();
         notifyDataSetChanged();
     }
 }

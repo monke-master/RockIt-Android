@@ -2,13 +2,11 @@ package com.brigade.rockit.fragments.music;
 
 import android.os.Bundle;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,8 +15,7 @@ import android.widget.TextView;
 import com.brigade.rockit.GlideApp;
 import com.brigade.rockit.R;
 import com.brigade.rockit.activities.MainActivity;
-import com.brigade.rockit.adapter.MusicAdapter;
-import com.brigade.rockit.data.Constants;
+import com.brigade.rockit.adapter.SongAdapter;
 import com.brigade.rockit.data.Playlist;
 import com.brigade.rockit.fragments.dialogs.PlaylistDialog;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -49,17 +46,19 @@ public class PlaylistFragment extends Fragment {
         authorTxt.setText(playlist.getAuthor().getLogin());
         dateTxt.setText(playlist.getDate());
 
-        MusicAdapter musicAdapter = new MusicAdapter(mainActivity);
-        musicAdapter.setMode(Constants.PLAYLIST_MODE);
-        songsList.setAdapter(musicAdapter);
+        SongAdapter songAdapter = new SongAdapter(mainActivity);
+        songsList.setAdapter(songAdapter);
         songsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        for (String id: playlist.getSongIds())
-            musicAdapter.addItem(id);
+        for (String id: playlist.getSongIds()) {
+            songAdapter.addItem(id);
+
+        }
 
         // Параметры плейлиста
         toolbar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.other_btn) {
-                PlaylistDialog playlistDialog = new PlaylistDialog(getContext(), mainActivity, playlist);
+            if (item.getItemId() == R.id.option_btn) {
+                PlaylistDialog playlistDialog = new PlaylistDialog(getContext(), mainActivity,
+                        playlist);
                 playlistDialog.show();
             }
             return true;

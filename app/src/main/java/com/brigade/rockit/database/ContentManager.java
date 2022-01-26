@@ -1,14 +1,15 @@
 package com.brigade.rockit.database;
 
 import android.net.Uri;
-import android.util.Log;
 
+import com.brigade.rockit.data.Album;
 import com.brigade.rockit.data.Constants;
-import com.brigade.rockit.data.Music;
+import com.brigade.rockit.data.Genre;
+import com.brigade.rockit.data.Song;
 import com.brigade.rockit.data.Playlist;
 import com.brigade.rockit.data.Post;
+import com.brigade.rockit.data.TimeManager;
 import com.brigade.rockit.data.User;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -56,92 +57,52 @@ public class ContentManager {
     }
 
     // Загрузка музыки
-    public void uploadMusic(Music music, TaskListener listener) {
-        // Получение id автора
-        String authorID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        // Перенос данных музыки в тип музыки для бд
-        DatabaseMusic dbMusic = new DatabaseMusic();
-        dbMusic.setAuthorId(authorID);
-        dbMusic.setArtist(music.getArtist());
-        dbMusic.setName(music.getName());
-        dbMusic.setDuration(music.getDuration());
-        // Добавление песни в базу данных
-        firestore.collection("songs").add(dbMusic).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                // Получение id песни
-                String id = task.getResult().getId();
-                // Загрузка аудио-файла
-                uploadUriFile(music.getUri(), "music/" + id, new TaskListener() {
-                    @Override
-                    public void onComplete() {
-                        // Получение пути к обложке
-                        String coverPath = "song_covers/default.png";
-                        if (music.getCover() != null) {
-                            coverPath = "song_covers/" + id;
-                            String finalCoverPath = coverPath;
-                            uploadUriFile(music.getCover(), coverPath, new TaskListener() {
-                                @Override
-                                public void onComplete() {
-                                    addSongCover(id, finalCoverPath, new TaskListener() {
-                                        @Override
-                                        public void onComplete() {
-                                            addToMyMusic(id, new TaskListener() {
-                                                @Override
-                                                public void onComplete() {
-                                                    listener.onComplete();
-                                                }
-
-                                                @Override
-                                                public void onFailure(Exception e) {
-                                                    listener.onFailure(e);
-                                                }
-                                            });
-                                        }
-
-                                        @Override
-                                        public void onFailure(Exception e) {
-                                            listener.onFailure(e);
-                                        }
-                                    });
-                                }
-                                @Override
-                                public void onFailure(Exception e) {
-                                    listener.onFailure(e);
-                                }
-                            });
-                        } else {
-                            addSongCover(id, coverPath, new TaskListener() {
-                                @Override
-                                public void onComplete() {
-                                    addToMyMusic(id, new TaskListener() {
-                                        @Override
-                                        public void onComplete() {
-                                            listener.onComplete();
-                                        }
-
-                                        @Override
-                                        public void onFailure(Exception e) {
-                                            listener.onFailure(e);
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void onFailure(Exception e) {
-                                    listener.onFailure(e);
-                                }
-                            });
+    public void uploadSong(Song song, TaskListener listener) {
+        // Генерация id
+        String id = UUID.randomUUID().toString();
+        song.setId(id);
+        // Загрузка аудио-файла
+        uploadUriFile(song.getUri(), "music/" + id, new TaskListener() {
+            @Override
+            public void onComplete() {
+                // Загрузка обложки
+                if (song.getCoverUri() == null) {
+                    song.setCoverPath("song_covers/default.png");
+                    // Создание документа с данными песни
+                    createSongDoc(song, listener);
+                } else {
+                    if (song.getCoverPath() == null)
+                        song.setCoverPath("song_covers/" + id);
+                    uploadUriFile(song.getCoverUri(), song.getCoverPath(), new TaskListener() {
+                        @Override
+                        public void onComplete() {
+                            // Создание документа с данными песни
+                            createSongDoc(song, listener);
                         }
-                    }
-                    @Override
-                    public void onFailure(Exception e) {
-                        listener.onFailure(e);
-                    }
-                });
-            } else {
-                listener.onFailure(task.getException());
-            }
 
+                        @Override
+                        public void onFailure(Exception e) {
+                            listener.onFailure(e);
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onFailure(Exception e) {
+                listener.onFailure(e);
+            }
+        });
+
+
+    }
+
+    public void createSongDoc(Song song, TaskListener listener) {
+        DatabaseSong dbSong = new DatabaseSong(song);
+        firestore.collection("songs").document(song.getId()).set(dbSong).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                addToMyMusic(song.getId(), listener);
+            } else
+                listener.onFailure(task.getException());
         });
     }
 
@@ -149,31 +110,38 @@ public class ContentManager {
     public void addToMyMusic(String musicId, TaskListener listener) {
         firestore.collection("users").document(uid).
                 update("music", FieldValue.arrayUnion(musicId)).addOnCompleteListener(task -> {
-                    if (task.isSuccessful())
-                        listener.onComplete();
-                    else
-                        listener.onFailure(task.getException());
-        });
-    }
-
-    // Добавлние обложки музыки
-    public void addSongCover(String musicId, String coverPath, TaskListener listener) {
-        firestore.collection("songs").document(musicId).update("cover", coverPath).
-                addOnCompleteListener(task -> {
-            if (task.isSuccessful())
+            if (task.isSuccessful()) {
                 listener.onComplete();
+                increaseAdded("songs", musicId);
+            }
             else
                 listener.onFailure(task.getException());
         });
+
+    }
+
+    public void increaseAdded(String collection, String id) {
+        firestore.collection(collection).document(id).update("added", FieldValue.increment(1));
+    }
+
+    public void increaseAuditions(String collection, String id) {
+        firestore.collection(collection).document(id).update("auditions",
+                FieldValue.increment(1));
+    }
+
+    public void decreaseAdded(String colection, String id) {
+        firestore.collection(colection).document(id).update("added", FieldValue.increment(-1));
     }
 
     // Удаление песни из "Моей музыки"
-    public void deleteSongFromMyMusic(Music music, TaskListener listener) {
+    public void deleteSongFromMyMusic(Song song, TaskListener listener) {
         DocumentReference userRef = firestore.collection("users").document(uid);
         // Получение списка песен
-        userRef.update("music", FieldValue.arrayRemove(music.getId())).addOnCompleteListener(task -> {
-            if (task.isSuccessful())
+        userRef.update("music", FieldValue.arrayRemove(song.getId())).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
                 listener.onComplete();
+                decreaseAdded("songs", song.getId());
+            }
             else {
                 listener.onFailure(task.getException());
             }
@@ -181,18 +149,17 @@ public class ContentManager {
         });
     }
 
-
     // Удаление песни из бд
-    public void deleteSong(Music music, TaskListener listener) {
-        deleteSongFromMyMusic(music, new TaskListener() {
+    public void deleteSong(Song song, TaskListener listener) {
+        deleteSongFromMyMusic(song, new TaskListener() {
             @Override
             public void onComplete() {
                 // Получение данных о песни
-                DocumentReference songRef = firestore.collection("songs").document(music.getId());
+                DocumentReference songRef = firestore.collection("songs").document(song.getId());
                 songRef.get().addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         // Удаление аудио-файла
-                        deleteFile("music/" + music.getId(), new TaskListener() {
+                        deleteFile("music/" + song.getId(), new TaskListener() {
                             @Override
                             public void onComplete() {
                                 if (!task.getResult().get("cover").toString().equals("song_covers/default.png")) {
@@ -247,10 +214,10 @@ public class ContentManager {
         dbPost.setAuthorId(auth.getUid());
         dbPost.setText(post.getText());
         // Преобразование даты
-        DateManager manager = new DateManager();
+        TimeManager manager = new TimeManager();
         dbPost.setDate(manager.getDate());
         // Получение id прикрепленных файлов
-        dbPost.setMusicIds(post.getMusicIds());
+        dbPost.setSongsIds(post.getSongsIds());
         // Загрузка в бд
         firestore.collection("posts").add(dbPost).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -365,20 +332,18 @@ public class ContentManager {
         });
     }
 
-    // Получение текстовой информации о посте
-    public void getPostTextInfo(String postId, GetObjectListener listener) {
+    public void getPost(String postId, GetObjectListener listener) {
         firestore.collection("posts").document(postId).get().addOnCompleteListener(task1 -> {
             if (task1.isSuccessful()) {
                 DocumentSnapshot doc = task1.getResult();
-                DatabasePost dbPost = new DatabasePost();
-                dbPost.setAuthorId(doc.get("authorId").toString());
-                dbPost.setDate(doc.get("date").toString());
-                dbPost.setText(doc.get("text").toString());
                 Post post = new Post();
-                post.setText(dbPost.getText());
-                post.setDate(dbPost.getDate());
+                post.setText(doc.get("text").toString());
+                post.setDate(doc.get("date").toString());
+                post.setImagesIds((ArrayList<String>) doc.get("imageIds"));
+                post.setSongsIds((ArrayList<String>) doc.get("songsIds"));
+                post.setId(postId);
                 UserManager userManager = new UserManager();
-                userManager.getUser(dbPost.getAuthorId(), new GetObjectListener() {
+                userManager.getUser(doc.get("authorId").toString(), new GetObjectListener() {
                     @Override
                     public void onComplete(Object object) {
                         post.setAuthor((User) object);
@@ -394,57 +359,60 @@ public class ContentManager {
         });
     }
 
-    // Получение списка id изображений поста
-    public void getImageIds(String postId, GetObjectListener listener) {
-        firestore.collection("posts").document(postId).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                listener.onComplete(task.getResult().get("imageIds"));
-            } else
-                listener.onFailure(task.getException());
-        });
-    }
-
-    // Получение списка id песен поста
-    public void getMusicIds(String postId, GetObjectListener listener) {
-        firestore.collection("posts").document(postId).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                listener.onComplete(task.getResult().get("musicIds"));
-            } else
-                listener.onFailure(task.getException());
-        });
-    }
-
     // Получение uri файла
     public void getUri(String path, GetObjectListener listener) {
-        storage.getReference(path).getDownloadUrl().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                listener.onComplete(task.getResult());
-            } else
-                listener.onFailure(task.getException());
-        });
-
+        storage.getReference(path).getDownloadUrl().addOnSuccessListener(listener::onComplete).addOnFailureListener(listener::onFailure);
     }
 
     // Получение данных о песне
-    public void getMusic(String musicId, GetObjectListener listener) {
+    public void getSong(String musicId, GetObjectListener listener) {
         firestore.collection("songs").document(musicId).get().addOnCompleteListener(task -> {
            if (task.isSuccessful()) {
                DocumentSnapshot doc = task.getResult();
-               Music music = new Music();
-               music.setName(doc.get("name").toString());
-               music.setArtist(doc.get("artist").toString());
-               music.setAuthorId(doc.get("authorId").toString());
-               music.setDuration(doc.get("duration").toString());
-               music.setId(musicId);
-               getUri("music/" + music.getId(), new GetObjectListener() {
+               Song song = new Song();
+               song.setName(doc.get("name").toString());
+               song.setDuration(doc.get("duration").toString());
+               song.setAdded((long)doc.get("added"));
+               song.setDate(doc.get("date").toString());
+               song.setAuditions((long)doc.get("auditions"));
+               song.setId(musicId);
+               if (doc.get("album") != null)
+                   song.setAlbum(doc.get("album").toString());
+               getUri("music/" + song.getId(), new GetObjectListener() {
                    @Override
                    public void onComplete(Object object) {
-                       music.setUri((Uri)object);
+                       song.setUri((Uri) object);
                        getUri(doc.get("cover").toString(), new GetObjectListener() {
                            @Override
                            public void onComplete(Object object) {
-                               music.setCover((Uri)object);
-                               listener.onComplete(music);
+                               song.setCoverUri((Uri)object);
+                               new UserManager().getUser(doc.get("authorId").toString(), new GetObjectListener() {
+
+                                   @Override
+                                   public void onComplete(Object object) {
+                                       song.setAuthor((User)object);
+                                       getGenre(doc.get("genre").toString(), new GetObjectListener() {
+                                           @Override
+                                           public void onComplete(Object object) {
+                                               song.setGenre((Genre) object);
+                                               listener.onComplete(song);
+                                           }
+
+                                           @Override
+                                           public void onFailure(Exception e) {
+                                               listener.onFailure(e);
+                                           }
+                                       });
+
+
+                                   }
+
+                                   @Override
+                                   public void onFailure(Exception e) {
+                                       listener.onFailure(e);
+                                   }
+                               });
+
                            }
 
                            @Override
@@ -484,10 +452,7 @@ public class ContentManager {
             if (task.isSuccessful()) {
                 String coverPath = "";
                 if (playlist.getCoverUri() == null) {
-                    if (playlist.getSongs().size() > 0)
-                        playlist.setCoverUri(playlist.getSongs().get(0).getCover());
-                    else
-                        coverPath = "song_covers/default.png";
+                    coverPath = "song_covers/default.png";
                 } else
                     coverPath = "playlist_covers/" + task.getResult().getId();
                 String finalCoverPath = coverPath;
@@ -498,7 +463,7 @@ public class ContentManager {
                         public void onComplete() {
                             task.getResult().update("cover", finalCoverPath).addOnCompleteListener(task1 -> {
                                 if (task1.isSuccessful()) {
-                                    addPlaylist(task.getResult().getId(), listener);
+                                    addPlaylist("playlists/" + task.getResult().getId(), listener);
                                 } else
                                     listener.onFailure(task1.getException());
                             });
@@ -521,6 +486,7 @@ public class ContentManager {
             } else
                 listener.onFailure(task.getException());
         });
+
     }
 
     // Добавление плейлиста в список плейлистов пользователя
@@ -528,8 +494,20 @@ public class ContentManager {
         firestore.collection("users").document(uid).update(
                 "playlists", FieldValue.arrayUnion(playlistId)).
                 addOnCompleteListener(task2 -> {
-                    if (task2.isSuccessful())
+                    if (task2.isSuccessful()) {
                         listener.onComplete();
+                        if (playlistId.contains("playlists")) {
+                            increaseAdded("playlists", playlistId);
+                            firestore.collection("playlists").document(playlistId).get().
+                                    addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            ArrayList<String> songsIds = (ArrayList<String>) task.getResult().get("songs");
+                                            for (String id : songsIds)
+                                                increaseAdded("songs", id);
+                                        }
+                                    });
+                        }
+                    }
                     else
                         listener.onFailure(task2.getException());
                 });
@@ -540,13 +518,37 @@ public class ContentManager {
         firestore.collection("playlists").document(id).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot result = task.getResult();
-                DatabasePlaylist playlist = new DatabasePlaylist();
+                Playlist playlist = new Playlist();
+                playlist.setId(id);
                 playlist.setName(result.get("name").toString());
-                playlist.setAuthor(result.get("author").toString());
-                playlist.setCover(result.get("cover").toString());
                 playlist.setDate(result.get("date").toString());
-                playlist.setSongs((ArrayList<String>) result.get("songs"));
-                listener.onComplete(playlist);
+                playlist.setSongIds((ArrayList<String>) result.get("songs"));
+                playlist.setDuration(result.get("duration").toString());
+                playlist.setAdded((long)result.get("added"));
+                new UserManager().getUser(result.get("author").toString(), new GetObjectListener() {
+                    @Override
+                    public void onComplete(Object object) {
+                        playlist.setAuthor((User)object);
+                        getUri(result.get("cover").toString(), new GetObjectListener() {
+                            @Override
+                            public void onComplete(Object object) {
+                                playlist.setCoverUri((Uri)object);
+                                listener.onComplete(playlist);
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+                                listener.onFailure(e);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        listener.onFailure(e);
+                    }
+                });
+
             } else
                 listener.onFailure(task.getException());
         });
@@ -556,8 +558,11 @@ public class ContentManager {
     public void deleteFromMyPlaylists(String playlistId, TaskListener listener) {
         firestore.collection("users").document(uid).update("playlists",
                 FieldValue.arrayRemove(playlistId)).addOnCompleteListener(task -> {
-            if (task.isSuccessful())
+            if (task.isSuccessful()) {
                 listener.onComplete();
+                decreaseAdded(playlistId.substring(0, playlistId.indexOf("/")),
+                        playlistId.substring(playlistId.indexOf("/") + 1));
+            }
             else
                 listener.onFailure(task.getException());
         });
@@ -611,4 +616,256 @@ public class ContentManager {
                 listener.onFailure(task.getException());
         });
     }
+
+    // Получение жанров из базы данных
+    public void getGenresList(GetObjectListener listener) {
+        firestore.collection("genres").get().addOnCompleteListener(task -> {
+           if (task.isSuccessful()) {
+               ArrayList<String> ids = new ArrayList<>();
+               for (DocumentSnapshot documentSnapshot: task.getResult().getDocuments())
+                   ids.add(documentSnapshot.getId());
+               listener.onComplete(ids);
+           } else
+               listener.onFailure(task.getException());
+        });
+    }
+
+    // Получение жанра по id
+    public void getGenre(String id, GetObjectListener listener) {
+        firestore.collection("genres").document(id).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot result = task.getResult();
+                // Если жанр не найден, ищем в поджанрах
+                if (result.get("name") != null) {
+                    Genre genre = new Genre();
+                    genre.setId(id);
+                    genre.setName(result.get("name").toString());
+                    genre.setSubgenres((ArrayList<String>) result.get("subgenres"));
+                    getUri("genres_pictures/" + id + ".png", new GetObjectListener() {
+                        @Override
+                        public void onComplete(Object object) {
+                            genre.setPicture((Uri) object);
+                            listener.onComplete(genre);
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            listener.onFailure(e);
+                        }
+                    });
+                } else {
+                    getSubgenre(id, listener);
+                }
+            } else
+                listener.onFailure(task.getException());
+        });
+    }
+
+    // Получение поджанра по id
+    public void getSubgenre(String id, GetObjectListener listener) {
+        firestore.collection("subgenres").document(id).get().addOnCompleteListener(task1 -> {
+            if (task1.isSuccessful()) {
+                DocumentSnapshot result = task1.getResult();
+                Genre genre = new Genre();
+                genre.setId(id);
+                genre.setName(result.get("name").toString());
+                genre.setSubgenres((ArrayList<String>) result.get("subgenres"));
+                genre.setParentId(result.get("parent").toString());
+                getUri("genres_pictures/" + id + ".png", new GetObjectListener() {
+                    @Override
+                    public void onComplete(Object object) {
+                        genre.setPicture((Uri) object);
+                        listener.onComplete(genre);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        listener.onFailure(e);
+                    }
+                });
+            } else
+                listener.onFailure(task1.getException());
+        });
+    }
+
+    // Загрузка по id
+    public void uploadAlbum(Album album, TaskListener listener) {
+        // Генерация id
+        String id = UUID.randomUUID().toString();
+        album.setId(id);
+        ArrayList<Song> uploadedSongs = new ArrayList<>();
+        // Загрузка песен альбома
+        for (Song song: album.getSongs()) {
+            song.setAlbum(album.getId());
+            song.setCoverPath("song_covers/" + id);
+            uploadSong(song, new TaskListener() {
+                @Override
+                public void onComplete() {
+                    uploadedSongs.add(song);
+                    // Когда все песни загрузились в дб, загружаем обложку
+                    if (uploadedSongs.size() == album.getSongs().size()) {
+                        if (album.getCoverUri() != null) {
+                            album.setCoverPath("song_covers/" + album.getId());
+                            uploadUriFile(album.getCoverUri(), album.getCoverPath(), new TaskListener() {
+                                @Override
+                                public void onComplete() {
+                                    createAlbumDoc(album, listener);
+                                }
+
+                                @Override
+                                public void onFailure(Exception e) {
+                                    listener.onFailure(e);
+                                }
+                            });
+                        } else {
+                            album.setCoverPath("song_covers/default.png");
+                            createAlbumDoc(album, listener);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    listener.onFailure(e);
+                }
+            });
+        }
+    }
+
+    // СОздание документа с данными альбома
+    public void createAlbumDoc(Album album, TaskListener listener) {
+        DatabaseAlbum dbAlbum = new DatabaseAlbum(album);
+        firestore.collection("albums").document(album.getId()).set(dbAlbum).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                addPlaylist("albums/" + album.getId(), listener);
+            } else
+                listener.onFailure(task.getException());
+        });
+    }
+
+    // Получение альбома
+    public void getAlbum(String albumId, GetObjectListener listener) {
+        firestore.collection("albums").document(albumId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot result = task.getResult();
+                Album album = new Album();
+                album.setId(albumId);
+                album.setName(result.get("name").toString());
+                album.setAuditions((long)result.get("auditions"));
+                album.setDate(result.get("date").toString());
+                album.setDuration(result.get("duration").toString());
+                album.setSongIds((ArrayList<String>) result.get("songs"));
+                album.setCoverPath(result.get("cover").toString());
+                // Получение данных об авторе альбома
+                UserManager userManager = new UserManager();
+                userManager.getUser(result.get("author").toString(), new GetObjectListener() {
+                    @Override
+                    public void onComplete(Object object) {
+                        album.setAuthor((User) object);
+                        // Получение обложки альбома
+                        getUri(result.get("cover").toString(), new GetObjectListener() {
+                            @Override
+                            public void onComplete(Object object) {
+                                album.setCoverUri((Uri)object);
+                                // Получение жанра
+                                getGenre(result.get("genre").toString(), new GetObjectListener() {
+                                    @Override
+                                    public void onComplete(Object object) {
+                                        Genre genre = (Genre)object;
+                                        album.setGenre(genre);
+                                        listener.onComplete(album);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Exception e) {
+                                        listener.onFailure(e);
+                                    }
+                                });
+
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+                                listener.onFailure(e);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
+
+            } else
+                listener.onFailure(task.getException());
+        });
+    }
+
+    // Удаление альбома из базы данных
+    public void deleteAlbum(Album album, TaskListener listener) {
+        // Удаление альбома у пользователя
+        firestore.collection("users").document(album.getAuthor().getId()).
+                update("playlists", FieldValue.arrayRemove("albums/" + album.getId())).
+                addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // Удаление песен из альбома
+                ArrayList<String> deletedSongs = new ArrayList<>();
+                for (Song song: album.getSongs()) {
+                    deleteSong(song, new TaskListener() {
+                        @Override
+                        public void onComplete() {
+                            deletedSongs.add(song.getId());
+                            if (deletedSongs.size() == album.getSongs().size()) {
+                                firestore.collection("albums").document(album.getId()).
+                                        delete().addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        if (!album.getCoverPath().equals("song_covers/default.png")) {
+                                            // Удаление обложки альбома из хранилища
+                                            deleteFile(album.getCoverPath(), new TaskListener() {
+                                                @Override
+                                                public void onComplete() {
+                                                    listener.onComplete();
+                                                }
+
+                                                @Override
+                                                public void onFailure(Exception e) {
+                                                    listener.onFailure(e);
+                                                }
+                                            });
+                                        } else
+                                            listener.onComplete();
+                                    } else
+                                        listener.onFailure(task.getException());
+                                });
+
+                            }
+                        }
+                        @Override
+                        public void onFailure(Exception e) {
+                            listener.onFailure(e);
+                        }
+                    });
+                }
+            } else
+                listener.onFailure(task.getException());
+        });
+
+    }
+
+
+    // Удаление альбома у всех пользователей
+//    firestore.collection("users").whereArrayContains("playlists",
+//                                                             "albums/" + album.getId()).get().addOnCompleteListener(task -> {
+//        if (task.isSuccessful()) {
+//            QuerySnapshot docs = task.getResult();
+//            ArrayList<String> deleted = new ArrayList<>();
+//            for (DocumentSnapshot doc: docs.getDocuments()) {
+//                String id = doc.getId();
+//                firestore.collection("users").document(id).update("")
+//            }
+//        }
+//    })
+
+
 }

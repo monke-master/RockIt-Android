@@ -17,17 +17,16 @@
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="7"
-            android:background="@drawable/footer">
+            android:layout_weight="7">
 
             <ImageView
-                android:id="@+id/other_btn"
+                android:id="@+id/option_btn"
                 android:layout_width="@dimen/footer_image_size"
                 android:layout_height="@dimen/footer_image_size"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_other"
+                android:src="@drawable/other"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

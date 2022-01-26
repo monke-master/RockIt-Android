@@ -2,12 +2,13 @@ package com.brigade.rockit.database;
 
 
 
-import com.brigade.rockit.adapter.MusicAdapter;
+import com.brigade.rockit.adapter.SongAdapter;
 import com.brigade.rockit.adapter.PlaylistAdapter;
 import com.brigade.rockit.adapter.PostAdapter;
 import com.brigade.rockit.adapter.UserAdapter;
 import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.data.User;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -20,29 +21,47 @@ import java.util.Locale;
 
 public class AdapterManager {
     private FirebaseFirestore firestore;
-    private FirebaseAuth auth;
     private FirebaseStorage storage;
+    private FirebaseAuth auth;
+    private String uid;
 
     public AdapterManager() {
-        auth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.
                 getInstance(Constants.STORAGE_PATH);
+        auth = FirebaseAuth.getInstance();
+        uid = auth.getUid();
     }
 
 
     // Поиск музыки
-    public void showSearchedMusic(MusicAdapter adapter, String searching, TaskListener listener){
+    public void showSearchedSong(SongAdapter adapter, String searching, TaskListener listener){
         // Получение песен по введенному имени
         firestore.collection("songs").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 for (DocumentSnapshot document: task.getResult()) {
                     String name = document.get("name").toString().toLowerCase(Locale.ROOT);
-                    String artist = document.get("artist").toString().toLowerCase(Locale.ROOT);
-                    if ((name.contains(searching) || artist.contains(searching)) &&
-                            !adapter.getMusicList().contains(document.getId())) {
+                    String artist = document.get("authorId").toString();
+                    new UserManager().getUser(artist, new GetObjectListener() {
+                        @Override
+                        public void onComplete(Object object) {
+                            User author = (User)object;
+                            String authorName = author.getName() + " " + author.getSurname();
+                            String authorLogin = author.getLogin();
+                            if ((name.contains(searching) || authorName.contains(searching) ||
+                                    authorLogin.contains(searching)) &&
+                                    !adapter.getIds().contains(document.getId())) {
                                 adapter.addItem(document.getId());
-                    }
+                                listener.onComplete();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            listener.onFailure(e);
+                        }
+                    });
+
                 }
             } else
                 listener.onFailure(task.getException());
@@ -173,8 +192,27 @@ public class AdapterManager {
                     String name = document.get("name").toString().toLowerCase(Locale.ROOT);
                     // Отображение подходящего плейлиста
                     if ((name.contains(searching)) &&
-                            !adapter.getPlaylistIds().contains(document.getId())) {
-                        adapter.addItem(document.getId());
+                            !adapter.getIds().contains("playlists/" + document.getId())) {
+                        adapter.addItem("playlists/" + document.getId());
+                        listener.onComplete();
+                    }
+                }
+            } else
+                listener.onFailure(task.getException());
+        });
+    }
+
+    // Поиск и отображение альбомов
+    public void showSearchedAlbums(PlaylistAdapter adapter, String searching, TaskListener listener) {
+        firestore.collection("albums").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (DocumentSnapshot document: task.getResult()) {
+                    String name = document.get("name").toString().toLowerCase(Locale.ROOT);
+                    // Отображение подходящего плейлиста
+                    if ((name.contains(searching)) &&
+                            !adapter.getIds().contains("albums/" + document.getId())) {
+                        adapter.addItem("albums/" + document.getId());
+                        listener.onComplete();
                     }
                 }
             } else

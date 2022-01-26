@@ -91,7 +91,7 @@ public class ChangeEmailFragment extends Fragment {
                     @Override
                     public void onComplete(boolean available) {
                         if (available) {
-                            Toast.makeText(getContext(), getString(R.string.successfully_edit_email),
+                            Toast.makeText(getContext(), getString(R.string.email_changed),
                                     Toast.LENGTH_LONG).show();
                             otherActivity.finish();
                         } else

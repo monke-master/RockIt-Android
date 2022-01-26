@@ -13,6 +13,7 @@ import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.TaskListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+// Диалог параметров поста
 public class PostDialog extends BottomSheetDialog {
 
     // Настройки поста
@@ -26,7 +27,7 @@ public class PostDialog extends BottomSheetDialog {
             manager.deletePost(post, new TaskListener() {
                 @Override
                 public void onComplete() {
-                    Toast.makeText(getContext(), getContext().getString(R.string.deleted_post),
+                    Toast.makeText(getContext(), getContext().getString(R.string.post_deleted),
                             Toast.LENGTH_LONG).show();
                 }
                 @Override

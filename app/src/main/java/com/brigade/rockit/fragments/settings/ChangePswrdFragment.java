@@ -10,7 +10,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -87,7 +86,7 @@ public class ChangePswrdFragment extends Fragment {
                 manager.changePassword(curPswrd, newPswrd, new TaskListener() {
                     @Override
                     public void onComplete() {
-                        Toast.makeText(getContext(), getString(R.string.successfully_edit_pswrd),
+                        Toast.makeText(getContext(), getString(R.string.password_changed),
                                 Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(otherActivity, MainActivity.class);
                         startActivity(intent);

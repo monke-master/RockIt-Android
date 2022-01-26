@@ -9,6 +9,7 @@ import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 
+// Класс для обработки вывода ошибок
 public class ExceptionManager {
     public static void showError(Exception e, Context context) {
         if (e instanceof FirebaseNetworkException) {

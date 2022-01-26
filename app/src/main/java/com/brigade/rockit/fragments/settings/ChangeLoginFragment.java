@@ -72,7 +72,7 @@ public class ChangeLoginFragment extends Fragment {
                     @Override
                     public void onComplete(boolean available) {
                         if (available) {
-                            Toast.makeText(getContext(), getString(R.string.successfully_edit_login),
+                            Toast.makeText(getContext(), getString(R.string.login_changed),
                                     Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(otherActivity, MainActivity.class);
                             startActivity(intent);

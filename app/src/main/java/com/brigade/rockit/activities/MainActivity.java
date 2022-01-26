@@ -18,12 +18,17 @@ import android.widget.Toast;
 import com.brigade.rockit.data.Constants;
 import com.brigade.rockit.R;
 import com.brigade.rockit.data.Data;
-import com.brigade.rockit.data.Music;
+import com.brigade.rockit.data.Genre;
+import com.brigade.rockit.data.Song;
 import com.brigade.rockit.data.TooManyPhotoException;
+import com.brigade.rockit.database.ExceptionManager;
 import com.brigade.rockit.database.GetObjectListener;
+import com.brigade.rockit.database.TaskListener;
+import com.brigade.rockit.database.UserManager;
 import com.brigade.rockit.fragments.dialogs.SongDialog;
 import com.brigade.rockit.fragments.main.HomeFragment;
 import com.brigade.rockit.fragments.music.BottomPlayerFragment;
+import com.brigade.rockit.fragments.music.GenresFragment;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,23 +41,55 @@ public class MainActivity extends AppCompatActivity {
     private View playerFragment;
     private GetObjectListener listener;
     private int maxPhotos = 0;
+    private MainActivity thisActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        thisActivity = this;
 
-        // Отображение главной страницы
-        if (savedInstanceState == null)
-            setFragment(new HomeFragment());
-        else
-            setFragment(getSupportFragmentManager().getFragment(savedInstanceState,
-                    "last_fragment"));
+        setFragment(new HomeFragment());
+        // Если пользователь не выбирал жанры, то
+        if (Data.getCurUser().getFavouriteGenres() == null) {
+            // Переходим на фрагмент выбора жанров
+            selectFavouriteGenres();
+        } else if (Data.getCurUser().getFavouriteGenres().size() == 0)
+            selectFavouriteGenres();
 
         // Начальные установки для музыкального плеера
         playerFragment = findViewById(R.id.player_fragment);
         playerFragment.setVisibility(View.INVISIBLE);
         showBottomPlayer();
+    }
+
+    private void selectFavouriteGenres() {
+        GenresFragment fragment = new GenresFragment(100);
+        fragment.setListener(new GetObjectListener() {
+            @Override
+            public void onComplete(Object object) {
+                ArrayList<String> genresIds = new ArrayList<>();
+                for (Genre genre: (ArrayList<Genre>)object)
+                    genresIds.add(genre.getId());
+                Data.getCurUser().setFavouriteGenres(genresIds);
+                new UserManager().setFavouriteGenres(genresIds, new TaskListener() {
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        ExceptionManager.showError(e, thisActivity);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+            }
+        });
+        setFragment(fragment);
     }
 
     @Override
@@ -197,14 +234,14 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         } else {
-            Toast.makeText(this, getString(R.string.error_pick_file), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.pick_file_error), Toast.LENGTH_LONG).show();
         }
     }
 
 
     // Отображение настроек песни
-    public void showSongSettings(Music music) {
-        SongDialog dialog = new SongDialog(this, music);
+    public void showSongSettings(Song song) {
+        SongDialog dialog = new SongDialog(this, song);
         dialog.show();
     }
 
@@ -221,13 +258,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Сохранение данных
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        // Сохранение текущего фрагмента
-        getSupportFragmentManager().putFragment(outState, "last_fragment", currentFragment);
-    }
+
 
 
 

@@ -5,12 +5,12 @@ import java.util.ArrayList;
 public class DatabasePost {
     private String date;
     private String authorId;
-    private ArrayList<String> musicIds;
+    private ArrayList<String> songsIds;
     private ArrayList<String> imageIds;
     private String text;
 
     public DatabasePost() {
-        musicIds = new ArrayList<>();
+        songsIds = new ArrayList<>();
         imageIds = new ArrayList<>();
         text = "";
     }
@@ -24,8 +24,8 @@ public class DatabasePost {
         this.authorId = authorId;
     }
 
-    public void setMusicIds(ArrayList<String> musicIds) {
-        this.musicIds = musicIds;
+    public void setSongsIds(ArrayList<String> songsIds) {
+        this.songsIds = songsIds;
     }
 
     public void setImageIds(ArrayList<String> imageIds) {
@@ -44,8 +44,8 @@ public class DatabasePost {
         return authorId;
     }
 
-    public ArrayList<String> getMusicIds() {
-        return musicIds;
+    public ArrayList<String> getSongsIds() {
+        return songsIds;
     }
 
     public ArrayList<String> getImageIds() {

@@ -15,7 +15,7 @@
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="@dimen/footer_height"
-            android:background="@color/dark_red">
+            android:background="@color/white_1">
 
             <EditText
                 android:id="@+id/search_user"

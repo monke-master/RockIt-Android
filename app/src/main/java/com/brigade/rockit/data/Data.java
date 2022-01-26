@@ -6,9 +6,10 @@ public class Data {
     private static DatabaseUser newUser;
     private static User curUser;
     private static Post newPost;
-    private static Music newMusic;
+    private static Song newSong;
     private static MusicPlayer musicPlayer;
     private static Playlist newPlaylist;
+    private static Album newAlbum;
 
     public static DatabaseUser getNewUser() {
         return newUser;
@@ -32,12 +33,12 @@ public class Data {
 
     public static void setNewPost(Post post) { Data.newPost = post;}
 
-    public static Music getNewMusic() {
-        return newMusic;
+    public static Song getNewMusic() {
+        return newSong;
     }
 
-    public static void setNewMusic(Music newMusic) {
-        Data.newMusic = newMusic;
+    public static void setNewMusic(Song newSong) {
+        Data.newSong = newSong;
     }
 
     public static MusicPlayer getMusicPlayer() {
@@ -54,5 +55,14 @@ public class Data {
 
     public static void setNewPlaylist(Playlist newPlaylist) {
         Data.newPlaylist = newPlaylist;
+    }
+
+
+    public static Album getNewAlbum() {
+        return newAlbum;
+    }
+
+    public static void setNewAlbum(Album newAlbum) {
+        Data.newAlbum = newAlbum;
     }
 }
