@@ -1,21 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
 
-    <style name="MainTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="MainTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/light_grey</item>
-        <item name="colorPrimaryVariant">@color/white_1</item>
-        <item name="colorOnPrimary">@color/white_1</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/dark_red</item>
         <item name="colorSecondaryVariant">@color/dark_red</item>
         <item name="colorOnSecondary">@color/black</item>
-        <item name="android:colorBackground">@color/white_1</item>
+        <item name="android:colorBackground">@color/white</item>
         <item name="android:navigationBarColor">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/white_1</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="buttonStyle">@style/TextButton</item>
+        <item name="textAppearanceButton">@style/TextButton</item>
+        <item name="shapeAppearanceSmallComponent">@style/SmallShapeAppearance</item>
         <item name="editTextStyle">@style/EditText</item>
         <item name="toolbarStyle">@style/Toolbar</item>
         <item name="android:textCursorDrawable">@color/black</item>

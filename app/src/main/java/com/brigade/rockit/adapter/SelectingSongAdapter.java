@@ -73,7 +73,7 @@ public class SelectingSongAdapter extends RecyclerView.Adapter<SelectingSongAdap
             if (selectedSongs.contains(song)) {
                 selectedSongs.remove(song);
                 pickImg.setVisibility(View.INVISIBLE);
-                layout.setBackgroundColor(itemView.getContext().getColor(R.color.white_1));
+                layout.setBackgroundColor(itemView.getContext().getColor(R.color.white));
             } else {
                 selectedSongs.add(song);
                 pickImg.setVisibility(View.VISIBLE);
