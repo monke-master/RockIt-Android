@@ -34,6 +34,23 @@
 </p>
 
 
+# Использованные библиотеки
+
+## Android SDK + Java
+
+Базовое средство для разработки Android-приложений
+
+<p align="center">
+  <img src="https://habrastorage.org/getpro/habr/post_images/907/5f9/f9f/9075f9f9fefe6985f639b6ae3b6230c7.jpg" alt="sdk"" />
+</p>
+
+## Firebase
+
+Облачная NoSQL СУБД, использованная для авторизации пользователей с подтвержденным адресом электронной почты и хранения их данных
+<p align="center">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Firebase_Logo.svg/2560px-Firebase_Logo.svg.png" alt="firebase" />
+</p>
+
 
 
 
