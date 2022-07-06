@@ -6,7 +6,7 @@
 ![1](https://github.com/monke-master/RockIt-Android/blob/master/2.png)
 ![2](https://github.com/monke-master/RockIt-Android/blob/master/3.png)
 ![3](https://github.com/monke-master/RockIt-Android/blob/master/4.png)
-![4](https://github.com/monke-master/RockIt-Android/blob/master/5.png)
+![4](https://github.com/monke-master/RockIt-Android/blob/master/1.png)
 ![5](https://github.com/monke-master/RockIt-Android/blob/master/unnamed%20(1).png)
 
 
