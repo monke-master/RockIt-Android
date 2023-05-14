@@ -41,19 +41,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/logo_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="284dp"
-            android:fontFamily="@font/glasten"
-            android:gravity="center"
-            android:text="@string/logo_text"
-            android:textColor="@color/black"
-            android:textSize="@dimen/logo_text_size"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/logo_img" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
